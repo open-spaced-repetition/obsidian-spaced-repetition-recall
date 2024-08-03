@@ -74,12 +74,12 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     cursor: pointer;
 }
 
+.sr-close-button,
 .sr-back-button {
     z-index: 21;
     cursor: var(--cursor);
     position: absolute;
     top: 12px;
-    left: 12px;
     font-size: 26px;
     line-height: 22px;
     height: 26px;
@@ -92,6 +92,14 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     align-items: center;
 }
 
+.sr-back-button {
+    left: 12px;
+}
+
+.sr-close-button {
+    right: 12px;
+}
+
 .sr-back-button:hover,
 .sr-button:hover {
     background-color: var(--background-modifier-hover);
@@ -102,13 +110,14 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
 .sr-response {
     display: flex;
     width: 100%;
-    gap: var(--size-4-4);
+    column-gap: var(--size-4-4);
     justify-content: center;
 }
 
-.sr-response {
+/* .sr-response {
     margin-top: var(--size-4-4);
-}
+} */
+
 
 .sr-response-button {
     height: 48px;
@@ -219,16 +228,10 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     cursor: not-allowed;
 }
 
-.sr-flashcard .sr-back-button {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 21;
-}
 
 .sr-flashcard .sr-controls {
     display: flex;
-    gap: var(--size-4-4);
+    column-gap: var(--size-4-4);
 }
 
 .sr-flashcard .sr-context {

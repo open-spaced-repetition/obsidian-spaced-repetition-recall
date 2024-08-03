@@ -20,6 +20,7 @@ import { buildDonation } from "./settings/donation";
 import { addburySiblingSetting } from "./settings/burySiblingSetting";
 import { addcardBlockIDSetting } from "./settings/cardBlockIDSetting";
 import { addmixQueueSetting } from "./settings/mixQueueSetting";
+import { addmdViewSetting } from "./settings/mdViewSetting";
 
 export interface SRSettings {
     // flashcards
@@ -34,6 +35,7 @@ export interface SRSettings {
     burySiblingCardsByNoteReview: boolean;
     multiClozeCard: boolean;
     cardBlockID: boolean;
+    mdView: boolean;
     showContextInCards: boolean;
     flashcardHeightPercentage: number;
     flashcardWidthPercentage: number;
@@ -100,6 +102,7 @@ export const DEFAULT_SETTINGS: SRSettings = {
     burySiblingCardsByNoteReview: false,
     multiClozeCard: false,
     cardBlockID: false,
+    mdView: false,
     showContextInCards: true,
     flashcardHeightPercentage: Platform.isMobile ? 100 : 80,
     flashcardWidthPercentage: Platform.isMobile ? 100 : 40,
@@ -542,6 +545,7 @@ export class SRSettingTab extends PluginSettingTab {
             });
 
         this.addIntervalShowHideSetting(containerEl.createDiv());
+        addmdViewSetting(containerEl.createDiv(), this.plugin);
 
         containerEl.createEl("h3", { text: `${t("NOTES")}` });
 

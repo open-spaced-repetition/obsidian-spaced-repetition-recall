@@ -78,7 +78,7 @@ export class ReviewView {
 
         ReviewView.nextReviewNotice(IReviewNote.minNextView, store.data.queues.laterSize);
 
-        reviewFloatBar.selfDestruct();
+        reviewFloatBar.close();
         new Notice(t("ALL_CAUGHT_UP"));
         this.plugin.sync();
     }
