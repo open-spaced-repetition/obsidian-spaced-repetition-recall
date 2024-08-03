@@ -13,8 +13,8 @@ export class TouchOnMobile {
     originTouches: IminTouch[] = [];
     ongoingTouches: IminTouch[] = [];
 
-    public showcb: () => void;
-    public closecb: () => void;
+    public longClickCb: () => void;
+    public swipUpCb: () => void;
 
     static create() {
         return new TouchOnMobile();
@@ -33,7 +33,7 @@ export class TouchOnMobile {
             console.debug("time up");
             if (this.originTouches.length > 0 && this.isLongClick(0)) {
                 evt.preventDefault();
-                this.showcb();
+                this.longClickCb();
                 this.handleCancel(evt);
             }
         }, this.timeDiff_longClick);
@@ -67,7 +67,7 @@ export class TouchOnMobile {
             if (idx >= 0) {
                 if (this.isSwipUp(idx)) {
                     evt.preventDefault();
-                    this.closecb();
+                    this.swipUpCb();
                 }
                 // const msg = `移除 ${idx} (${ongoingTouches[idx].pageX}, ${ongoingTouches[idx].pageY}) timeDur: ${getTimeDuration()} `;
 

@@ -171,7 +171,7 @@ export default class SRPlugin extends Plugin {
             this.commands.addDebugCommands();
         }
 
-        this.reviewFloatBar = new reviewResponseModal(settings);
+        this.reviewFloatBar = new reviewResponseModal(this, settings);
         this.reviewFloatBar.submitCallback = (note, resp) => {
             this.saveReviewResponse(note, resp);
         };
@@ -342,7 +342,7 @@ export default class SRPlugin extends Plugin {
     onunload(): void {
         console.log("Unloading Obsidian spaced repetition Recall. ...");
         this.app.workspace.getLeavesOfType(REVIEW_QUEUE_VIEW_TYPE).forEach((leaf) => leaf.detach());
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
     }
 
     private async openFlashcardModalForSingleNote(
@@ -885,7 +885,7 @@ export default class SRPlugin extends Plugin {
 
         ReviewView.nextReviewNotice(IReviewNote.minNextView, Queue.getInstance().laterSize);
 
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
         this.reviewQueueView.redraw();
         new Notice(t("ALL_CAUGHT_UP"));
     }
