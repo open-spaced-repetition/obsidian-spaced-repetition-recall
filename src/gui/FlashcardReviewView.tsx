@@ -392,7 +392,6 @@ export class FlashcardReviewView {
 
     private async _handleSkipCard(): Promise<void> {
         if (this._currentCard != null) {
-            await this.show();
             if (
                 this?._previousCard &&
                 this._previousCard.isMultiCloze &&
@@ -400,7 +399,9 @@ export class FlashcardReviewView {
                 this._currentCard !== this._currentCard.getFirstClozeCard()
             ) {
                 this._showAnswer();
+                return;
             }
+            await this.show();
         } else if (this.settings.mdView) {
             reviewResponseModal.getInstance().close();
             FlashcardModal.instance.open();

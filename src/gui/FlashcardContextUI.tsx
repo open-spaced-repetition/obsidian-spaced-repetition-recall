@@ -55,7 +55,7 @@ class FlashcardC_MD extends FlashcardContentUI {
         } else {
             this.mdCardContext = "";
         }
-        this.mdCardText = this.mdCardContext + cardtext ?? "";
+        this.mdCardText = this.mdCardContext + cardtext;
         await this._render();
     }
 
