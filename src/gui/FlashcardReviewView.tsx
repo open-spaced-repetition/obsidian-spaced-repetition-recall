@@ -144,6 +144,13 @@ export class FlashcardReviewView {
         this.mode = FlashcardModalMode.Front;
         const deck: Deck = this.reviewSequencer.currentDeck;
 
+        if (this.settings.mdView) {
+            const fbar = reviewResponseModal.getInstance();
+            if (!fbar.hasBar()) {
+                this.init();
+            }
+        }
+
         // Setup title
         this._setTitle(deck);
         this.resetButton.disabled = true;
@@ -159,8 +166,11 @@ export class FlashcardReviewView {
 
         // Setup response buttons
         this._resetResponseButtons();
-        const item = this.plugin.store.getItembyID(this._currentCard.Id);
-        reviewResponseModal.getInstance().display(item, this._processReview.bind(this));
+        if (this.settings.mdView) {
+            const item = this.plugin.store.getItembyID(this._currentCard.Id);
+            const fbar = reviewResponseModal.getInstance();
+            fbar.display(item, this._processReview.bind(this));
+        }
 
         // Prevents the following code, from running if this show is just a redraw and not an unhide
         if (!this.view.hasClass("sr-is-hidden")) {
@@ -175,6 +185,7 @@ export class FlashcardReviewView {
      * Hides the FlashcardView
      */
     hide() {
+        reviewResponseModal.getInstance().hide();
         // Prevents the following code, from running if this was executed multiple times after one another
         if (this.view.hasClass("sr-is-hidden")) {
             return;
@@ -188,8 +199,12 @@ export class FlashcardReviewView {
      * Closes the FlashcardView
      */
     close() {
-        const activeLeaf = this.app.workspace.getLeaf();
-        activeLeaf.detach();
+        if (this.settings.mdView) {
+            const activeLeaf = this.app.workspace.getLeaf();
+            activeLeaf.detach();
+            reviewResponseModal.getInstance().close();
+        }
+
         document.removeEventListener("keydown", this._keydownHandler);
         this.hide();
     }
@@ -307,7 +322,6 @@ export class FlashcardReviewView {
 
         // Show response buttons
         this.answerButton.addClass("sr-is-hidden");
-        this.resetButton.removeClass("sr-is-hidden");
         this.hardButton.removeClass("sr-is-hidden");
         this.easyButton.removeClass("sr-is-hidden");
 
@@ -403,7 +417,6 @@ export class FlashcardReviewView {
             }
             await this.show();
         } else if (this.settings.mdView) {
-            reviewResponseModal.getInstance().close();
             FlashcardModal.instance.open();
         } else this.backClickHandler();
     }
@@ -436,6 +449,7 @@ export class FlashcardReviewView {
         this.backButton.setAttribute("aria-label", t("BACK"));
         this.backButton.addEventListener("click", () => {
             /* this.plugin.data.historyDeck = ""; */
+            FlashcardModal.instance.open();
             this.backClickHandler();
         });
 
@@ -443,6 +457,7 @@ export class FlashcardReviewView {
     }
 
     private _createCloseButton(elm: HTMLDivElement) {
+        if (!this.settings.mdView) return;
         const closeButton = elm.createDiv();
         // closeButton = this.controls.createDiv();
         // closeButton = this.modalEl.createDiv();
@@ -451,7 +466,7 @@ export class FlashcardReviewView {
         closeButton.setAttribute("aria-label", t("CLOSE"));
         closeButton.addEventListener("click", () => {
             this.close();
-            reviewResponseModal.getInstance().close();
+            // reviewResponseModal.getInstance().close();
             FlashcardModal.instance.close();
         });
     }
@@ -514,7 +529,7 @@ export class FlashcardReviewView {
 
     private _createResetButton() {
         this.resetButton = this.controls.createEl("button");
-        this.resetButton.addClasses(["sr-button", "sr-reset-button", "sr-is-hidden"]);
+        this.resetButton.addClasses(["sr-button", "sr-reset-button"]);
         setIcon(this.resetButton, "refresh-cw");
         this.resetButton.setAttribute("aria-label", t("RESET_CARD_PROGRESS"));
         this.resetButton.addEventListener("click", () => {
@@ -610,7 +625,6 @@ export class FlashcardReviewView {
     private _resetResponseButtons() {
         // Sets all buttons in to their default state
         this.answerButton.removeClass("sr-is-hidden");
-        this.resetButton.addClass("sr-is-hidden");
         this.hardButton.addClass("sr-is-hidden");
         this.goodButton.addClass("sr-is-hidden");
         this.easyButton.addClass("sr-is-hidden");

@@ -88,7 +88,9 @@ export class FlashcardModal extends Modal {
 
     onClose(): void {
         this.deckView.close();
-        this.flashcardView.close();
+        if (this.mode === FlashcardModalMode.DecksList) {
+            this.flashcardView.close();
+        }
         this.mode = FlashcardModalMode.Closed;
     }
 

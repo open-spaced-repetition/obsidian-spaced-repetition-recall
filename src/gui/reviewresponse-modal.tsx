@@ -70,9 +70,10 @@ export class reviewResponseModal {
         }
         const rrBar = document.getElementById(this.barId);
         if (!rrBar || !this.buttons) {
+            console.debug("display didn't find rrbar");
             this.build();
         }
-
+        this.containerEl.show();
         this.respCallback = callback;
 
         // update show text
@@ -90,6 +91,8 @@ export class reviewResponseModal {
     }
 
     build() {
+        if (this.isDisplay()) return;
+        console.debug("build start...");
         // const options = this.plugin.algorithm.srsOptions();
         const optBtnCounts = this.options.length;
         let btnCols = 4;
@@ -100,7 +103,7 @@ export class reviewResponseModal {
         this.containerEl.setAttribute("id", this.barId);
         // this.containerEl.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
         // this.containerEl.setAttribute("style", `grid-template-rows: ${"1fr ".repeat(1)}`);
-        this.containerEl.style.visibility = "visible"; // : "hidden"
+        this.containerEl.hide();
         document.body
             .querySelector(".mod-vertical.mod-root")
             .insertAdjacentElement("afterbegin", this.containerEl);
@@ -224,7 +227,9 @@ export class reviewResponseModal {
         const touch = TouchOnMobile.create();
         touch.longClickCb = () => {
             this.toggleShowInterval();
-            this.showAnswer();
+            if (this.answerBtn.hasClass("sr-is-hidden")) {
+                this.showAnswer();
+            }
         };
         touch.swipUpCb = () => {
             if (this._triggerControls()) {
@@ -245,7 +250,7 @@ export class reviewResponseModal {
     }
 
     private addKeysEvent() {
-        document.body.addEventListener("keypress", this._keydownHandler);
+        document.body.addEventListener("keydown", this._keydownHandler);
     }
 
     private _keydownHandler = (e: KeyboardEvent) => {
@@ -257,7 +262,8 @@ export class reviewResponseModal {
             bar &&
             bar.checkVisibility() &&
             this.isDisplay() &&
-            this.app.workspace.getActiveViewOfType(MarkdownView).getMode() === "preview"
+            this.app.workspace.getActiveViewOfType(MarkdownView).getMode() === "preview" &&
+            this.answerBtn.hasClass("sr-is-hidden")
         ) {
             const consume = () => {
                 e.preventDefault();
@@ -335,29 +341,46 @@ export class reviewResponseModal {
         return text;
     }
 
-    public isDisplay() {
+    public hasBar() {
         return document.getElementById(this.barId) != null;
-        // return this.containerEl.style.visibility === "visible";
+    }
+
+    public isDisplay() {
+        return this.hasBar() && this.containerEl?.isShown();
+    }
+
+    hide() {
+        if (this.containerEl?.isShown()) {
+            this.containerEl.hide();
+            console.debug("hide fbar.");
+        }
     }
 
     close() {
         const rrBar = document.getElementById(this.barId);
         if (rrBar) {
+            document.body.removeEventListener("keydown", this._keydownHandler.bind(this));
             rrBar.style.visibility = "hidden";
-            while (rrBar.firstChild) {
+            if (rrBar.firstChild) {
                 rrBar.removeChild(rrBar.firstChild);
             }
             rrBar.remove();
+            console.debug("cllose fbar.");
         }
     }
 
     private _autoClose() {
         //after review
+
         const tout = Platform.isMobile ? 5000 : 10000;
         const timmer = setInterval(() => {
             const rrBar = document.getElementById(this.barId);
-            const Markdown = app.workspace.getActiveViewOfType(MarkdownView);
+            const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (rrBar) {
+                if (this.settings.mdView && this.item.isCard) {
+                    clearInterval(timmer);
+                    return;
+                }
                 if (!Markdown) {
                     this.close();
                     clearInterval(timmer);

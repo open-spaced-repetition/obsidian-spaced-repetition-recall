@@ -79,7 +79,7 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     z-index: 21;
     cursor: var(--cursor);
     position: absolute;
-    top: 12px;
+    top: 0px;
     font-size: 26px;
     line-height: 22px;
     height: 26px;

@@ -49,7 +49,7 @@ class FlashcardC_MD extends FlashcardContentUI {
     async render(context: string, cardtext: string, path: string): Promise<void> {
         this.path = path;
         // Setup context
-        if (this.context) {
+        if (context) {
             this.mdCardContext = "## " + context;
             this.mdCardContext += "\n";
         } else {

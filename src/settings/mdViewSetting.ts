@@ -17,17 +17,5 @@ export function addmdViewSetting(containerEl: HTMLElement, plugin: SRPlugin) {
                 plugin.data.settings.mdView = newValue;
                 await plugin.savePluginData();
             });
-        })
-        .addExtraButton((button) => {
-            button
-                .setIcon("reset")
-                .setTooltip(t("RESET_DEFAULT"))
-                .onClick(() => {
-                    applySettingsUpdate(async () => {
-                        settings.mdView = DEFAULT_SETTINGS.mdView;
-                        await plugin.savePluginData();
-                        plugin.settingTab.display();
-                    });
-                });
         });
 }
