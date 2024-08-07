@@ -184,12 +184,14 @@ export class FlashcardReviewView {
         if (!this.settings.mdView) this.view.removeClass("sr-is-hidden");
         this.backButton.removeClass("sr-is-hidden");
         document.addEventListener("keydown", this._keydownHandler);
+        this._autoremove();
     }
 
     /**
      * Hides the FlashcardView
      */
     hide() {
+        this.mode = FlashcardModalMode.Closed;
         reviewResponseModal.getInstance().hide();
         // Prevents the following code, from running if this was executed multiple times after one another
         if (this.view.hasClass("sr-is-hidden")) {
@@ -333,6 +335,8 @@ export class FlashcardReviewView {
         const settings = this.settings;
         const algo = settings.algorithm;
         const btnTexts = settings.responseOptionBtnsText[algo];
+        const item = this.plugin.store.getItembyID(this._currentCard.Id);
+        if (settings.mdView) reviewResponseModal.getInstance().display(item, undefined, false);
 
         if (this.reviewMode == FlashcardReviewMode.Cram) {
             // Same for mobile/desktop
@@ -410,22 +414,28 @@ export class FlashcardReviewView {
     }
 
     private async _handleSkipCard(): Promise<void> {
-        if (this._currentCard != null) {
-            if (
-                this?._previousCard &&
-                this._previousCard.isMultiCloze &&
-                this._currentCard.isMultiCloze &&
+        const isMulti = () => {
+            return (
+                this?._previousCard.isMultiCloze &&
+                this._currentCard?.isMultiCloze &&
                 this._currentCard !== this._currentCard.getFirstClozeCard()
-            ) {
+            );
+        };
+        if (this.settings.mixCardNote && !MixQueSet.getInstance().isCard) {
+            if (isMulti()) {
+                this.mode = FlashcardModalMode.Closed;
+                MixQueSet.getInstance().inMultiCloze();
+            } else {
+                return;
+            }
+        }
+
+        if (this._currentCard != null) {
+            if (this?._previousCard && isMulti()) {
                 this._showAnswer();
                 return;
             }
-            if (
-                (this?._previousCard?.isMultiCloze && this._currentCard.isMultiCloze) == false &&
-                MixQueSet.getInstance().isCard
-            ) {
-                await this.show();
-            }
+            await this.show();
         } else if (this.settings.mdView) {
             FlashcardModal.instance.open();
         } else this.backClickHandler();
@@ -707,5 +717,21 @@ export class FlashcardReviewView {
         } else {
             button.setText(`${buttonName} - ${textInterval(interval, false)}`);
         }
+    }
+
+    private _autoremove() {
+        //after review
+
+        const tout = Platform.isMobile ? 5000 : 10000;
+        const timmer = setInterval(() => {
+            const file = this.app.workspace.getActiveFile();
+            if (file?.basename !== this.cardUI.basename) {
+                this.close();
+                clearInterval(timmer);
+            } else if (this.mode === FlashcardModalMode.Closed) {
+                this.close();
+                clearInterval(timmer);
+            }
+        }, tout);
     }
 }

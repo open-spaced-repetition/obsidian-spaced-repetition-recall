@@ -20,6 +20,7 @@ export class MixQueSet implements IMixQueSet {
     private static _instance: MixQueSet;
     private _dnCnt: number = 0;
     private _cnCnt: number = 0;
+    // private _inMuti: boolean = false;
 
     constructor() {
         MixQueSet._instance = this;
@@ -44,6 +45,12 @@ export class MixQueSet implements IMixQueSet {
         return this._isCard;
     }
 
+    inMultiCloze(multi = true) {
+        // this._inMuti = multi;
+        this._isCard = multi;
+        console.debug("set in multi cloze",this._isCard);
+    }
+
     calcNext(dueCnthad: number, newCnthad: number) {
         if (this.DueDefaultCnt === 0) return (this.isDue = newCnthad > 0 ? false : true);
         if (this.NewDefaultCnt === 0) return (this.isDue = dueCnthad > 0 ? true : false);
@@ -61,7 +68,6 @@ export class MixQueSet implements IMixQueSet {
                 this._dnCnt = 0;
             }
         }
-
     }
 
     arbitrateCardNote(item: RepetitionItem, cardtlt: number, notetlt: number) {
@@ -81,5 +87,6 @@ export class MixQueSet implements IMixQueSet {
                 return;
             }
         }
+        console.debug(this._cnCnt, " next review is c", this.isCard);
     }
 }

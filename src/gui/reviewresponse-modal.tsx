@@ -59,11 +59,10 @@ export class reviewResponseModal {
 
     public display(
         item?: RepetitionItem,
-        callback?: (resp: number) => void,
-        // mode?: FlashcardModalMode,
+        callback?: (resp: number) => Promise<void>,
+        front?: boolean,
     ): void {
         const settings = this.settings;
-        // this.mode = mode;
 
         if (!settings.reviewResponseFloatBar || !settings.autoNextNote) return;
         if (item) {
@@ -79,7 +78,9 @@ export class reviewResponseModal {
             this.build();
         }
         this.containerEl.show();
-        this.respCallback = callback;
+        if (callback) {
+            this.respCallback = callback;
+        }
 
         // update show text
         // if (this.mode == null || this.mode == FlashcardModalMode.Front) {
@@ -88,7 +89,7 @@ export class reviewResponseModal {
         //     this.showQuestion();
         // }
 
-        if (item?.isCard) {
+        if (item?.isCard && front !== false) {
             this.showQuestion();
         } else {
             this.showAnswer();
@@ -133,18 +134,20 @@ export class reviewResponseModal {
         this._autoClose();
     }
 
-    private buttonClick(s: string) {
+    private async buttonClick(s: string) {
         // this.mode = FlashcardModalMode.Front;
         let mqs: MixQueSet;
-        if (this.settings.mixCardNote) {
+        if (this.settings.mixCardNote && this.openNextCardCB && this.openNextNoteCB) {
             mqs = MixQueSet.getInstance();
             mqs.arbitrateCardNote(this.item, this.cardtotalCB(), this.notetotalCB());
         }
 
         if (this.item.isCard && this.respCallback) {
-            this.respCallback(this.options.indexOf(s));
-        } else if (this.submitCallback) {
+            await this.respCallback(this.options.indexOf(s));
+            console.debug("this is card review");
+        } else if (!this.item?.isCard && this.submitCallback) {
             this.submitCallback(this.options.indexOf(s));
+            console.debug("this is note review");
         }
 
         if (mqs) {
@@ -389,15 +392,12 @@ export class reviewResponseModal {
             const rrBar = document.getElementById(this.barId);
             const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (rrBar) {
-                if (this.settings.mdView && this.item.isCard) {
-                    clearInterval(timmer);
-                    return;
-                }
                 if (!Markdown) {
                     this.close();
                     clearInterval(timmer);
                 }
             } else {
+                this.close();
                 clearInterval(timmer);
             }
         }, tout);

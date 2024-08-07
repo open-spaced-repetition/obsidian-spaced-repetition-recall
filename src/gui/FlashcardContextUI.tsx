@@ -30,7 +30,9 @@ export abstract class FlashcardContentUI {
         this.context = context;
         this.content = content;
     }
-
+    get basename() {
+        return fbasename;
+    }
     abstract render(context: string, cardtext: string, path: string): Promise<void>;
     abstract render_Ans(cardtext: string, isNotCloze: boolean): Promise<void>;
 }
@@ -45,7 +47,9 @@ class FlashcardC_MD extends FlashcardContentUI {
         super(plugin, context, content);
         this.adapter = plugin.app.vault.adapter;
     }
-
+    get basename() {
+        return fbasename;
+    }
     async render(context: string, cardtext: string, path: string): Promise<void> {
         this.path = path;
         // Setup context

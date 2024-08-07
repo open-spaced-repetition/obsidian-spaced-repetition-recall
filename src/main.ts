@@ -180,11 +180,13 @@ export default class SRPlugin extends Plugin {
         };
         this.reviewFloatBar.openNextNoteCB = () => {
             if (!this.lastSelectedReviewDeck) {
-                const reviewDeckKeys: string[] = Object.keys(
-                    Object.values(this.reviewDecks).filter((deck) => {
+                const reviewDeckKeys: string[] = Object.values(this.reviewDecks)
+                    .filter((deck) => {
                         return deck.dueNotesCount + deck.newNotes.length > 0;
-                    }),
-                );
+                    })
+                    .map((deck) => {
+                        return deck.deckName;
+                    });
                 if (reviewDeckKeys.length > 0) this.lastSelectedReviewDeck = reviewDeckKeys[0];
                 else {
                     new Notice(t("ALL_CAUGHT_UP"));
@@ -498,7 +500,11 @@ export default class SRPlugin extends Plugin {
         }
 
         this.updateAndSortDueNotes();
-        reviewResponseModal.getInstance().notetotalCB = () => {
+        const fbar = this.reviewFloatBar;
+        fbar.cardtotalCB = () => {
+            return this.remainingDeckTree.getCardCount(CardListType.All, true);
+        };
+        fbar.notetotalCB = () => {
             return this.noteStats.getTotalCount();
         };
         this.syncLock = false;
@@ -777,7 +783,7 @@ export default class SRPlugin extends Plugin {
         if (!this.data.settings.reviewResponseFloatBar) {
             new Notice(t("RESPONSE_RECEIVED"));
         }
-        if (MixQueSet.getInstance().isCard) {
+        if (MixQueSet.getInstance().isCard && this.reviewFloatBar.openNextCardCB) {
             return;
         }
 
