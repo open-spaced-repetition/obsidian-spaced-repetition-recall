@@ -295,8 +295,9 @@ export default class Commands {
         plugin.addCommand({
             id: "update-dataItems",
             name: "Update Items",
-            callback: () => {
-                plugin.store.verifyItems();
+            callback: async () => {
+                await plugin.store.verifyItems();
+                await plugin.store.save();
             },
         });
     }

@@ -331,6 +331,10 @@ export class RepetitionItem {
         }
         if (!Object.prototype.hasOwnProperty.call(this, "itemType")) {
             this.itemType = isCard ? RPITEMTYPE.CARD : RPITEMTYPE.NOTE;
+        } else if (isCard && this.itemType !== RPITEMTYPE.CARD) {
+            this.itemType = RPITEMTYPE.CARD;
+        } else if (!isCard && this.itemType !== RPITEMTYPE.NOTE) {
+            this.itemType = RPITEMTYPE.NOTE;
         }
     }
 
