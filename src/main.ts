@@ -164,7 +164,7 @@ export default class SRPlugin extends Plugin {
             this.saveReviewResponse_onNote.bind(this),
         );
         ReviewView.create(this, this.data.settings);
-        MixQueSet.create(settings.mixDue, settings.mixNew);
+        MixQueSet.create(settings.mixDue, settings.mixNew, settings.mixCard, settings.mixNote);
         this.commands = new Commands(this);
         this.commands.addCommands();
         if (this.data.settings.showDebugMessages) {
@@ -172,8 +172,26 @@ export default class SRPlugin extends Plugin {
         }
 
         this.reviewFloatBar = new reviewResponseModal(this, settings);
-        this.reviewFloatBar.submitCallback = (note, resp) => {
-            this.saveReviewResponse(note, resp);
+        this.reviewFloatBar.submitCallback = (resp) => {
+            const openFile: TFile | null = this.app.workspace.getActiveFile();
+            if (openFile && openFile.extension === "md") {
+                this.saveReviewResponse(openFile, resp);
+            }
+        };
+        this.reviewFloatBar.openNextNoteCB = () => {
+            if (!this.lastSelectedReviewDeck) {
+                const reviewDeckKeys: string[] = Object.keys(
+                    Object.values(this.reviewDecks).filter((deck) => {
+                        return deck.dueNotesCount + deck.newNotes.length > 0;
+                    }),
+                );
+                if (reviewDeckKeys.length > 0) this.lastSelectedReviewDeck = reviewDeckKeys[0];
+                else {
+                    new Notice(t("ALL_CAUGHT_UP"));
+                    return;
+                }
+            }
+            this.reviewNextNote(this.lastSelectedReviewDeck);
         };
 
         registerTrackFileEvents(this);
@@ -380,6 +398,9 @@ export default class SRPlugin extends Plugin {
         );
 
         reviewSequencer.setDeckTree(fullDeckTree, remainingDeckTree);
+        reviewResponseModal.getInstance().cardtotalCB = () => {
+            return remainingDeckTree.getCardCount(CardListType.All, true);
+        };
         new FlashcardModal(this.app, this, this.data.settings, reviewSequencer, reviewMode).open();
     }
 
@@ -477,7 +498,9 @@ export default class SRPlugin extends Plugin {
         }
 
         this.updateAndSortDueNotes();
-
+        reviewResponseModal.getInstance().notetotalCB = () => {
+            return this.noteStats.getTotalCount();
+        };
         this.syncLock = false;
     }
 
@@ -753,6 +776,9 @@ export default class SRPlugin extends Plugin {
 
         if (!this.data.settings.reviewResponseFloatBar) {
             new Notice(t("RESPONSE_RECEIVED"));
+        }
+        if (MixQueSet.getInstance().isCard) {
+            return;
         }
 
         if (this.data.settings.autoNextNote) {

@@ -59,6 +59,9 @@ export interface SRSettings {
     autoNextNote: boolean;
     mixDue: number;
     mixNew: number;
+    mixCardNote: boolean;
+    mixCard: number;
+    mixNote: number;
     reviewResponseFloatBar: boolean;
     responseBarPositionPercentage: number;
     reviewingNoteDirectly: boolean;
@@ -127,6 +130,9 @@ export const DEFAULT_SETTINGS: SRSettings = {
     autoNextNote: false,
     mixDue: 3,
     mixNew: 2,
+    mixCardNote: false,
+    mixCard: 4,
+    mixNote: 1,
     reviewResponseFloatBar: false,
     responseBarPositionPercentage: 5,
     reviewingNoteDirectly: false,

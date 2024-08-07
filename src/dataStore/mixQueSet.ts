@@ -1,3 +1,5 @@
+import { RepetitionItem } from "./repetitionItem";
+
 export type tIMixQueSet = Record<string, number | boolean>; // isDue,DueDefaultCnt, NewDefaultCnt
 export interface IMixQueSet {
     isDue: boolean;
@@ -11,21 +13,22 @@ export class MixQueSet implements IMixQueSet {
     DueDefaultCnt: number;
     NewDefaultCnt: number;
 
-    isCard: boolean;
+    private _isCard: boolean;
     CardDefaultCnt: number;
     NoteDefaultCnt: number;
 
     private static _instance: MixQueSet;
     private _dnCnt: number = 0;
+    private _cnCnt: number = 0;
 
     constructor() {
         MixQueSet._instance = this;
     }
 
-    static create(due: number = 3, newdc: number = 2, card: number = 3, note: number = 1) {
+    static create(due: number = 3, newdc: number = 2, card: number = 4, note: number = 1) {
         const mqs = new MixQueSet();
         mqs.isDue = true;
-        mqs.isCard = false;
+        mqs._isCard = false;
         mqs.DueDefaultCnt = due;
         mqs.NewDefaultCnt = newdc;
         mqs.CardDefaultCnt = card;
@@ -35,6 +38,10 @@ export class MixQueSet implements IMixQueSet {
 
     static getInstance() {
         return this._instance;
+    }
+
+    get isCard() {
+        return this._isCard;
     }
 
     calcNext(dueCnthad: number, newCnthad: number) {
@@ -55,6 +62,24 @@ export class MixQueSet implements IMixQueSet {
             }
         }
 
-        // todo: update card note cnt
+    }
+
+    arbitrateCardNote(item: RepetitionItem, cardtlt: number, notetlt: number) {
+        if (this.CardDefaultCnt === 0) return (this._isCard = item.isCard);
+        if (this.NoteDefaultCnt === 0) return (this._isCard = !item.isCard);
+        this._cnCnt++;
+        if (this.isCard) {
+            if (this._cnCnt >= this.CardDefaultCnt && notetlt > 0) {
+                this._isCard = false;
+                this._cnCnt = 0;
+                return;
+            }
+        } else {
+            if (this._cnCnt >= this.NoteDefaultCnt && cardtlt > 0) {
+                this._isCard = true;
+                this._cnCnt = 0;
+                return;
+            }
+        }
     }
 }

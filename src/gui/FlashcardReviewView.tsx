@@ -23,6 +23,7 @@ import { DataLocation } from "src/dataStore/dataLocation";
 import { BlockUtils, debug } from "src/util/utils_recall";
 import { reviewResponseModal } from "./reviewresponse-modal";
 import { FlashcardContentUI } from "./FlashcardContextUI";
+import { MixQueSet } from "src/dataStore/mixQueSet";
 
 export class FlashcardReviewView {
     public app: App;
@@ -91,6 +92,10 @@ export class FlashcardReviewView {
 
         // Build ui
         this.init();
+
+        if (this.settings.mdView && this.settings.mixCardNote) {
+            reviewResponseModal.getInstance().openNextCardCB = this._handleSkipCard.bind(this);
+        }
     }
 
     /**
@@ -415,7 +420,12 @@ export class FlashcardReviewView {
                 this._showAnswer();
                 return;
             }
-            await this.show();
+            if (
+                (this?._previousCard?.isMultiCloze && this._currentCard.isMultiCloze) == false &&
+                MixQueSet.getInstance().isCard
+            ) {
+                await this.show();
+            }
         } else if (this.settings.mdView) {
             FlashcardModal.instance.open();
         } else this.backClickHandler();

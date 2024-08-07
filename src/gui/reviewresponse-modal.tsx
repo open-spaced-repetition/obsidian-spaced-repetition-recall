@@ -9,13 +9,14 @@ import { RepetitionItem } from "src/dataStore/repetitionItem";
 // import { debug } from "src/util/utils_recall";
 import { TouchOnMobile } from "src/Events/touchEvent";
 import SRPlugin from "src/main";
+import { MixQueSet } from "src/dataStore/mixQueSet";
 
 export class reviewResponseModal {
     private static instance: reviewResponseModal;
     private app: App;
     public plugin: SRPlugin;
     private settings: SRSettings;
-    public submitCallback: (note: TFile, resp: number) => void;
+    public submitCallback: (resp: number) => void;
     private algorithm: SrsAlgorithm;
     private containerEl: HTMLElement;
     private contentEl: HTMLElement;
@@ -35,6 +36,10 @@ export class reviewResponseModal {
 
     respCallback: (resp: number) => void;
     showAnsCB: () => void;
+    public cardtotalCB: () => number;
+    public notetotalCB: () => number;
+    public openNextCardCB: () => void;
+    public openNextNoteCB: () => void;
 
     static getInstance() {
         return reviewResponseModal.instance;
@@ -130,16 +135,23 @@ export class reviewResponseModal {
 
     private buttonClick(s: string) {
         // this.mode = FlashcardModalMode.Front;
-
-        if (this.respCallback) {
-            this.respCallback(this.options.indexOf(s));
-            return;
+        let mqs: MixQueSet;
+        if (this.settings.mixCardNote) {
+            mqs = MixQueSet.getInstance();
+            mqs.arbitrateCardNote(this.item, this.cardtotalCB(), this.notetotalCB());
         }
 
-        const openFile: TFile | null = app.workspace.getActiveFile();
-        if (openFile && openFile.extension === "md") {
-            if (this.submitCallback) {
-                this.submitCallback(openFile, this.options.indexOf(s));
+        if (this.item.isCard && this.respCallback) {
+            this.respCallback(this.options.indexOf(s));
+        } else if (this.submitCallback) {
+            this.submitCallback(this.options.indexOf(s));
+        }
+
+        if (mqs) {
+            if (!this.item?.isCard && mqs.isCard) {
+                this.openNextCardCB();
+            } else if (this.item?.isCard && !mqs.isCard) {
+                this.openNextNoteCB();
             }
         }
     }
@@ -385,6 +397,8 @@ export class reviewResponseModal {
                     this.close();
                     clearInterval(timmer);
                 }
+            } else {
+                clearInterval(timmer);
             }
         }, tout);
     }
