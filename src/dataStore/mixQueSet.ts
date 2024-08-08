@@ -48,7 +48,6 @@ export class MixQueSet implements IMixQueSet {
     inMultiCloze(multi = true) {
         // this._inMuti = multi;
         this._isCard = multi;
-        console.debug("set in multi cloze",this._isCard);
     }
 
     calcNext(dueCnthad: number, newCnthad: number) {
@@ -87,6 +86,5 @@ export class MixQueSet implements IMixQueSet {
                 return;
             }
         }
-        console.debug(this._cnCnt, " next review is c", this.isCard);
     }
 }

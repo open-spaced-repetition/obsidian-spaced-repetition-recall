@@ -53,7 +53,7 @@ export class ReviewView {
                 state.item = que.getNextId();
                 // state.mode = "question";
 
-                reviewFloatBar.display(item, (opt) => {
+                reviewFloatBar.display(item, async (opt) => {
                     IReviewNote.recallReviewResponse(this.itemId, opt);
                     plugin.postponeResponse(note, itemToShedNote(item, note));
                     if (settings.autoNextNote) {

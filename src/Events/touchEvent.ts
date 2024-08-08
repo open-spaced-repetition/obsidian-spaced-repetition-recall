@@ -30,7 +30,7 @@ export class TouchOnMobile {
             this.ongoingTouches.push(copyTouch(touches[i]));
         }
         setTimeout(() => {
-            console.debug("time up");
+            // console.debug("time up");
             if (this.originTouches.length > 0 && this.isLongClick(0)) {
                 evt.preventDefault();
                 this.longClickCb();
@@ -81,7 +81,7 @@ export class TouchOnMobile {
 
     handleCancel(evt: TouchEvent) {
         evt.preventDefault();
-        console.debug("触摸取消。");
+        // console.debug("触摸取消。");
         const touches = evt.changedTouches;
 
         for (let i = 0; i < touches.length; i++) {

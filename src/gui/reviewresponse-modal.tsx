@@ -3,10 +3,8 @@ import { App, MarkdownView, Menu, MenuItem, Platform, TFile } from "obsidian";
 import { textInterval } from "src/scheduling";
 import { SRSettings } from "src/settings";
 import { t } from "src/lang/helpers";
-// import { FlashcardModalMode } from "src/gui/flashcard-modal";
 import { SrsAlgorithm } from "src/algorithms/algorithms";
 import { RepetitionItem } from "src/dataStore/repetitionItem";
-// import { debug } from "src/util/utils_recall";
 import { TouchOnMobile } from "src/Events/touchEvent";
 import SRPlugin from "src/main";
 import { MixQueSet } from "src/dataStore/mixQueSet";
@@ -23,7 +21,6 @@ export class reviewResponseModal {
 
     barId = "reviewResponseModalBar";
     private barItemId: string = "ResponseFloatBarCommandItem";
-    // mode: FlashcardModalMode;
     answerBtn: HTMLButtonElement;
     buttons: HTMLButtonElement[];
     response: HTMLDivElement;
@@ -83,12 +80,6 @@ export class reviewResponseModal {
         }
 
         // update show text
-        // if (this.mode == null || this.mode == FlashcardModalMode.Front) {
-        // this.showAnswer();
-        // } else if (this.mode == FlashcardModalMode.Back) {
-        //     this.showQuestion();
-        // }
-
         if (item?.isCard && front !== false) {
             this.showQuestion();
         } else {
@@ -107,16 +98,12 @@ export class reviewResponseModal {
         }
         this.containerEl = createEl("div");
         this.containerEl.setAttribute("id", this.barId);
-        // this.containerEl.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
-        // this.containerEl.setAttribute("style", `grid-template-rows: ${"1fr ".repeat(1)}`);
         this.containerEl.hide();
         document.body
             .querySelector(".mod-vertical.mod-root")
             .insertAdjacentElement("afterbegin", this.containerEl);
 
         this.contentEl = this.containerEl.createDiv("sr-show-response");
-        // const modalmdv = this.contentEl.createDiv();
-        // const contentEl = modalmdv.createEl("div") as HTMLElement;
         this.contentEl.addClass("sr-modal-content");
         this.contentEl.addClass("sr-flashcard");
         this.controls = this.contentEl.createDiv();
@@ -135,7 +122,6 @@ export class reviewResponseModal {
     }
 
     private async buttonClick(s: string) {
-        // this.mode = FlashcardModalMode.Front;
         let mqs: MixQueSet;
         if (this.settings.mixCardNote && this.openNextCardCB && this.openNextNoteCB) {
             mqs = MixQueSet.getInstance();
@@ -144,10 +130,8 @@ export class reviewResponseModal {
 
         if (this.item.isCard && this.respCallback) {
             await this.respCallback(this.options.indexOf(s));
-            console.debug("this is card review");
         } else if (!this.item?.isCard && this.submitCallback) {
             this.submitCallback(this.options.indexOf(s));
-            console.debug("this is note review");
         }
 
         if (mqs) {
@@ -186,7 +170,6 @@ export class reviewResponseModal {
             this.showAnswer();
         });
         this.answerBtn.addClass("sr-is-hidden");
-        // this.response.appendChild(this.answerBtn);
     }
 
     private addMenuEvent() {
@@ -367,7 +350,6 @@ export class reviewResponseModal {
     hide() {
         if (this.containerEl?.isShown()) {
             this.containerEl.hide();
-            console.debug("hide fbar.");
         }
     }
 
@@ -380,7 +362,6 @@ export class reviewResponseModal {
                 rrBar.removeChild(rrBar.firstChild);
             }
             rrBar.remove();
-            console.debug("cllose fbar.");
         }
     }
 
