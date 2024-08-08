@@ -221,6 +221,7 @@ export class FlashcardReviewView {
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the edit modal is open
         if (
+            document.activeElement.nodeName === "INPUT"  ||
             document.activeElement.nodeName === "TEXTAREA" ||
             this.mode === FlashcardModalMode.Closed
         ) {
@@ -416,7 +417,7 @@ export class FlashcardReviewView {
     private async _handleSkipCard(): Promise<void> {
         const isMulti = () => {
             return (
-                this?._previousCard.isMultiCloze &&
+                this?._previousCard?.isMultiCloze &&
                 this._currentCard?.isMultiCloze &&
                 this._currentCard !== this._currentCard.getFirstClozeCard()
             );
@@ -726,10 +727,10 @@ export class FlashcardReviewView {
         const timmer = setInterval(() => {
             const file = this.app.workspace.getActiveFile();
             if (file?.basename !== this.cardUI.basename) {
-                this.close();
+                document.removeEventListener("keydown", this._keydownHandler);
                 clearInterval(timmer);
             } else if (this.mode === FlashcardModalMode.Closed) {
-                this.close();
+                document.removeEventListener("keydown", this._keydownHandler);
                 clearInterval(timmer);
             }
         }, tout);

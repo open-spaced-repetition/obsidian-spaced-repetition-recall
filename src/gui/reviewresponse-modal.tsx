@@ -1,5 +1,5 @@
 // https://img.shields.io/github/v/release/chetachiezikeuzor/cMenu-Plugin
-import { App, MarkdownView, Menu, MenuItem, Platform, TFile } from "obsidian";
+import { App, MarkdownView, Menu, MenuItem, Platform, TFile, setIcon } from "obsidian";
 import { textInterval } from "src/scheduling";
 import { SRSettings } from "src/settings";
 import { t } from "src/lang/helpers";
@@ -25,6 +25,8 @@ export class reviewResponseModal {
     buttons: HTMLButtonElement[];
     response: HTMLDivElement;
     controls: HTMLDivElement;
+    private notecontrols: HTMLDivElement;
+    private skipButton: HTMLButtonElement;
     private responseInterval: number[];
     private item: RepetitionItem;
     private showInterval = true;
@@ -37,6 +39,7 @@ export class reviewResponseModal {
     public notetotalCB: () => number;
     public openNextCardCB: () => void;
     public openNextNoteCB: () => void;
+    infoButton: HTMLButtonElement;
 
     static getInstance() {
         return reviewResponseModal.instance;
@@ -106,12 +109,14 @@ export class reviewResponseModal {
         this.contentEl = this.containerEl.createDiv("sr-show-response");
         this.contentEl.addClass("sr-modal-content");
         this.contentEl.addClass("sr-flashcard");
+        this.notecontrols = this.contentEl.createDiv();
         this.controls = this.contentEl.createDiv();
 
         this.response = this.contentEl.createDiv("sr-show-response");
         this.response.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
 
         this.buttons = [];
+        this._createNoteControls();
         this.createButtons_responses();
         this.createButton_showAnswer();
 
@@ -137,10 +142,35 @@ export class reviewResponseModal {
         if (mqs) {
             if (!this.item?.isCard && mqs.isCard) {
                 this.openNextCardCB();
+                this._updateControls(true);
             } else if (this.item?.isCard && !mqs.isCard) {
                 this.openNextNoteCB();
+                this._updateControls(false);
             }
         }
+    }
+
+    private _createNoteControls() {
+        this.notecontrols.addClass("sr-header");
+        this._createCloseButton(this.notecontrols);
+
+        const div = this.notecontrols.createDiv();
+        this._createIntervalButton(div);
+        this._createResetButton(div);
+        this._createCardInfoButton(div);
+        this._createSkipButton(div);
+        div.addClass("sr-controls");
+        this.notecontrols.hide();
+    }
+
+    private _createResetButton(containerEl: HTMLElement) {
+        const btn = containerEl.createEl("button");
+        btn.addClasses(["sr-button", "sr-reset-button"]);
+        setIcon(btn, "refresh-cw");
+        btn.setAttribute("aria-label", t("RESET_CARD_PROGRESS"));
+        btn.addEventListener("click", () => {
+            this.buttonClick(this.options[0]);
+        });
     }
 
     private createButtons_responses() {
@@ -170,6 +200,70 @@ export class reviewResponseModal {
             this.showAnswer();
         });
         this.answerBtn.addClass("sr-is-hidden");
+    }
+    private _createCloseButton(elm: HTMLDivElement) {
+        const closeButton = elm.createDiv();
+        closeButton.addClasses(["sr-close-button"]); //  "sr-is-hidden"
+        setIcon(closeButton, "lucide-x");
+        closeButton.setAttribute("aria-label", t("CLOSE"));
+        closeButton.addEventListener("click", () => {
+            this.close();
+        });
+        return closeButton;
+    }
+
+    private _createIntervalButton(containerEl: HTMLElement) {
+        const btn = containerEl.createEl("button");
+        const setIvtlIcon = () => {
+            if (this.showInterval) {
+                setIcon(btn, "alarm-clock-off");
+                btn.setAttribute("aria-label", "click to Hide Intervals");
+            } else {
+                setIcon(btn, "alarm-clock");
+                btn.setAttribute("aria-label", "click to Show Intervals");
+            }
+        };
+        btn.addClasses(["sr-button", "sr-info-button"]);
+        setIvtlIcon();
+
+        btn.addEventListener("click", () => {
+            this.toggleShowInterval();
+            setIvtlIcon();
+            this.showAnswer();
+        });
+    }
+
+    private _createCardInfoButton(containerEl: HTMLElement) {
+        this.infoButton = containerEl.createEl("button");
+        this.infoButton.addClasses(["sr-button", "sr-info-button"]);
+        setIcon(this.infoButton, "info");
+        this.infoButton.setAttribute("aria-label", "View Card Info");
+        this.infoButton.addEventListener("click", () => {
+            const id = "obsidian-spaced-repetition-recall:view-item-info";
+            // eslint-disable-next-line
+            // @ts-ignore
+            this.app.commands.executeCommandById(id);
+        });
+    }
+
+    private _createSkipButton(containerEl: HTMLElement) {
+        this.skipButton = containerEl.createEl("button");
+        this.skipButton.addClasses(["sr-button", "sr-skip-button"]);
+        setIcon(this.skipButton, "chevrons-right");
+        this.skipButton.setAttribute("aria-label", t("SKIP"));
+        this.skipButton.addEventListener("click", () => {
+            this.openNextNoteCB();
+        });
+    }
+
+    private _updateControls(isCard: boolean) {
+        if (isCard && this.notecontrols.isShown()) {
+            this.notecontrols.hide();
+            this.controls.show();
+        } else if (!isCard && this.controls.isShown()) {
+            this.controls.hide();
+            this.notecontrols.show();
+        }
     }
 
     private addMenuEvent() {
@@ -204,10 +298,8 @@ export class reviewResponseModal {
                 return;
             }
             evt.cancelable && evt.preventDefault();
-            if (triggerControls()) {
-                return;
-            }
-
+            triggerControls();
+            return;
             if (isShow()) {
                 showitem.setIcon("alarm-clock-off");
                 showitem.setTitle("Hide Intervals");
@@ -230,10 +322,8 @@ export class reviewResponseModal {
             }
         };
         touch.swipUpCb = () => {
-            if (this._triggerControls()) {
-                return;
-            }
-            this.close();
+            this._triggerControls();
+            // this.close();
         };
 
         this.containerEl.addEventListener("touchstart", touch.handleStart.bind(touch), {
@@ -284,7 +374,14 @@ export class reviewResponseModal {
     }
 
     private _triggerControls() {
-        if (!this.item?.isCard) return false;
+        if (!this.item?.isCard) {
+            if (this.notecontrols.isShown()) {
+                this.notecontrols.hide();
+            } else {
+                this.notecontrols.show();
+            }
+            return false;
+        }
         if (this.controls?.hasClass("sr-is-hidden")) {
             this.controls.removeClass("sr-is-hidden");
             return true;
@@ -303,7 +400,7 @@ export class reviewResponseModal {
         // this.answerBtn.style.display = "none";
         // this.response.style.display = "grid";
 
-        let _stIndx = 0;
+        let _stIndx = 1;
         if (this.item?.isCard) {
             _stIndx = 1;
         }
