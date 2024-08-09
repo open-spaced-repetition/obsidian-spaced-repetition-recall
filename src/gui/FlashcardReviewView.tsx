@@ -221,7 +221,7 @@ export class FlashcardReviewView {
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the edit modal is open
         if (
-            document.activeElement.nodeName === "INPUT"  ||
+            document.activeElement.nodeName === "INPUT" ||
             document.activeElement.nodeName === "TEXTAREA" ||
             this.mode === FlashcardModalMode.Closed
         ) {
@@ -432,7 +432,7 @@ export class FlashcardReviewView {
         }
 
         if (this._currentCard != null) {
-            if (this?._previousCard && isMulti()) {
+            if (this?._previousCard && isMulti() && this.mode === FlashcardModalMode.Back) {
                 this._showAnswer();
                 return;
             }
