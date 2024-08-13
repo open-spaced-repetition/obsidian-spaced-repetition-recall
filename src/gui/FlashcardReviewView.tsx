@@ -107,6 +107,7 @@ export class FlashcardReviewView {
             fbar.showAnsCB = this._showAnswer.bind(this);
             fbar.build();
             this.view = fbar.controls;
+            this.view.empty();
             this.response = fbar.response;
         } else {
             this.view = this.modalContentEl.createDiv();
