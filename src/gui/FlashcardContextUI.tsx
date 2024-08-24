@@ -79,7 +79,7 @@ class FlashcardC_MD extends FlashcardContentUI {
         await this.adapter.write(path, this.mdCardText);
         const file = this.app.vault.getFileByPath(path);
         if (file instanceof TFile) {
-            const activeLeaf = this.app.workspace.getLeaf();
+            const activeLeaf = this.app.workspace.getLeaf("tab");
             await activeLeaf.openFile(file);
             const vstate = activeLeaf.getViewState();
             vstate.state.mode = "preview";
