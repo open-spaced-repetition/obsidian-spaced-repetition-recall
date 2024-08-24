@@ -8,6 +8,7 @@ import { RepetitionItem } from "src/dataStore/repetitionItem";
 import { TouchOnMobile } from "src/Events/touchEvent";
 import SRPlugin from "src/main";
 import { MixQueSet } from "src/dataStore/mixQueSet";
+import { FlashcardReviewMode } from "src/FlashcardReviewSequencer";
 
 export class reviewResponseModal {
     private static instance: reviewResponseModal;
@@ -32,6 +33,7 @@ export class reviewResponseModal {
     private showInterval = true;
     private buttonTexts: string[];
     private options: string[];
+    private _reviewMode: FlashcardReviewMode;
 
     respCallback: (resp: number) => void;
     showAnsCB: () => void;
@@ -125,10 +127,17 @@ export class reviewResponseModal {
         this.addTouchEvent();
         this._autoClose();
     }
-
+    set reviewMode(reviewMode: FlashcardReviewMode) {
+        this._reviewMode = reviewMode;
+    }
     private async buttonClick(s: string) {
         let mqs: MixQueSet;
-        if (this.settings.mixCardNote && this.openNextCardCB && this.openNextNoteCB) {
+        if (
+            this.reviewMode === FlashcardReviewMode.Review &&
+            this.settings.mixCardNote &&
+            this.openNextCardCB &&
+            this.openNextNoteCB
+        ) {
             mqs = MixQueSet.getInstance();
             mqs.arbitrateCardNote(this.item, this.cardtotalCB(), this.notetotalCB());
         }
@@ -409,7 +418,9 @@ export class reviewResponseModal {
             // let text = btnText[algo][index];
             const text = this.getTextWithInterval(_stIndx + index);
             btn.setText(text);
-            btn.removeClass("sr-is-hidden");
+            if (!this.item.isCard) {
+                btn.removeClass("sr-is-hidden");
+            }
         });
     }
 

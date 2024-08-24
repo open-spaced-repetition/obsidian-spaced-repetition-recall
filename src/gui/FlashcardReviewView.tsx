@@ -106,6 +106,7 @@ export class FlashcardReviewView {
             const fbar = reviewResponseModal.getInstance();
             fbar.showAnsCB = this._showAnswer.bind(this);
             fbar.build();
+            fbar.reviewMode = this.reviewMode;
             this.view = fbar.controls;
             this.view.empty();
             this.response = fbar.response;
@@ -423,10 +424,14 @@ export class FlashcardReviewView {
                 this._currentCard !== this._currentCard.getFirstClozeCard()
             );
         };
-        if (this.settings.mixCardNote && !MixQueSet.getInstance().isCard) {
+        let mqs: MixQueSet;
+        if (this.reviewMode === FlashcardReviewMode.Review) {
+            mqs = MixQueSet.getInstance();
+        }
+        if (this.settings.mixCardNote && mqs && !mqs.isCard) {
             if (isMulti()) {
                 this.mode = FlashcardModalMode.Closed;
-                MixQueSet.getInstance().inMultiCloze();
+                mqs.inMultiCloze();
             } else {
                 return;
             }
