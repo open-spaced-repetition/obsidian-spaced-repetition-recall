@@ -96,6 +96,7 @@ export class FlashcardModal extends Modal {
 
     private _showDecksList(): void {
         this._hideFlashcard();
+        this.mode = FlashcardModalMode.DecksList;
         this.deckView.show();
     }
 
@@ -105,6 +106,7 @@ export class FlashcardModal extends Modal {
 
     private _showFlashcard(): void {
         this._hideDecksList();
+        this.mode = FlashcardModalMode.Front;
         this.flashcardView.show();
         if (this.settings.mdView) this.close();
     }

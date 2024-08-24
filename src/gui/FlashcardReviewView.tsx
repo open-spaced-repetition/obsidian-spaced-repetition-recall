@@ -209,8 +209,7 @@ export class FlashcardReviewView {
      */
     close() {
         if (this.settings.mdView) {
-            const activeLeaf = this.app.workspace.getLeaf();
-            activeLeaf.detach();
+            this.cardUI.close();
             reviewResponseModal.getInstance().close();
         }
 

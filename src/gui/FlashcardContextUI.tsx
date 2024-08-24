@@ -1,4 +1,4 @@
-import { DataAdapter, App, TFile, MarkdownView } from "obsidian";
+import { DataAdapter, App, TFile, MarkdownView, WorkspaceLeaf } from "obsidian";
 import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
 import { RenderMarkdownWrapper } from "src/util/RenderMarkdownWrapper";
@@ -35,10 +35,12 @@ export abstract class FlashcardContentUI {
     }
     abstract render(context: string, cardtext: string, path: string): Promise<void>;
     abstract render_Ans(cardtext: string, isNotCloze: boolean): Promise<void>;
+    close() {}
 }
 
 class FlashcardC_MD extends FlashcardContentUI {
     private adapter: DataAdapter;
+    private activeLeaf: WorkspaceLeaf;
     private mdCardContext: string;
     private mdCardText: string;
     private path: string;
@@ -46,6 +48,17 @@ class FlashcardC_MD extends FlashcardContentUI {
     constructor(plugin: SRPlugin, context: HTMLElement, content: HTMLDivElement) {
         super(plugin, context, content);
         this.adapter = plugin.app.vault.adapter;
+        const leafs = this.app.workspace.getLeavesOfType("markdown");
+        const hasLeaf = leafs.some((leaf) => {
+            const vst = leaf.getViewState();
+            if (vst.state.file === path) {
+                this.activeLeaf = leaf;
+                return true;
+            }
+        });
+        if (!hasLeaf) {
+            this.activeLeaf = this.app.workspace.getLeaf("tab");
+        }
     }
     get basename() {
         return fbasename;
@@ -79,24 +92,23 @@ class FlashcardC_MD extends FlashcardContentUI {
         await this.adapter.write(path, this.mdCardText);
         const file = this.app.vault.getFileByPath(path);
         if (file instanceof TFile) {
-            const activeLeaf = this.app.workspace.getLeaf("tab");
-            await activeLeaf.openFile(file);
-            const vstate = activeLeaf.getViewState();
+            // const activeLeaf = this.app.workspace.getLeaf("tab");
+            await this.activeLeaf.openFile(file);
+            const vstate = this.activeLeaf.getViewState();
             vstate.state.mode = "preview";
-            await activeLeaf.setViewState(vstate);
+            await this.activeLeaf.setViewState(vstate);
         } else {
-            // await this.app.workspace.openLinkText(path, "");
-            // await this.app.workspace.openLinkText("DoNotUse_pacedrepetition_tempCardtext", "");
-            await this.app.workspace.openLinkText(
-                "DoNotUse_pacedrepetition_tempCardtext",
-                this.path,
-            );
+            await this.app.workspace.openLinkText(this.basename, this.path);
             const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
             const state = activeLeaf.getState();
             state.mode = "preview";
             state.file = path;
             activeLeaf.setState(state, { history: false });
         }
+    }
+
+    close() {
+        this.activeLeaf.detach();
     }
 }
 
