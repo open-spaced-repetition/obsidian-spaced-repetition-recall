@@ -51,6 +51,11 @@ export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
                 });
         });
 
+    if (!settings.mdView) {
+        settings.mixCardNote = false;
+        plugin.savePluginData();
+        return;
+    }
     const desc = createFragment((frag) => {
         frag.createDiv().innerHTML =
             "review flashcards and note in mix Que in default MarkdownPreview";

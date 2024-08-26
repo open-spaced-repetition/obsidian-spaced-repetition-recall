@@ -16,6 +16,7 @@ export function addmdViewSetting(containerEl: HTMLElement, plugin: SRPlugin) {
             toggle.setValue(plugin.data.settings.mdView).onChange(async (newValue) => {
                 plugin.data.settings.mdView = newValue;
                 await plugin.savePluginData();
+                plugin.settingTab.display();
             });
         });
 }
