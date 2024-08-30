@@ -2,6 +2,7 @@ import { DataAdapter, App, TFile, MarkdownView, WorkspaceLeaf } from "obsidian";
 import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
 import { RenderMarkdownWrapper } from "src/util/RenderMarkdownWrapper";
+import { debug } from "src/util/utils_recall";
 
 const fbasename = "DoNotUse_spacedrepetition_tempCardtext";
 const path = fbasename + ".md";
@@ -44,6 +45,7 @@ class FlashcardC_MD extends FlashcardContentUI {
     private mdCardContext: string;
     private mdCardText: string;
     private path: string;
+    private file: TFile;
 
     constructor(plugin: SRPlugin, context: HTMLElement, content: HTMLDivElement) {
         super(plugin, context, content);
@@ -59,6 +61,7 @@ class FlashcardC_MD extends FlashcardContentUI {
         if (!hasLeaf) {
             this.activeLeaf = this.app.workspace.getLeaf("tab");
         }
+        this.file = this.app.vault.getFileByPath(path);
     }
     get basename() {
         return fbasename;
@@ -90,15 +93,15 @@ class FlashcardC_MD extends FlashcardContentUI {
 
     private async _render() {
         await this.adapter.write(path, this.mdCardText);
-        const file = this.app.vault.getFileByPath(path);
-        if (file instanceof TFile) {
+        if (this.file instanceof TFile) {
             // const activeLeaf = this.app.workspace.getLeaf("tab");
-            await this.activeLeaf.openFile(file);
+            await this.activeLeaf.openFile(this.file);
             const vstate = this.activeLeaf.getViewState();
             vstate.state.mode = "preview";
             await this.activeLeaf.setViewState(vstate);
         } else {
-            await this.app.workspace.openLinkText(this.basename, this.path);
+            debug("UI _render", 5, "openLinkText");
+            await this.app.workspace.openLinkText(this.basename, this.path, false);
             const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
             const state = activeLeaf.getState();
             state.mode = "preview";
