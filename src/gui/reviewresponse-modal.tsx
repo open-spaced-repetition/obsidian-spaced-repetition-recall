@@ -133,7 +133,7 @@ export class reviewResponseModal {
     private async buttonClick(s: string) {
         let mqs: MixQueSet;
         if (
-            this.reviewMode === FlashcardReviewMode.Review &&
+            this._reviewMode === FlashcardReviewMode.Review &&
             this.settings.mixCardNote &&
             this.openNextCardCB &&
             this.openNextNoteCB
