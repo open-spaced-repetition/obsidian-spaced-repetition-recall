@@ -195,6 +195,7 @@ export class FlashcardReviewView {
     hide() {
         this.mode = FlashcardModalMode.Closed;
         reviewResponseModal.getInstance().hide();
+        this._autoremove(false);
         // Prevents the following code, from running if this was executed multiple times after one another
         if (this.view.hasClass("sr-is-hidden")) {
             return;
@@ -724,19 +725,24 @@ export class FlashcardReviewView {
         }
     }
 
-    private _autoremove() {
-        //after review
-
+    private _timmer: NodeJS.Timeout;
+    private _autoremove(enble = true) {
+        if (this._timmer) {
+            if (!enble) {
+                clearInterval(this._timmer);
+            }
+            return;
+        }
         const tout = Platform.isMobile ? 5000 : 10000;
-        const timmer = setInterval(() => {
+        this._timmer = setInterval(() => {
             const file = this.app.workspace.getActiveFile();
             const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (!Markdown) {
                 this.close();
-                clearInterval(timmer);
+                clearInterval(this._timmer);
             } else if (this.mode === FlashcardModalMode.Closed) {
                 this.close();
-                clearInterval(timmer);
+                clearInterval(this._timmer);
             }
         }, tout);
     }
