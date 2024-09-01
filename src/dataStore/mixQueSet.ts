@@ -48,6 +48,9 @@ export class MixQueSet implements IMixQueSet {
     inMultiCloze(multi = true) {
         // this._inMuti = multi;
         this._isCard = multi;
+        if(this._cnCnt===0) {
+            this._cnCnt = this.CardDefaultCnt;
+        }
     }
 
     calcNext(dueCnthad: number, newCnthad: number) {
