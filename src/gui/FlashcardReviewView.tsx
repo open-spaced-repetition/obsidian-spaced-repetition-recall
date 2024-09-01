@@ -177,6 +177,7 @@ export class FlashcardReviewView {
             const item = this.plugin.store.getItembyID(this._currentCard.Id);
             const fbar = reviewResponseModal.getInstance();
             fbar.display(item, this._processReview.bind(this));
+            this._autoremove();
         }
 
         // Prevents the following code, from running if this show is just a redraw and not an unhide
@@ -186,7 +187,6 @@ export class FlashcardReviewView {
         if (!this.settings.mdView) this.view.removeClass("sr-is-hidden");
         this.backButton.removeClass("sr-is-hidden");
         document.addEventListener("keydown", this._keydownHandler);
-        this._autoremove();
     }
 
     /**
@@ -208,13 +208,12 @@ export class FlashcardReviewView {
      * Closes the FlashcardView
      */
     close() {
+        document.removeEventListener("keydown", this._keydownHandler);
+        this.hide();
         if (this.settings.mdView) {
             this.cardUI.close();
             reviewResponseModal.getInstance().close();
         }
-
-        document.removeEventListener("keydown", this._keydownHandler);
-        this.hide();
     }
 
     // -> Functions & helpers
@@ -731,11 +730,12 @@ export class FlashcardReviewView {
         const tout = Platform.isMobile ? 5000 : 10000;
         const timmer = setInterval(() => {
             const file = this.app.workspace.getActiveFile();
-            if (file?.basename !== this.cardUI.basename) {
-                document.removeEventListener("keydown", this._keydownHandler);
+            const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
+            if (!Markdown) {
+                this.close();
                 clearInterval(timmer);
             } else if (this.mode === FlashcardModalMode.Closed) {
-                document.removeEventListener("keydown", this._keydownHandler);
+                this.close();
                 clearInterval(timmer);
             }
         }, tout);

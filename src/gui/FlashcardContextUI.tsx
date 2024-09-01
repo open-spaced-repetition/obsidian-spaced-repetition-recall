@@ -4,7 +4,7 @@ import { SRSettings } from "src/settings";
 import { RenderMarkdownWrapper } from "src/util/RenderMarkdownWrapper";
 import { debug } from "src/util/utils_recall";
 
-const fbasename = "DoNotUse_spacedrepetition_tempCardtext";
+const fbasename = "DoNotUse_tempCardtext_for_spacedrepetition";
 const path = fbasename + ".md";
 // ("./.obsidian/plugins/obsidian-spaced-repetition-recall/spacedrepetition_tempCardtext.md");
 
@@ -107,10 +107,12 @@ class FlashcardC_MD extends FlashcardContentUI {
             state.mode = "preview";
             state.file = path;
             activeLeaf.setState(state, { history: false });
+            this.file = this.app.vault.getFileByPath(path);
         }
     }
 
     close() {
+        this.adapter.remove(path);
         this.activeLeaf.detach();
     }
 }
