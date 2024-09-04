@@ -131,6 +131,7 @@ export class reviewResponseModal {
         this._reviewMode = reviewMode;
     }
     private async buttonClick(s: string) {
+        this.hideControls();
         let mqs: MixQueSet;
         if (
             this._reviewMode === FlashcardReviewMode.Review &&
@@ -205,6 +206,7 @@ export class reviewResponseModal {
         this.answerBtn.addClasses(["sr-response-button", "sr-show-answer-button", "sr-bg-blue"]); //
         this.answerBtn.setText(t("SHOW_ANSWER"));
         this.answerBtn.addEventListener("click", () => {
+            this.hideControls();
             this.showAnsCB();
             this.showAnswer();
         });
@@ -272,6 +274,15 @@ export class reviewResponseModal {
         } else if (!isCard && this.controls.isShown()) {
             this.controls.hide();
             this.notecontrols.show();
+        }
+    }
+
+    private hideControls() {
+        if (this.notecontrols.isShown()) {
+            this.notecontrols.hide();
+        }
+        if (this.controls?.isShown()) {
+            this.controls.hide();
         }
     }
 
@@ -391,7 +402,8 @@ export class reviewResponseModal {
             }
             return false;
         }
-        if (this.controls?.hasClass("sr-is-hidden")) {
+        if (this.controls?.hasClass("sr-is-hidden") || this.controls?.isShown() === false) {
+            this.controls.show();
             this.controls.removeClass("sr-is-hidden");
             return true;
         } else if (this.controls.hasChildNodes()) {
