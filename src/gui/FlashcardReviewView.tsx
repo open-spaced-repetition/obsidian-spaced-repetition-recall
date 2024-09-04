@@ -514,13 +514,29 @@ export class FlashcardReviewView {
     private _createOpenFileButton() {
         this.openNoteFileButton = this.controls.createEl("button");
         this.openNoteFileButton.addClass("sr-flashcard-menu-item");
-        setIcon(this.openNoteFileButton, "file-edit");
-        this.openNoteFileButton.setAttribute("aria-label", t("OPEN_NOTE"));
+        const fileToggleIcon = (open: boolean = true) => {
+            if (open) {
+                setIcon(this.openNoteFileButton, "file-edit");
+                this.openNoteFileButton.setAttribute("aria-label", t("OPEN_NOTE"));
+            } else {
+                setIcon(this.openNoteFileButton, "file-x");
+                this.openNoteFileButton.setAttribute("aria-label", t("CLOSE_NOTE"));
+            }
+        };
+        fileToggleIcon();
         this.openNoteFileButton.addEventListener("click", async () => {
-            const activeLeaf = this.plugin.app.workspace.getLeaf("tab");
             const noteFile = this._currentCard.question.note.file as SrTFile;
+            const wp = this.plugin.app.workspace;
+            const activefile = wp.getActiveFile();
+            if (activefile === noteFile.file) {
+                fileToggleIcon(true);
+                wp.getLeaf(false).detach();
+                return;
+            }
+            const activeLeaf = wp.getLeaf("tab");
             await activeLeaf.openFile(noteFile.file);
             if (activeLeaf.view instanceof MarkdownView) {
+                fileToggleIcon(false);
                 const activeView = activeLeaf.view;
                 const pos = {
                     line: this._currentCard.question.lineNo,
