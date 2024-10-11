@@ -192,7 +192,7 @@ export default class SRPlugin extends Plugin {
                 window.setInterval(
                     async () => {
                         await this.sync();
-                        this.store.save();
+                        // this.store.save();
                     },
                     5 * 60 * 1000,
                 ),

@@ -144,10 +144,8 @@ export class ItemTrans {
             let blockID = question.questionText.obsidianBlockId;
             const count: number = question.cards.length;
             const scheduling: RegExpMatchArray[] = [];
-            if (settings.cardBlockID && !blockID) {
-                blockID = question.questionText.genBlockId = "^" + BlockUtils.generateBlockId();
-            }
             let cardinfo = trackedFile.getSyncCardInfo(lineNo, cardTextHash, blockID);
+
             if (cardinfo != null) {
                 cardinfo.itemIds
                     .map((id: number) => store.getItembyID(id).getSched())
@@ -160,6 +158,15 @@ export class ItemTrans {
                     });
             } else {
                 cardinfo = trackedFile.trackCard(lineNo, cardTextHash);
+            }
+
+            // update blockid
+            if (settings.cardBlockID && !blockID) {
+                if (!cardinfo.blockID) {
+                    blockID = "^" + BlockUtils.generateBlockId();
+                    cardinfo = trackedFile.getSyncCardInfo(lineNo, cardTextHash, blockID);
+                }
+                question.questionText.genBlockId = cardinfo.blockID;
             }
 
             const dtppath = question.topicPathList.list[0] ?? undefined;
@@ -187,8 +194,8 @@ function updateCardObjs(cards: Card[], cardinfo: CardInfo, scheduling: RegExpMat
         const cardObj = cards[i];
         const hasScheduleInfo: boolean = i < schedInfoList.length;
         const schedule: CardScheduleInfo = schedInfoList[i];
-        const hassched = !schedule.isDummyScheduleForNewCard();
-        cardObj.scheduleInfo = hasScheduleInfo && hassched ? schedule : null;
+        const hassched = hasScheduleInfo && !schedule.isDummyScheduleForNewCard();
+        cardObj.scheduleInfo = hassched ? schedule : null;
         cardObj.Id = carditemIds[i];
 
         if (hassched) update = true;
