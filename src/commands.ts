@@ -163,7 +163,12 @@ export default class Commands {
                                 "please input positive number",
                             );
                             input.submitCallback = (days: number) =>
-                                postponeItems(tkfile.cardIDs.map(plugin.store.getItembyID), days);
+                                postponeItems(
+                                    tkfile.cardIDs.map((id) => {
+                                        return plugin.store.getItembyID(id);
+                                    }),
+                                    days,
+                                );
                             input.open();
 
                             // plugin.store.save();
