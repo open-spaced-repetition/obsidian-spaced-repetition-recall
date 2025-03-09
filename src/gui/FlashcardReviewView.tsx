@@ -171,9 +171,6 @@ export class FlashcardReviewView {
         // Setup card content
         await this.cardUI.render(context, this._currentCard.front, this._currentNote.filePath);
 
-        // Set scroll position back to top
-        this.content.scrollTop = 0;
-
         // Setup response buttons
         this._resetResponseButtons();
         if (this.settings.mdView) {

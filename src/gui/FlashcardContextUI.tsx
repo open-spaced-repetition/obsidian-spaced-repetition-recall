@@ -42,6 +42,7 @@ export abstract class FlashcardContentUI {
 class FlashcardC_MD extends FlashcardContentUI {
     private adapter: DataAdapter;
     private activeLeaf: WorkspaceLeaf;
+    private mdview: MarkdownView;
     private mdCardContext: string;
     private mdCardText: string;
     private path: string;
@@ -61,6 +62,7 @@ class FlashcardC_MD extends FlashcardContentUI {
         if (!hasLeaf) {
             this.activeLeaf = this.app.workspace.getLeaf("tab");
         }
+        this.mdview = new MarkdownView(this.activeLeaf);
         this.file = this.app.vault.getFileByPath(path);
     }
     get basename() {
@@ -77,6 +79,8 @@ class FlashcardC_MD extends FlashcardContentUI {
         }
         this.mdCardText = this.mdCardContext + cardtext;
         await this._render();
+        // Set scroll position back to top
+        this.mdview.editor.scrollTo(0, 0);
     }
 
     async render_Ans(cardtext: string, isNotCloze: boolean) {
@@ -97,6 +101,7 @@ class FlashcardC_MD extends FlashcardContentUI {
             // const activeLeaf = this.app.workspace.getLeaf("tab");
             await this.activeLeaf.openFile(this.file);
             const vstate = this.activeLeaf.getViewState();
+            vstate.active = true;
             vstate.state.mode = "preview";
             await this.activeLeaf.setViewState(vstate);
         } else {
