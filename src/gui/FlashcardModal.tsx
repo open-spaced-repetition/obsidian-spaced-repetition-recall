@@ -23,6 +23,7 @@ export enum FlashcardModalMode {
 }
 
 export class FlashcardModal extends Modal {
+    private static _instance: FlashcardModal;
     public plugin: SRPlugin;
     public mode: FlashcardModalMode;
     private reviewSequencer: IFlashcardReviewSequencer;
@@ -75,6 +76,12 @@ export class FlashcardModal extends Modal {
             this._showDecksList.bind(this),
             this._doEditQuestionText.bind(this),
         );
+
+        FlashcardModal._instance = this;
+    }
+
+    static get instance() {
+        return FlashcardModal._instance;
     }
 
     onOpen(): void {
@@ -83,12 +90,15 @@ export class FlashcardModal extends Modal {
 
     onClose(): void {
         this.deckView.close();
-        this.flashcardView.close();
+        if (this.mode === FlashcardModalMode.DecksList) {
+            this.flashcardView.close();
+        }
         this.mode = FlashcardModalMode.Closed;
     }
 
     private _showDecksList(): void {
         this._hideFlashcard();
+        this.mode = FlashcardModalMode.DecksList;
         this.deckView.show();
     }
 
@@ -98,7 +108,9 @@ export class FlashcardModal extends Modal {
 
     private _showFlashcard(): void {
         this._hideDecksList();
+        this.mode = FlashcardModalMode.Front;
         this.flashcardView.show();
+        if (this.settings.mdView) this.close();
     }
 
     private _hideFlashcard(): void {

@@ -109,7 +109,11 @@ export class ItemTrans {
         }
         // update store.trackFile and item
         trackedFile.updateTags(rdeck.deckName);
-        item.updateDeckName(rdeck.deckName, store.isCardItem(item.ID));
+        const isCard = store.isCardItem(item.ID);
+        if (isCard) {
+            console.warn("note item type error: ", item, trackedFile);
+        }
+        item.updateDeckName(rdeck.deckName, false);
 
         return;
     }

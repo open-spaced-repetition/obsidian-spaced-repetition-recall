@@ -724,6 +724,11 @@ export class DataStore {
             items.map(async (item, _idx) => {
                 if (item != null && item.isTracked) {
                     // console.debug("verifyItems:", item, id);
+                    const tkfile = this.getFileByIndex(item.fileIndex);
+                    if (!tkfile) {
+                        item.setUntracked();
+                        return;
+                    }
                     const itemType = !this.isCardItem(item.ID) ? RPITEMTYPE.NOTE : RPITEMTYPE.CARD;
                     this._updateItem(item.ID, item.fileIndex, itemType, item.deckName);
                 }

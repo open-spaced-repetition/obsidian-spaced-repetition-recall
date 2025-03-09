@@ -98,12 +98,13 @@ export abstract class IReviewNote {
         ease: number,
     ): Promise<TrespResult>;
 
-    static recallReviewResponse(itemId: number, response: string) {
+    static recallReviewResponse(itemId: number, response: number) {
         const store = DataStore.getInstance();
+        const option = SrsAlgorithm.getInstance().srsOptions()[response];
         const item = store.getItembyID(itemId);
         // console.debug("itemId: ", itemId);
         store.updateReviewedCounts(itemId);
-        store.reviewId(itemId, response);
+        store.reviewId(itemId, option);
         store.save();
         this.minNextView = this.updateminNextView(this.minNextView, item.nextReview);
     }
@@ -238,7 +239,7 @@ export class RNonTrackfiles extends IReviewNote {
             }
         }
 
-        IReviewNote.recallReviewResponse(itemId, option);
+        IReviewNote.recallReviewResponse(itemId, response);
 
         return {
             buryList,

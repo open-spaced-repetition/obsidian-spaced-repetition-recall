@@ -124,7 +124,7 @@ export function addDataLocationSettings(containerEl: HTMLElement, plugin: SRPlug
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     await plugin.app.plugins.enablePlugin(plugin.manifest.id);
-                    console.debug("finish location change.");
+                    console.log("finish location change.");
 
                     await plugin.sync();
                     locSwitch.resultCheck(noteStats, cardStats, plugin.noteStats, plugin.cardStats);
