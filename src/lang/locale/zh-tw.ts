@@ -23,6 +23,7 @@ export default {
     CURRENT_INTERVAL_HELP_TEXT: "目前間隔時間：",
     CARD_GENERATED_FROM: "生成自：${notePath}",
     OPEN_NOTE: "打開筆記",
+    CLOSE_NOTE: "關閉筆記",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "打開一個筆記開始復習",

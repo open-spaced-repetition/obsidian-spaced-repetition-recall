@@ -178,7 +178,7 @@ export class Queue implements IQueue {
                     exists = store.updateMovedFile(file);
                 }
                 if (!exists && !bUnTfiles.has(file)) {
-                    console.debug("untrackfile by buildqueue:", file);
+                    // console.debug("untrackfile by buildqueue:", file);
                     bUnTfiles.add(file);
                     removedItems += store.untrackFile(file.path, false);
                     untrackedFiles += 1;
@@ -273,7 +273,7 @@ export class Queue implements IQueue {
             this.repeatQueue = [];
             this.toDayAllQueue = {};
             this.toDayLaterQueue = {};
-            console.debug("all queue are cleared!");
+            console.log("all queue are cleared!");
         } else if (isArray(queue)) {
             queue = [];
         } else {

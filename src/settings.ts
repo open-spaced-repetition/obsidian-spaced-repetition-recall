@@ -23,6 +23,7 @@ import { buildDonation } from "./settings/donation";
 import { addburySiblingSetting } from "./settings/burySiblingSetting";
 import { addcardBlockIDSetting } from "./settings/cardBlockIDSetting";
 import { addmixQueueSetting } from "./settings/mixQueueSetting";
+import { addmdViewSetting } from "./settings/mdViewSetting";
 
 export interface SRSettings {
     // flashcards
@@ -37,6 +38,7 @@ export interface SRSettings {
     burySiblingCardsByNoteReview: boolean;
     multiClozeCard: boolean;
     cardBlockID: boolean;
+    mdView: boolean;
     showContextInCards: boolean;
     flashcardHeightPercentage: number;
     flashcardWidthPercentage: number;
@@ -62,6 +64,9 @@ export interface SRSettings {
     autoNextNote: boolean;
     mixDue: number;
     mixNew: number;
+    mixCardNote: boolean;
+    mixCard: number;
+    mixNote: number;
     reviewResponseFloatBar: boolean;
     responseBarPositionPercentage: number;
     reviewingNoteDirectly: boolean;
@@ -106,6 +111,7 @@ export const DEFAULT_SETTINGS: SRSettings = {
     burySiblingCardsByNoteReview: false,
     multiClozeCard: false,
     cardBlockID: false,
+    mdView: false,
     showContextInCards: true,
     flashcardHeightPercentage: Platform.isMobile ? 100 : 80,
     flashcardWidthPercentage: Platform.isMobile ? 100 : 40,
@@ -132,6 +138,9 @@ export const DEFAULT_SETTINGS: SRSettings = {
     autoNextNote: false,
     mixDue: 3,
     mixNew: 2,
+    mixCardNote: false,
+    mixCard: 4,
+    mixNote: 1,
     reviewResponseFloatBar: false,
     responseBarPositionPercentage: 5,
     reviewingNoteDirectly: false,
@@ -684,6 +693,7 @@ export class SRSettingTab extends PluginSettingTab {
 
     private async tabUiPreferences(containerEl: HTMLElement): Promise<void> {
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
+        addmdViewSetting(newSettingEl(containerEl), this.plugin);
         this.addIntervalShowHideSetting(newSettingEl(containerEl));
         new Setting(containerEl)
             .setName(t("INITIALLY_EXPAND_SUBDECKS_IN_TREE"))

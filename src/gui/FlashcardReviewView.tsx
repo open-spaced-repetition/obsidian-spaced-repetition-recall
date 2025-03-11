@@ -13,14 +13,17 @@ import {
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
 } from "src/FlashcardReviewSequencer";
 import { Note } from "src/Note";
-import { RenderMarkdownWrapper } from "src/util/RenderMarkdownWrapper";
 import { CardScheduleInfo } from "src/CardSchedule";
-import { FlashcardModalMode } from "./FlashcardModal";
-import { RepetitionItem } from "src/dataStore/repetitionItem";
+
+import { FlashcardModal, FlashcardModalMode } from "src/gui/FlashcardModal";
+import { RPITEMTYPE, RepetitionItem } from "src/dataStore/repetitionItem";
 import { SrTFile } from "src/SRFile";
 import { ItemInfoModal } from "./info";
 import { DataLocation } from "src/dataStore/dataLocation";
-import { debug } from "src/util/utils_recall";
+import { BlockUtils, debug } from "src/util/utils_recall";
+import { reviewResponseModal } from "./reviewresponse-modal";
+import { FlashcardContentUI } from "./FlashcardContextUI";
+import { MixQueSet } from "src/dataStore/mixQueSet";
 
 export class FlashcardReviewView {
     public app: App;
@@ -62,6 +65,8 @@ export class FlashcardReviewView {
     public options: string[];
     private _previousCard: Card;
 
+    private cardUI: FlashcardContentUI;
+
     constructor(
         app: App,
         plugin: SRPlugin,
@@ -87,39 +92,55 @@ export class FlashcardReviewView {
 
         // Build ui
         this.init();
+
+        if (this.settings.mdView && this.settings.mixCardNote) {
+            reviewResponseModal.getInstance().openNextCardCB = this._handleSkipCard.bind(this);
+        }
     }
 
     /**
      * Initializes all static elements in the FlashcardView
      */
     init() {
-        this.view = this.modalContentEl.createDiv();
+        if (this.settings.mdView) {
+            const fbar = reviewResponseModal.getInstance();
+            fbar.showAnsCB = this._showAnswer.bind(this);
+            fbar.build();
+            fbar.reviewMode = this.reviewMode;
+            this.view = fbar.controls;
+            this.view.empty();
+            this.response = fbar.response;
+        } else {
+            this.view = this.modalContentEl.createDiv();
+        }
+
         this.view.addClasses(["sr-flashcard", "sr-is-hidden"]);
 
         this.header = this.view.createDiv();
         this.header.addClass("sr-header");
 
-        this._createBackButton();
-
         this.title = this.header.createDiv();
         this.title.addClass("sr-title");
 
+        // this.controls = fbar.controls;
         this.controls = this.header.createDiv();
         this.controls.addClass("sr-controls");
-
+        this._createBackButton();
         this._createCardControls();
 
-        if (this.settings.showContextInCards) {
-            this.context = this.view.createDiv();
-            this.context.addClass("sr-context");
+        if (!this.settings.mdView) {
+            if (this.settings.showContextInCards) {
+                this.context = this.view.createDiv();
+                this.context.addClass("sr-context");
+            }
+
+            this.content = this.view.createDiv();
+            this.content.addClass("sr-content");
+
+            this.response = this.view.createDiv();
         }
-
-        this.content = this.view.createDiv();
-        this.content.addClass("sr-content");
-
-        this.response = this.view.createDiv();
         this.response.addClass("sr-response");
-
+        this.cardUI = FlashcardContentUI.create(this.plugin, this.context, this.content);
         this._createResponseButtons();
     }
 
@@ -130,40 +151,40 @@ export class FlashcardReviewView {
         this.mode = FlashcardModalMode.Front;
         const deck: Deck = this.reviewSequencer.currentDeck;
 
+        if (this.settings.mdView) {
+            const fbar = reviewResponseModal.getInstance();
+            if (!fbar.hasBar()) {
+                this.init();
+            }
+        }
+
         // Setup title
         this._setTitle(deck);
         this.resetButton.disabled = true;
 
         // Setup context
+        let context: string;
         if (this.settings.showContextInCards) {
-            this.context.setText(
-                this._formatQuestionContextText(this._currentQuestion.questionContext),
-            );
+            context = this._formatQuestionContextText(this._currentQuestion.questionContext);
         }
 
         // Setup card content
-        this.content.empty();
-        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
-            this.app,
-            this.plugin,
-            this._currentNote.filePath,
-        );
-        await wrapper.renderMarkdownWrapper(
-            this._currentCard.front,
-            this.content,
-            this._currentQuestion.questionText.textDirection,
-        );
-        // Set scroll position back to top
-        this.content.scrollTop = 0;
+        await this.cardUI.render(context, this._currentCard.front, this._currentNote.filePath);
 
         // Setup response buttons
         this._resetResponseButtons();
+        if (this.settings.mdView) {
+            const item = this.plugin.store.getItembyID(this._currentCard.Id);
+            const fbar = reviewResponseModal.getInstance();
+            fbar.display(item, this._processReview.bind(this));
+            this._autoremove();
+        }
 
         // Prevents the following code, from running if this show is just a redraw and not an unhide
         if (!this.view.hasClass("sr-is-hidden")) {
             return;
         }
-        this.view.removeClass("sr-is-hidden");
+        if (!this.settings.mdView) this.view.removeClass("sr-is-hidden");
         this.backButton.removeClass("sr-is-hidden");
         document.addEventListener("keydown", this._keydownHandler);
     }
@@ -172,6 +193,9 @@ export class FlashcardReviewView {
      * Hides the FlashcardView
      */
     hide() {
+        this.mode = FlashcardModalMode.Closed;
+        reviewResponseModal.getInstance().hide();
+        this._autoremove(false);
         // Prevents the following code, from running if this was executed multiple times after one another
         if (this.view.hasClass("sr-is-hidden")) {
             return;
@@ -187,6 +211,10 @@ export class FlashcardReviewView {
     close() {
         document.removeEventListener("keydown", this._keydownHandler);
         this.hide();
+        if (this.settings.mdView) {
+            this.cardUI.close();
+            reviewResponseModal.getInstance().close();
+        }
     }
 
     // -> Functions & helpers
@@ -194,6 +222,7 @@ export class FlashcardReviewView {
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the edit modal is open
         if (
+            document.activeElement.nodeName === "INPUT" ||
             document.activeElement.nodeName === "TEXTAREA" ||
             this.mode === FlashcardModalMode.Closed
         ) {
@@ -297,24 +326,8 @@ export class FlashcardReviewView {
         this.resetButton.disabled = false;
 
         // Show answer text
-        if (this._currentQuestion.questionType !== CardType.Cloze) {
-            const hr: HTMLElement = document.createElement("hr");
-            hr.addClass("sr-card-divide");
-            this.content.appendChild(hr);
-        } else {
-            this.content.empty();
-        }
-
-        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
-            this.app,
-            this.plugin,
-            this._currentNote.filePath,
-        );
-        wrapper.renderMarkdownWrapper(
-            this._currentCard.back,
-            this.content,
-            this._currentQuestion.questionText.textDirection,
-        );
+        const isNotCloze = this._currentQuestion.questionType !== CardType.Cloze;
+        this.cardUI.render_Ans(this._currentCard.back, isNotCloze);
 
         // Show response buttons
         this.answerButton.addClass("sr-is-hidden");
@@ -324,6 +337,8 @@ export class FlashcardReviewView {
         const settings = this.settings;
         const algo = settings.algorithm;
         const btnTexts = settings.responseOptionBtnsText[algo];
+        const item = this.plugin.store.getItembyID(this._currentCard.Id);
+        if (settings.mdView) reviewResponseModal.getInstance().display(item, undefined, false);
 
         if (this.reviewMode == FlashcardReviewMode.Cram) {
             // Same for mobile/desktop
@@ -386,16 +401,34 @@ export class FlashcardReviewView {
     }
 
     private async _handleSkipCard(): Promise<void> {
-        if (this._currentCard != null) {
-            await this.show();
-            if (
-                this?._previousCard &&
-                this._previousCard.isMultiCloze &&
-                this._currentCard.isMultiCloze &&
+        const isMulti = () => {
+            return (
+                this?._previousCard?.isMultiCloze &&
+                this._currentCard?.isMultiCloze &&
                 this._currentCard !== this._currentCard.getFirstClozeCard()
-            ) {
-                this._showAnswer();
+            );
+        };
+        let mqs: MixQueSet;
+        if (this.reviewMode === FlashcardReviewMode.Review) {
+            mqs = MixQueSet.getInstance();
+        }
+        if (this.settings.mixCardNote && mqs && !mqs.isCard) {
+            if (isMulti()) {
+                this.mode = FlashcardModalMode.Closed;
+                mqs.inMultiCloze();
+            } else {
+                return;
             }
+        }
+
+        if (this._currentCard != null) {
+            if (this?._previousCard && isMulti() && this.mode === FlashcardModalMode.Back) {
+                this._showAnswer();
+                return;
+            }
+            await this.show();
+        } else if (this.settings.mdView) {
+            FlashcardModal.instance.open();
         } else this.backClickHandler();
     }
 
@@ -419,13 +452,33 @@ export class FlashcardReviewView {
     // -> Header
 
     private _createBackButton() {
-        this.backButton = this.modalEl.createDiv();
+        const div = this.controls.createDiv();
+        this.backButton = div.createDiv();
+        // this.backButton = this.modalEl.createDiv();
         this.backButton.addClasses(["sr-back-button", "sr-is-hidden"]);
         setIcon(this.backButton, "arrow-left");
         this.backButton.setAttribute("aria-label", t("BACK"));
         this.backButton.addEventListener("click", () => {
             /* this.plugin.data.historyDeck = ""; */
+            FlashcardModal.instance.open();
             this.backClickHandler();
+        });
+
+        this._createCloseButton(div);
+    }
+
+    private _createCloseButton(elm: HTMLDivElement) {
+        if (!this.settings.mdView) return;
+        const closeButton = elm.createDiv();
+        // closeButton = this.controls.createDiv();
+        // closeButton = this.modalEl.createDiv();
+        closeButton.addClasses(["sr-close-button"]); //  "sr-is-hidden"
+        setIcon(closeButton, "lucide-x");
+        closeButton.setAttribute("aria-label", t("CLOSE"));
+        closeButton.addEventListener("click", () => {
+            this.close();
+            // reviewResponseModal.getInstance().close();
+            FlashcardModal.instance.close();
         });
     }
 
@@ -446,13 +499,29 @@ export class FlashcardReviewView {
     private _createOpenFileButton() {
         this.openNoteFileButton = this.controls.createEl("button");
         this.openNoteFileButton.addClass("sr-flashcard-menu-item");
-        setIcon(this.openNoteFileButton, "file-edit");
-        this.openNoteFileButton.setAttribute("aria-label", t("OPEN_NOTE"));
+        const fileToggleIcon = (open: boolean = true) => {
+            if (open) {
+                setIcon(this.openNoteFileButton, "file-edit");
+                this.openNoteFileButton.setAttribute("aria-label", t("OPEN_NOTE"));
+            } else {
+                setIcon(this.openNoteFileButton, "file-x");
+                this.openNoteFileButton.setAttribute("aria-label", t("CLOSE_NOTE"));
+            }
+        };
+        fileToggleIcon();
         this.openNoteFileButton.addEventListener("click", async () => {
-            const activeLeaf = this.plugin.app.workspace.getLeaf("tab");
             const noteFile = this._currentCard.question.note.file as SrTFile;
+            const wp = this.plugin.app.workspace;
+            const activefile = wp.getActiveFile();
+            if (activefile === noteFile.file) {
+                fileToggleIcon(true);
+                wp.getLeaf(false).detach();
+                return;
+            }
+            const activeLeaf = wp.getLeaf("tab");
             await activeLeaf.openFile(noteFile.file);
             if (activeLeaf.view instanceof MarkdownView) {
+                fileToggleIcon(false);
                 const activeView = activeLeaf.view;
                 const pos = {
                     line: this._currentCard.question.lineNo,
@@ -531,18 +600,14 @@ export class FlashcardReviewView {
             btnCols = optBtnCounts;
         }
         for (let i = 1; i < this.options.length; i++) {
-            this.responseBtns.push(document.createElement("button"));
+            this.responseBtns.push(this.response.createEl("button"));
             this.responseBtns[i].setAttribute("id", "sr-" + this.options[i].toLowerCase() + "-btn");
             this.responseBtns[i].addClasses(["sr-response-button", "sr-is-hidden"]);
             this.responseBtns[i].setText(this.plugin.data.settings.flashcardHardText);
             this.responseBtns[i].addEventListener("click", () => {
                 this._processReview(i);
             });
-            this.response.appendChild(this.responseBtns[i]);
         }
-        this.hardButton = this.responseBtns[1];
-        this.goodButton = this.responseBtns.at(-2);
-        this.easyButton = this.responseBtns.last();
     }
 
     private _setupResponseBtns(btnTexts: string[]) {
@@ -565,8 +630,20 @@ export class FlashcardReviewView {
     }
 
     private _createResponseButtons() {
-        this._createShowAnswerButton();
-        this._createResponseBtns();
+        if (this.settings.mdView) {
+            const fbar = reviewResponseModal.getInstance();
+            this.answerButton = fbar.answerBtn;
+            this.responseBtns = fbar.buttons;
+        } else {
+            this._createShowAnswerButton();
+            this._createResponseBtns();
+        }
+
+        // this.resetButton = this.responseBtns[0];
+        this.hardButton = this.responseBtns[1];
+        this.goodButton = this.responseBtns.at(-2);
+        this.easyButton = this.responseBtns.last();
+
         // this._createHardButton();
         // this._createGoodButton();
         // this._createEasyButton();
@@ -647,5 +724,27 @@ export class FlashcardReviewView {
         } else {
             button.setText(`${buttonName} - ${textInterval(interval, false)}`);
         }
+    }
+
+    private _timmer: NodeJS.Timeout;
+    private _autoremove(enble = true) {
+        if (this._timmer) {
+            if (!enble) {
+                clearInterval(this._timmer);
+            }
+            return;
+        }
+        const tout = Platform.isMobile ? 5000 : 10000;
+        this._timmer = setInterval(() => {
+            const file = this.app.workspace.getActiveFile();
+            const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
+            if (!Markdown) {
+                this.close();
+                clearInterval(this._timmer);
+            } else if (this.mode === FlashcardModalMode.Closed) {
+                this.close();
+                clearInterval(this._timmer);
+            }
+        }, tout);
     }
 }
