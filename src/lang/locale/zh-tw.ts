@@ -141,7 +141,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "請輸入有效的數字。",
     UI_PREFERENCES: "用戶介面首選項",
     OPEN_AS_TAB: "標籤頁模式",
-    OPEN_AS_TAB_DESC: "若開啟此選項，將以標籤頁的方式開啟複習介面；若關閉此選項，則會以模態視窗的方式開啟複習介面。",
+    OPEN_AS_TAB_DESC:
+        "若開啟此選項，將以標籤頁的方式開啟複習介面；若關閉此選項，則會以模態視窗的方式開啟複習介面。",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "牌組樹最初應顯示為展開",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "關閉此選項可摺疊同一張卡片中的巢狀牌組。如果您的卡片屬於同一檔案中的許多套牌，則很有用。",

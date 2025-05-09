@@ -163,7 +163,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Пожалуйста, введите подходящее число.",
     UI_PREFERENCES: "Пользовательский интерфейс - Настройки",
     OPEN_AS_TAB: "Режим вкладки",
-    OPEN_AS_TAB_DESC: "Если эта опция включена, интерфейс обзора откроется во вкладке. Если выключена — в модальном окне.",
+    OPEN_AS_TAB_DESC:
+        "Если эта опция включена, интерфейс обзора откроется во вкладке. Если выключена — в модальном окне.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Деревья колод должны изначально отображаться как развернутые",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:

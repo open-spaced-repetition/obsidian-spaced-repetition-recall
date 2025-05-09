@@ -689,20 +689,18 @@ export class SRSettingTab extends PluginSettingTab {
             .setName(t("OPEN_AS_TAB"))
             .setDesc(t("OPEN_AS_TAB_DESC"))
             .addToggle((toggle) =>
-                toggle
-                    .setValue(this.plugin.data.settings.openViewAsTab)
-                    .onChange(async (value) => {
-                        if (value) {
-                            this.plugin.registerSRFocusListener();
-                        } else {
-                            this.plugin.tabViewManager.closeAllTabViews();
+                toggle.setValue(this.plugin.data.settings.openViewAsTab).onChange(async (value) => {
+                    if (value) {
+                        this.plugin.registerSRFocusListener();
+                    } else {
+                        this.plugin.tabViewManager.closeAllTabViews();
 
-                            // Remove focus from SR and remove event listener for focus change
-                            this.plugin.removeSRFocusListener();
-                        }
-                        this.plugin.data.settings.openViewAsTab = value;
-                        await this.plugin.savePluginData();
-                    }),
+                        // Remove focus from SR and remove event listener for focus change
+                        this.plugin.removeSRFocusListener();
+                    }
+                    this.plugin.data.settings.openViewAsTab = value;
+                    await this.plugin.savePluginData();
+                }),
             );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });

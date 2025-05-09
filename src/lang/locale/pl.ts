@@ -157,7 +157,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Podaj prawidłową liczbę.",
     UI_PREFERENCES: "Preferencje interfejsu użytkownika",
     OPEN_AS_TAB: "Tryb karty",
-    OPEN_AS_TAB_DESC: "Jeśli ta opcja jest włączona, interfejs przeglądu otworzy się jako karta. Jeśli wyłączona, otworzy się jako okno modalne.",
+    OPEN_AS_TAB_DESC:
+        "Jeśli ta opcja jest włączona, interfejs przeglądu otworzy się jako karta. Jeśli wyłączona, otworzy się jako okno modalne.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Podtalie powinny być początkowo wyświetlane rozszerzone",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Wyłącz to, aby zwinąć zagnieżdżone talie w tej samej karcie. Przydatne, jeśli karty należą do wielu talii w tym samym pliku.",

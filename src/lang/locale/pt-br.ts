@@ -156,7 +156,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Por favor Insira um número válido.",
     UI_PREFERENCES: "Preferências de UI",
     OPEN_AS_TAB: "Modo de guia",
-    OPEN_AS_TAB_DESC: "Se esta opção estiver ativada, a interface de revisão será aberta como uma guia. Caso contrário, será aberta como uma janela modal.",
+    OPEN_AS_TAB_DESC:
+        "Se esta opção estiver ativada, a interface de revisão será aberta como uma guia. Caso contrário, será aberta como uma janela modal.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Árvores de baralhos devem inicialmente ser exibidas como expandidas",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:

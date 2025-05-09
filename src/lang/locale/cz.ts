@@ -152,7 +152,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Prosím zadejte validní číslo.",
     UI_PREFERENCES: "Předvolby uživatelského rozhraní",
     OPEN_AS_TAB: "Režim záložky",
-    OPEN_AS_TAB_DESC: "Pokud je tato volba zapnuta, rozhraní pro opakování se otevře jako záložka. Pokud je vypnuta, otevře se v modálním okně.",
+    OPEN_AS_TAB_DESC:
+        "Pokud je tato volba zapnuta, rozhraní pro opakování se otevře jako záložka. Pokud je vypnuta, otevře se v modálním okně.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Stromy balíčky by měly být zpočátku zobrazeny jako rozbalené",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:

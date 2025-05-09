@@ -151,7 +151,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Please provide a valid number.",
     UI_PREFERENCES: "UI Preferences",
     OPEN_AS_TAB: "Tab Mode",
-    OPEN_AS_TAB_DESC: "If this option is enabled, the review interface will open as a tab. If disabled, it will open as a modal window.",
+    OPEN_AS_TAB_DESC:
+        "If this option is enabled, the review interface will open as a tab. If disabled, it will open as a modal window.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Deck trees should be initially displayed as expanded",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Turn this off to collapse nested decks in the same card. Useful if you have cards which belong to many decks in the same file.",

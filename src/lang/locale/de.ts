@@ -167,7 +167,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     VALID_NUMBER_WARNING: "Bitte eine gültige Zahl eingeben.",
     UI_PREFERENCES: "Einstellungen der Benutzeroberfläche",
     OPEN_AS_TAB: "Registerkartenmodus",
-    OPEN_AS_TAB_DESC: "Wenn diese Option aktiviert ist, wird die Überprüfungsoberfläche in einem Tab geöffnet. Andernfalls wird sie in einem Modal-Fenster geöffnet.",
+    OPEN_AS_TAB_DESC:
+        "Wenn diese Option aktiviert ist, wird die Überprüfungsoberfläche in einem Tab geöffnet. Andernfalls wird sie in einem Modal-Fenster geöffnet.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Stapelverzeichnis soll beim öffnen erweitert angezeigt werden",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
