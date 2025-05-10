@@ -44,5 +44,4 @@ export const TICKS_PER_DAY = 24 * 3600 * 1000;
 export const SR_HTML_COMMENT_BEGIN = "<!--SR:";
 export const SR_HTML_COMMENT_END = "-->";
 
-export const SR_TAB_VIEW = "spaced-repetition-recall-tab-view";
 export const DEFAULT_DECKNAME = "default";

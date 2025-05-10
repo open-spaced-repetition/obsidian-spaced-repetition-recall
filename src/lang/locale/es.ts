@@ -155,8 +155,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "El número de días debe ser al menos uno.",
     VALID_NUMBER_WARNING: "Por favor especifique un número válido.",
     UI_PREFERENCES: "Preferencias de la interfaz de usuario.",
-    OPEN_AS_TAB: "Modo de pestaña",
-    OPEN_AS_TAB_DESC: "Si esta opción está activada, la interfaz de repaso se abrirá como una pestaña. Si está desactivada, se abrirá como una ventana modal.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Los árboles de mazos deberían ser expandidos al inicio.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Desactiva esto para contraer mazos anidados en la misma tarjeta. Útil si tienes tarjetas que pertenecen a muchos mazos en el mismo archivo.",

@@ -147,8 +147,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "يجب أن يكون عدد الأيام 1 على الأقل",
     VALID_NUMBER_WARNING: "يرجى تقديم رقم صالح",
     UI_PREFERENCES: "تفضيلات واجهة المستخدم",
-    OPEN_AS_TAB: "وضع علامة التبويب",
-    OPEN_AS_TAB_DESC: "إذا تم تفعيل هذا الخيار، سيتم فتح واجهة المراجعة في علامة تبويب. إذا تم تعطيله، سيتم فتحها في نافذة منبثقة.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "يجب أن يكون العرض الشجري للرُزم موسع بحيث تطهر الملفات الفرعية كلها",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:

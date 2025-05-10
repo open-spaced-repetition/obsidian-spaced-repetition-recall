@@ -155,8 +155,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "日数には1以上の数字を指定してください。",
     VALID_NUMBER_WARNING: "有効な数字を入力してください。",
     UI_PREFERENCES: "ユーザー インターフェイスの設定",
-    OPEN_AS_TAB: "タブモード",
-    OPEN_AS_TAB_DESC: "このオプションを有効にすると、復習画面がタブとして開きます。無効にすると、モーダルウィンドウとして開きます。",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "デッキ ツリーは最初は展開して表示する必要があります",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "これをオフにすると、同じカード内のネストされたデッキが折りたたまれます。同じファイルに多くのデッキに属するカードがある場合に便利です。",

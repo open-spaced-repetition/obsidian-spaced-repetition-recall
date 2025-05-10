@@ -152,8 +152,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "적어도 1이상이어야 합니다.",
     VALID_NUMBER_WARNING: "유효한 숫자를 입력해주세요.",
     UI_PREFERENCES: "사용자 인터페이스 기본 설정",
-    OPEN_AS_TAB: "탭 모드",
-    OPEN_AS_TAB_DESC: "이 옵션을 활성화하면 복습 인터페이스가 탭으로 열립니다. 비활성화하면 모달 창으로 열립니다.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "덱 트리는 처음에 확장된 것으로 표시되어야 합니다.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "같은 카드에 중첩된 덱을 접으려면 이 옵션을 끄십시오. 같은 파일에 여러 덱에 속한 카드가 있는 경우 유용합니다.",

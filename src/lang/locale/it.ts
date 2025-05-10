@@ -158,8 +158,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "Il numero di giorni deve essere almeno 1.",
     VALID_NUMBER_WARNING: "Per favore, mettere un numero valido.",
     UI_PREFERENCES: "Preferenze di interfaccia",
-    OPEN_AS_TAB: "Modalità scheda",
-    OPEN_AS_TAB_DESC: "Se questa opzione è abilitata, l’interfaccia di revisione si aprirà come una scheda. Se disabilitata, si aprirà come una finestra modale.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Alberti di mazzi dovrebbero essere inizialmente visualizzate come espansi",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:

@@ -69,7 +69,6 @@ export interface SRSettings {
     maxNDaysNotesReviewQueue: number;
     // UI preferences
     initiallyExpandAllSubdecksInTree: boolean;
-    openViewAsTab: boolean;
     // algorithm
     baseEase: number;
     lapsesIntervalChange: number;
@@ -140,7 +139,6 @@ export const DEFAULT_SETTINGS: SRSettings = {
     maxNDaysNotesReviewQueue: 365,
     // UI settings
     initiallyExpandAllSubdecksInTree: false,
-    openViewAsTab: false,
     // algorithm
     baseEase: 250,
     lapsesIntervalChange: 0.5,
@@ -685,26 +683,6 @@ export class SRSettingTab extends PluginSettingTab {
     }
 
     private async tabUiPreferences(containerEl: HTMLElement): Promise<void> {
-        new Setting(containerEl)
-            .setName(t("OPEN_AS_TAB"))
-            .setDesc(t("OPEN_AS_TAB_DESC"))
-            .addToggle((toggle) =>
-                toggle
-                    .setValue(this.plugin.data.settings.openViewAsTab)
-                    .onChange(async (value) => {
-                        if (value) {
-                            this.plugin.registerSRFocusListener();
-                        } else {
-                            this.plugin.tabViewManager.closeAllTabViews();
-
-                            // Remove focus from SR and remove event listener for focus change
-                            this.plugin.removeSRFocusListener();
-                        }
-                        this.plugin.data.settings.openViewAsTab = value;
-                        await this.plugin.savePluginData();
-                    }),
-            );
-
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
         this.addIntervalShowHideSetting(newSettingEl(containerEl));
         new Setting(containerEl)
