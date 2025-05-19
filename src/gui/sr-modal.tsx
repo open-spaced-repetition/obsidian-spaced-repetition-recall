@@ -1,6 +1,4 @@
 import { App, Modal, setIcon } from "obsidian";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import h from "vhtml";
 
 import type SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
@@ -107,6 +105,7 @@ export class FlashcardModal extends Modal {
     }
 
     private _showFlashcard(deck: Deck): void {
+        this.plugin.setSRViewInFocus(true);
         this._hideDecksList();
         this.flashcardView.show(deck);
     }
