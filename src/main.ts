@@ -184,8 +184,11 @@ export default class SRPlugin extends Plugin {
         }
 
         this.reviewFloatBar = new reviewResponseModal(settings);
-        this.reviewFloatBar.submitCallback = (note, resp) => {
-            this.saveReviewResponse(note, resp);
+        this.reviewFloatBar.submitCallback = (resp) => {
+            const openFile: TFile | null = this.app.workspace.getActiveFile();
+            if (openFile && openFile.extension === "md") {
+                this.saveReviewResponse(openFile, resp);
+            }
         };
 
         registerTrackFileEvents(this);
@@ -396,7 +399,7 @@ export default class SRPlugin extends Plugin {
         console.log("Unloading Obsidian spaced repetition Recall. ...");
         this.app.workspace.getLeavesOfType(REVIEW_QUEUE_VIEW_TYPE).forEach((leaf) => leaf.detach());
         this.tabViewManager.closeAllTabViews();
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
     }
 
     private async openFlashcardModalForSingleNote(
@@ -971,7 +974,7 @@ export default class SRPlugin extends Plugin {
 
         ReviewView.nextReviewNotice(IReviewNote.minNextView, Queue.getInstance().laterSize);
 
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
         this.reviewQueueView.redraw();
         new Notice(t("ALL_CAUGHT_UP"));
     }
