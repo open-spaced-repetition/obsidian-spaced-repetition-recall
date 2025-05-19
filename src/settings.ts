@@ -27,9 +27,6 @@ import { addmixQueueSetting } from "./settings/mixQueueSetting";
 export interface SRSettings {
     // flashcards
     responseOptionBtnsText: Record<string, string[]>;
-    flashcardEasyText: string;
-    flashcardGoodText: string;
-    flashcardHardText: string;
     flashcardTags: string[];
     convertFoldersToDecks: boolean;
     cardCommentOnSameLine: boolean;
@@ -37,9 +34,6 @@ export interface SRSettings {
     burySiblingCardsByNoteReview: boolean;
     multiClozeCard: boolean;
     cardBlockID: boolean;
-    showContextInCards: boolean;
-    flashcardHeightPercentage: number;
-    flashcardWidthPercentage: number;
     randomizeCardOrder: boolean;
     flashcardCardOrder: string;
     flashcardDeckOrder: string;
@@ -68,8 +62,19 @@ export interface SRSettings {
     disableFileMenuReviewOptions: boolean;
     maxNDaysNotesReviewQueue: number;
     // UI preferences
+    showRibbonIcon: boolean;
+    showStatusBar: boolean;
     initiallyExpandAllSubdecksInTree: boolean;
-    openViewAsTab: boolean;
+    showContextInCards: boolean;
+    showIntervalInReviewButtons: boolean;
+    flashcardHeightPercentage: number;
+    flashcardWidthPercentage: number;
+    flashcardEasyText: string;
+    flashcardGoodText: string;
+    flashcardHardText: string;
+    reviewButtonDelay: number;
+    openViewInNewTab: boolean;
+
     // algorithm
     baseEase: number;
     lapsesIntervalChange: number;
@@ -97,9 +102,6 @@ export interface SRSettings {
 export const DEFAULT_SETTINGS: SRSettings = {
     // flashcards
     responseOptionBtnsText: DEFAULT_responseOptionBtnsText,
-    flashcardEasyText: t("EASY"),
-    flashcardGoodText: t("GOOD"),
-    flashcardHardText: t("HARD"),
     flashcardTags: ["#flashcards"],
     convertFoldersToDecks: false,
     cardCommentOnSameLine: false,
@@ -107,13 +109,9 @@ export const DEFAULT_SETTINGS: SRSettings = {
     burySiblingCardsByNoteReview: false,
     multiClozeCard: false,
     cardBlockID: false,
-    showContextInCards: true,
-    flashcardHeightPercentage: Platform.isMobile ? 100 : 80,
-    flashcardWidthPercentage: Platform.isMobile ? 100 : 40,
     randomizeCardOrder: null,
     flashcardCardOrder: "DueFirstRandom",
     flashcardDeckOrder: "PrevDeckComplete_Sequential",
-
     convertHighlightsToClozes: true,
     convertBoldTextToClozes: false,
     convertCurlyBracketsToClozes: false,
@@ -138,9 +136,21 @@ export const DEFAULT_SETTINGS: SRSettings = {
     reviewingNoteDirectly: false,
     disableFileMenuReviewOptions: false,
     maxNDaysNotesReviewQueue: 365,
+
     // UI settings
+    showRibbonIcon: true,
+    showStatusBar: true,
     initiallyExpandAllSubdecksInTree: false,
-    openViewAsTab: false,
+    showContextInCards: true,
+    showIntervalInReviewButtons: true,
+    flashcardHeightPercentage: Platform.isMobile ? 100 : 80,
+    flashcardWidthPercentage: Platform.isMobile ? 100 : 40,
+    flashcardEasyText: t("EASY"),
+    flashcardGoodText: t("GOOD"),
+    flashcardHardText: t("HARD"),
+    reviewButtonDelay: 0,
+    openViewInNewTab: false,
+
     // algorithm
     baseEase: 250,
     lapsesIntervalChange: 0.5,
@@ -689,18 +699,20 @@ export class SRSettingTab extends PluginSettingTab {
             .setName(t("OPEN_AS_TAB"))
             .setDesc(t("OPEN_AS_TAB_DESC"))
             .addToggle((toggle) =>
-                toggle.setValue(this.plugin.data.settings.openViewAsTab).onChange(async (value) => {
-                    if (value) {
-                        this.plugin.registerSRFocusListener();
-                    } else {
-                        this.plugin.tabViewManager.closeAllTabViews();
+                toggle
+                    .setValue(this.plugin.data.settings.openViewInNewTab)
+                    .onChange(async (value) => {
+                        if (value) {
+                            this.plugin.registerSRFocusListener();
+                        } else {
+                            this.plugin.tabViewManager.closeAllTabViews();
 
-                        // Remove focus from SR and remove event listener for focus change
-                        this.plugin.removeSRFocusListener();
-                    }
-                    this.plugin.data.settings.openViewAsTab = value;
-                    await this.plugin.savePluginData();
-                }),
+                            // Remove focus from SR and remove event listener for focus change
+                            this.plugin.removeSRFocusListener();
+                        }
+                        this.plugin.data.settings.openViewInNewTab = value;
+                        await this.plugin.savePluginData();
+                    }),
             );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });

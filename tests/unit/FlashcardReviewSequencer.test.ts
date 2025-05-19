@@ -11,7 +11,7 @@ import {
     FlashcardReviewMode,
     FlashcardReviewSequencer,
     IFlashcardReviewSequencer,
-} from "src/FlashcardReviewSequencer";
+} from "src/flashcard-review-sequencer";
 import { TopicPath } from "src/TopicPath";
 import { CardListType, Deck, DeckTreeFilter } from "src/Deck";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";

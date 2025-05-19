@@ -1,5 +1,5 @@
 import { Card } from "./Card";
-import { FlashcardReviewMode } from "./FlashcardReviewSequencer";
+import { FlashcardReviewMode } from "./flashcard-review-sequencer";
 import { Question } from "./Question";
 import { IQuestionPostponementList } from "./QuestionPostponementList";
 import { TopicPath, TopicPathList } from "./TopicPath";

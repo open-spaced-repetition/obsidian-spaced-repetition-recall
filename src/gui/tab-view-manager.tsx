@@ -2,9 +2,9 @@ import { PaneType, TFile, ViewCreator, WorkspaceLeaf } from "obsidian";
 
 import { SR_TAB_VIEW } from "src/constants";
 import SRPlugin from "src/main";
-import { FlashcardReviewMode } from "src/FlashcardReviewSequencer";
+import { FlashcardReviewMode } from "src/flashcard-review-sequencer";
 import { Deck } from "src/Deck";
-import { TabView } from "src/gui/TabView";
+import { SRTabView } from "src/gui/sr-tab-view";
 
 export type TabViewType = { type: string; viewCreator: ViewCreator };
 
@@ -30,7 +30,7 @@ export default class TabViewManager {
         {
             type: SR_TAB_VIEW,
             viewCreator: (leaf) =>
-                new TabView(leaf, this.plugin, async () => {
+                new SRTabView(leaf, this.plugin, async () => {
                     // Tabbed views cant get params on open call, so we have to do it here
                     // This allows us to load the data from inside the view when the open function is called
                     if (this.shouldOpenSingeNoteTabView) {
@@ -82,10 +82,7 @@ export default class TabViewManager {
      *
      * @returns {Promise<void>} - A promise that resolves when the tab view is opened.
      */
-    public async openSRTabView(
-        reviewMode: FlashcardReviewMode,
-        singleNote?: TFile,
-    ): Promise<void> {
+    public async openSRTabView(reviewMode: FlashcardReviewMode, singleNote?: TFile): Promise<void> {
         this.chosenReviewModeForTabbedView = reviewMode;
         this.shouldOpenSingeNoteTabView = singleNote !== undefined;
         if (singleNote) this.chosenSingleNoteForTabbedView = singleNote;

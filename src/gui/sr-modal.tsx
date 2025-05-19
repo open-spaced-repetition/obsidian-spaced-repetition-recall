@@ -1,4 +1,4 @@
-import { Modal, App } from "obsidian";
+import { App, Modal, setIcon } from "obsidian";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import h from "vhtml";
 
@@ -10,10 +10,11 @@ import { Question } from "../Question";
 import {
     FlashcardReviewMode,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
-} from "src/FlashcardReviewSequencer";
+} from "src/flashcard-review-sequencer";
 import { FlashcardEditModal } from "./EditModal";
-import { DeckUI } from "./DeckUI";
-import { CardUI } from "./CardUI";
+import { DeckUI } from "./deck-ui";
+import { CardUI } from "./card-ui";
+import { t } from "src/lang/helpers";
 
 export enum FlashcardMode {
     Deck,
@@ -30,6 +31,7 @@ export class FlashcardModal extends Modal {
     private reviewMode: FlashcardReviewMode;
     private deckView: DeckUI;
     private flashcardView: CardUI;
+    public backButton: HTMLDivElement;
 
     constructor(
         app: App,
@@ -53,6 +55,13 @@ export class FlashcardModal extends Modal {
         this.modalEl.style.maxWidth = this.settings.flashcardWidthPercentage + "%";
         this.modalEl.setAttribute("id", "sr-modal");
 
+        if (
+            this.settings.flashcardHeightPercentage >= 100 ||
+            this.settings.flashcardWidthPercentage >= 100
+        ) {
+            this.modalEl.style.borderRadius = "0";
+        }
+
         this.contentEl.addClass("sr-modal-content");
 
         // Init static elements in views
@@ -60,7 +69,7 @@ export class FlashcardModal extends Modal {
             this.plugin,
             this.settings,
             this.reviewSequencer,
-            this.contentEl,
+            this.contentEl.createDiv(),
             this._startReviewOfDeck.bind(this),
         );
 
@@ -70,14 +79,14 @@ export class FlashcardModal extends Modal {
             this.settings,
             this.reviewSequencer,
             this.reviewMode,
-            this.contentEl,
-            this.modalEl,
+            this.contentEl.createDiv(),
             this._showDecksList.bind(this),
             this._doEditQuestionText.bind(this),
         );
     }
 
     onOpen(): void {
+        this._createBackButton();
         this._showDecksList();
     }
 
@@ -97,9 +106,9 @@ export class FlashcardModal extends Modal {
         this.deckView.hide();
     }
 
-    private _showFlashcard(): void {
+    private _showFlashcard(deck: Deck): void {
         this._hideDecksList();
-        this.flashcardView.show();
+        this.flashcardView.show(deck);
     }
 
     private _hideFlashcard(): void {
@@ -109,7 +118,8 @@ export class FlashcardModal extends Modal {
     private _startReviewOfDeck(deck: Deck) {
         this.reviewSequencer.setCurrentDeck(deck.getTopicPath());
         if (this.reviewSequencer.hasCurrentCard) {
-            this._showFlashcard();
+            this._showFlashcard(deck);
+            this.backButton.removeClass("sr-is-hidden");
         } else {
             this._showDecksList();
         }
@@ -131,5 +141,16 @@ export class FlashcardModal extends Modal {
                 this.reviewSequencer.updateCurrentQuestionText(modifiedCardText);
             })
             .catch((reason) => console.log(reason));
+    }
+
+    private _createBackButton() {
+        this.backButton = this.modalEl.createDiv();
+        this.backButton.addClasses(["sr-back-button", "sr-is-hidden"]);
+        setIcon(this.backButton, "arrow-left");
+        this.backButton.setAttribute("aria-label", t("BACK"));
+        this.backButton.addEventListener("click", () => {
+            this.backButton.addClass("sr-is-hidden");
+            this._showDecksList();
+        });
     }
 }

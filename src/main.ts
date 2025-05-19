@@ -10,7 +10,7 @@ import {
 import * as graph from "pagerank.js";
 
 import { DEFAULT_SETTINGS, SRSettings, SRSettingTab, upgradeSettings } from "src/settings";
-import { FlashcardModal } from "src/gui/FlashcardModal";
+import { FlashcardModal } from "src/gui/sr-modal";
 import { StatsModal } from "src/gui/StatsModal";
 import { REVIEW_QUEUE_VIEW_TYPE, ReviewQueueListView } from "src/gui/Sidebar";
 import { ReviewResponse, schedule } from "src/scheduling";
@@ -25,7 +25,7 @@ import {
     FlashcardReviewMode,
     FlashcardReviewSequencer as FlashcardReviewSequencer,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
-} from "./FlashcardReviewSequencer";
+} from "./flashcard-review-sequencer";
 import {
     CardOrder,
     DeckOrder,
@@ -68,8 +68,8 @@ import { IReviewNote } from "./reviewNote/review-note";
 import { ReviewView } from "./gui/reviewView";
 import { MixQueSet } from "./dataStore/mixQueSet";
 import { Iadapter } from "./dataStore/adapter";
-import TabViewManager from "src/gui/TabViewManager";
-import { TabView } from "src/gui/TabView";
+import TabViewManager from "src/gui/tab-view-manager";
+import { SRTabView } from "src/gui/sr-tab-view";
 
 interface PluginData {
     settings: SRSettings;
@@ -216,7 +216,7 @@ export default class SRPlugin extends Plugin {
         this.addRibbonIcon("SpacedRepIcon", t("REVIEW_CARDS"), async () => {
             if (!this.syncLock) {
                 await this.sync();
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review);
                 } else {
                     this.openFlashcardModal(
@@ -295,7 +295,7 @@ export default class SRPlugin extends Plugin {
 
                 await this.sync();
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review);
                 } else {
                     this.openFlashcardModal(
@@ -312,7 +312,7 @@ export default class SRPlugin extends Plugin {
             name: t("CRAM_ALL_CARDS"),
             callback: async () => {
                 await this.sync();
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Cram);
                 } else {
                     this.openFlashcardModal(
@@ -333,7 +333,7 @@ export default class SRPlugin extends Plugin {
                     return;
                 }
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review, openFile);
                 } else {
                     this.openFlashcardModalForSingleNote(openFile, FlashcardReviewMode.Review);
@@ -350,7 +350,7 @@ export default class SRPlugin extends Plugin {
                     return;
                 }
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Cram, openFile);
                 } else {
                     this.openFlashcardModalForSingleNote(openFile, FlashcardReviewMode.Cram);
@@ -1137,7 +1137,7 @@ export default class SRPlugin extends Plugin {
     }
 
     public handleFocusChange(leaf: WorkspaceLeaf | null) {
-        this.setSRViewInFocus(leaf !== null && leaf.view instanceof TabView);
+        this.setSRViewInFocus(leaf !== null && leaf.view instanceof SRTabView);
     }
 
     public setSRViewInFocus(value: boolean) {
