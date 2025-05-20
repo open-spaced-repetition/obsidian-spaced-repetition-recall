@@ -296,7 +296,7 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
 
 .sr-deck-list,
 .sr-flashcard {
-    gap: 16px;
+    column-gap: 16px;
 }
 
 .sr-deck-list,
@@ -495,7 +495,8 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
 .sr-show-response,
 .sr-response {
     display: flex;
-    gap: var(--size-4-4);
+    column-gap: var(--size-4-4);
+    justify-content: center;
 }
 
 .sr-response-button {

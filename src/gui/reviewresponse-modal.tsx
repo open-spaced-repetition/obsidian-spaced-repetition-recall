@@ -244,7 +244,7 @@ export class reviewResponseModal {
             const id = "obsidian-spaced-repetition-recall:view-item-info";
             // eslint-disable-next-line
             // @ts-ignore
-            this.app.commands.executeCommandById(id);
+            Iadapter.instance.app.commands.executeCommandById(id);
         });
     }
 
@@ -359,7 +359,7 @@ export class reviewResponseModal {
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the editor is preview and has fbar.
         const bar = this.vwcontainerEl.querySelector("#" + this.barId);
-        // const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
+        // const Markdown = Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView);
 
         if (
             bar &&
