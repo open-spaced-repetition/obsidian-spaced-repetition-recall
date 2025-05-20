@@ -16,6 +16,8 @@ export class reviewResponseModal {
     private settings: SRSettings;
     public submitCallback: (resp: number) => void;
     private algorithm: SrsAlgorithm;
+    private ownerdoc: Document;
+    private vwcontainerEl: HTMLElement;
     private containerEl: HTMLElement;
     private contentEl: HTMLElement;
 
@@ -71,8 +73,7 @@ export class reviewResponseModal {
             this.item = undefined;
             this.responseInterval = null;
         }
-        const rrBar = document.getElementById(this.barId);
-        if (!rrBar || !this.buttons) {
+        if (!this.hasBar() || !this.buttons) {
             this.build();
         }
         this.containerEl.show();
@@ -110,7 +111,11 @@ export class reviewResponseModal {
         //     .insertAdjacentElement("afterbegin", this.containerEl);
         view?.containerEl?.appendChild(this.containerEl);
         if (view) {
+            this.vwcontainerEl = view.containerEl;
+            this.ownerdoc = view.containerEl.ownerDocument;
+            this.addKeysEvent();
             view.onunload = () => {
+                this.close();
                 view.containerEl.removeChild(this.containerEl);
             };
         }
@@ -130,7 +135,6 @@ export class reviewResponseModal {
         this.createButton_showAnswer();
 
         this.addMenuEvent();
-        this.addKeysEvent();
         this.addTouchEvent();
         this._autoClose();
     }
@@ -345,12 +349,16 @@ export class reviewResponseModal {
     }
 
     private addKeysEvent() {
-        document.body.addEventListener("keydown", this._keydownHandler);
+        this.vwcontainerEl.addEventListener("keydown", this._keydownHandler.bind(this));
+    }
+
+    private removeKeysEvent() {
+        this.vwcontainerEl.removeEventListener("keydown", this._keydownHandler.bind(this));
     }
 
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the editor is preview and has fbar.
-        const bar = document.getElementById(this.barId);
+        const bar = this.vwcontainerEl.querySelector("#" + this.barId);
         // const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
 
         if (
@@ -358,7 +366,8 @@ export class reviewResponseModal {
             bar.checkVisibility() &&
             this.isDisplay() &&
             Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView).getMode() ===
-                "preview"
+                "preview" &&
+            this.answerBtn.hasClass("sr-is-hidden")
         ) {
             const consume = () => {
                 e.preventDefault();
@@ -414,7 +423,9 @@ export class reviewResponseModal {
 
         let _stIndx = 1;
         this.options.slice(_stIndx).forEach((opt, index) => {
-            const btn = document.getElementById("sr-" + opt.toLowerCase() + "-btn");
+            const btn =
+                this.vwcontainerEl.querySelector("#sr-" + opt.toLowerCase() + "-btn") ??
+                this.buttons[_stIndx + index];
             // let text = btnText[algo][index];
             const text = this.getTextWithInterval(_stIndx + index);
             btn.setText(text);
@@ -446,7 +457,7 @@ export class reviewResponseModal {
     }
 
     public hasBar() {
-        return document.getElementById(this.barId) != null;
+        return this.vwcontainerEl?.querySelector("#" + this.barId) != null;
     }
 
     public isDisplay() {
@@ -460,9 +471,9 @@ export class reviewResponseModal {
     }
 
     close() {
-        const rrBar = document.getElementById(this.barId);
+        const rrBar = this.vwcontainerEl.querySelector("#" + this.barId) as HTMLElement;
         if (rrBar) {
-            document.body.removeEventListener("keydown", this._keydownHandler.bind(this));
+            this.removeKeysEvent();
             rrBar.style.visibility = "hidden";
             if (rrBar.firstChild) {
                 rrBar.removeChild(rrBar.firstChild);
@@ -473,9 +484,11 @@ export class reviewResponseModal {
 
     private _autoClose() {
         //after review
+        return;
+
         const tout = Platform.isMobile ? 5000 : 10000;
         const timmer = setInterval(() => {
-            const rrBar = document.getElementById(this.barId);
+            const rrBar = this.vwcontainerEl.querySelector("#" + this.barId);
             const Markdown = Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView);
 
             if (rrBar) {

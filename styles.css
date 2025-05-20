@@ -253,12 +253,12 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     top: 12px;
 }
 
+.sr-close-button,
 .sr-back-button {
     z-index: 21;
     cursor: var(--cursor);
     position: absolute;
     top: 12px;
-    left: 12px;
     font-size: 26px;
     line-height: 22px;
     height: 26px;
@@ -269,6 +269,9 @@ body:not(.native-scrollbars) #sr-modal .modal-close-button {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.sr-back-button {
+    left: 12px;
 }
 
 /* MARK: Tab view */
@@ -661,8 +664,10 @@ ResponseFloatBar TOOLBAR
 }
 #sr-incorrect\ \(easy\)-btn {
     background: #ff9088;
-
-
+}
+.sr-close-button {
+    right: 12px;
+}
 /* MARK: gridjs */
 
 /*
