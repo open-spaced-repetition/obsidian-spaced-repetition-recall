@@ -53,7 +53,7 @@ interface FsrsSettings {
     revlog_tags: string[];
     request_retention: number;
     maximum_interval: number;
-    w: number[];
+    w: readonly number[];
     enable_fuzz: boolean;
     enable_short_term: boolean;
 }
