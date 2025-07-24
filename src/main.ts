@@ -176,16 +176,36 @@ export default class SRPlugin extends Plugin {
             this.saveReviewResponse_onNote.bind(this),
         );
         ReviewView.create(this, this.data.settings);
-        MixQueSet.create(settings.mixDue, settings.mixNew);
+        MixQueSet.create(settings.mixDue, settings.mixNew, settings.mixCard, settings.mixNote);
         this.commands = new Commands(this);
         this.commands.addCommands();
         if (this.data.settings.showDebugMessages) {
             this.commands.addDebugCommands();
         }
 
-        this.reviewFloatBar = new reviewResponseModal(settings);
-        this.reviewFloatBar.submitCallback = (note, resp) => {
-            this.saveReviewResponse(note, resp);
+        this.reviewFloatBar = new reviewResponseModal(this, settings);
+        this.reviewFloatBar.submitCallback = (resp) => {
+            const openFile: TFile | null = this.app.workspace.getActiveFile();
+            if (openFile && openFile.extension === "md") {
+                this.saveReviewResponse(openFile, resp);
+            }
+        };
+        this.reviewFloatBar.openNextNoteCB = () => {
+            if (!this.lastSelectedReviewDeck) {
+                const reviewDeckKeys: string[] = Object.values(this.reviewDecks)
+                    .filter((deck) => {
+                        return deck.dueNotesCount + deck.newNotes.length > 0;
+                    })
+                    .map((deck) => {
+                        return deck.deckName;
+                    });
+                if (reviewDeckKeys.length > 0) this.lastSelectedReviewDeck = reviewDeckKeys[0];
+                else {
+                    new Notice(t("ALL_CAUGHT_UP"));
+                    return;
+                }
+            }
+            this.reviewNextNote(this.lastSelectedReviewDeck);
         };
 
         registerTrackFileEvents(this);
@@ -396,7 +416,7 @@ export default class SRPlugin extends Plugin {
         console.log("Unloading Obsidian spaced repetition Recall. ...");
         this.app.workspace.getLeavesOfType(REVIEW_QUEUE_VIEW_TYPE).forEach((leaf) => leaf.detach());
         this.tabViewManager.closeAllTabViews();
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
     }
 
     private async openFlashcardModalForSingleNote(
@@ -433,6 +453,9 @@ export default class SRPlugin extends Plugin {
         );
 
         reviewSequencer.setDeckTree(fullDeckTree, remainingDeckTree);
+        reviewResponseModal.getInstance().cardtotalCB = () => {
+            return remainingDeckTree.getCardCount(CardListType.All, true);
+        };
         new FlashcardModal(this.app, this, this.data.settings, reviewSequencer, reviewMode).open();
     }
 
@@ -449,6 +472,7 @@ export default class SRPlugin extends Plugin {
         return new DeckTreeIterator(iteratorOrder, baseDeck);
     }
 
+    // @logExecutionTime()
     async sync(): Promise<void> {
         // this.clock_start = Date.now();
         const settings = this.data.settings;
@@ -539,7 +563,13 @@ export default class SRPlugin extends Plugin {
         }
 
         this.updateAndSortDueNotes();
-
+        const fbar = this.reviewFloatBar;
+        fbar.cardtotalCB = () => {
+            return this.remainingDeckTree.getCardCount(CardListType.All, true);
+        };
+        fbar.notetotalCB = () => {
+            return this.noteStats.getTotalCount();
+        };
         this.syncLock = false;
     }
 
@@ -839,6 +869,9 @@ export default class SRPlugin extends Plugin {
         if (!this.data.settings.reviewResponseFloatBar) {
             new Notice(t("RESPONSE_RECEIVED"));
         }
+        if (MixQueSet.isCard() && this.reviewFloatBar.openNextCardCB) {
+            return;
+        }
 
         if (this.data.settings.autoNextNote) {
             if (!this.lastSelectedReviewDeck) {
@@ -884,7 +917,7 @@ export default class SRPlugin extends Plugin {
         let item;
         let index = -1;
 
-        mqs.calcNext(deck.dueNotesCount, deck.newNotes.length);
+        MixQueSet.calcNext(deck.dueNotesCount, deck.newNotes.length);
 
         const isPreviewUndueNote = (item: RepetitionItem) => {
             return item.nextReview > Date.now() && !item.isDue;
@@ -912,7 +945,7 @@ export default class SRPlugin extends Plugin {
             }
         };
 
-        if (mqs.isDue && deck.dueNotesCount > 0) {
+        if (MixQueSet.isDue() && deck.dueNotesCount > 0) {
             index = IReviewNote.getNextNoteIndex(
                 deck.dueNotesCount,
                 this.data.settings.openRandomNote,
@@ -922,7 +955,7 @@ export default class SRPlugin extends Plugin {
             fShowItemInfo(item, "scheduledNoes index: " + index);
             show = true;
             // return;
-        } else if (mqs.isDue && queue.queueSize(deckKey) > 0) {
+        } else if (MixQueSet.isDue() && queue.queueSize(deckKey) > 0) {
             item = this.store.getNext(deckKey);
             fShowItemInfo(item, "queue");
             const path = this.store.getFilePath(item);
@@ -935,7 +968,7 @@ export default class SRPlugin extends Plugin {
                 queue.remove(item, queue.queue[deckKey]);
             }
         }
-        if (!mqs.isDue && deck.newNotes.length > 0) {
+        if (!MixQueSet.isDue() && deck.newNotes.length > 0) {
             const index = IReviewNote.getNextNoteIndex(
                 deck.newNotes.length,
                 this.data.settings.openRandomNote,
@@ -971,7 +1004,7 @@ export default class SRPlugin extends Plugin {
 
         ReviewView.nextReviewNotice(IReviewNote.minNextView, Queue.getInstance().laterSize);
 
-        this.reviewFloatBar.selfDestruct();
+        this.reviewFloatBar.close();
         this.reviewQueueView.redraw();
         new Notice(t("ALL_CAUGHT_UP"));
     }

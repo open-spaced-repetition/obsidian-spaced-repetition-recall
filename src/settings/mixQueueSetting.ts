@@ -1,4 +1,5 @@
 import { Setting } from "obsidian";
+import { MixQueSet } from "src/dataStore/mixQueSet";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
 import { DEFAULT_SETTINGS, applySettingsUpdate } from "src/settings";
@@ -19,8 +20,7 @@ export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
                     applySettingsUpdate(async () => {
                         settings.mixDue = Math.min(value, settings.mixDue);
                         settings.mixNew = value - settings.mixDue;
-                        await plugin.savePluginData();
-                        plugin.settingTab.display();
+                        await update();
                     });
                 }),
         )
@@ -32,7 +32,7 @@ export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
                 .onChange((value) => {
                     applySettingsUpdate(async () => {
                         settings.mixDue = value;
-                        await plugin.savePluginData();
+                        await update();
                     });
                 }),
         )
@@ -40,13 +40,18 @@ export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
             button
                 .setIcon("reset")
                 .setTooltip(t("RESET_DEFAULT"))
-                .onClick(() => {
+                .onClick(async () => {
                     applySettingsUpdate(async () => {
                         settings.mixDue = DEFAULT_SETTINGS.mixDue;
                         settings.mixNew = DEFAULT_SETTINGS.mixNew;
-                        await plugin.savePluginData();
-                        plugin.settingTab.display();
+                        await update();
                     });
                 });
         });
+
+    async function update() {
+        await plugin.savePluginData();
+        plugin.settingTab.display();
+        MixQueSet.create(settings.mixDue, settings.mixNew, settings.mixCard, settings.mixNote);
+    }
 }
