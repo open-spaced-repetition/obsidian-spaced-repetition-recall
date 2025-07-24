@@ -1,5 +1,5 @@
 // https://img.shields.io/github/v/release/chetachiezikeuzor/cMenu-Plugin
-import { MarkdownView, Menu, MenuItem, Platform, TFile } from "obsidian";
+import { App, MarkdownView, Menu, MenuItem, Platform, TFile, setIcon } from "obsidian";
 import { textInterval } from "src/scheduling";
 import { SRSettings } from "src/settings";
 import { t } from "src/lang/helpers";
@@ -9,34 +9,52 @@ import { RepetitionItem } from "src/dataStore/repetitionItem";
 // import { debug } from "src/util/utils_recall";
 import { TouchOnMobile } from "src/Events/touchEvent";
 import { Iadapter } from "src/dataStore/adapter";
+import SRPlugin from "src/main";
+import { FlashcardReviewMode } from "src/FlashcardReviewSequencer";
 
 export class reviewResponseModal {
     private static instance: reviewResponseModal;
-    // public plugin: SRPlugin;
+    private app: App;
+    public plugin: SRPlugin;
     private settings: SRSettings;
-    public submitCallback: (note: TFile, resp: number) => void;
+    public submitCallback: (resp: number) => void;
     private algorithm: SrsAlgorithm;
+    private ownerdoc: Document;
+    private vwcontainerEl: HTMLElement;
     private containerEl: HTMLElement;
     private contentEl: HTMLElement;
 
     barId = "reviewResponseModalBar";
     private barItemId: string = "ResponseFloatBarCommandItem";
-    // mode: FlashcardModalMode;
-    private answerBtn: HTMLElement;
-    private buttons: HTMLButtonElement[];
-    private response: HTMLElement;
+    answerBtn: HTMLButtonElement;
+    buttons: HTMLButtonElement[];
+    response: HTMLDivElement;
+    controls: HTMLDivElement;
+    private notecontrols: HTMLDivElement;
+    private skipButton: HTMLButtonElement;
     private responseInterval: number[];
+    private item: RepetitionItem;
     private showInterval = true;
     private buttonTexts: string[];
     private options: string[];
+    private _reviewMode: FlashcardReviewMode;
 
-    respCallback: (s: string) => void;
+    respCallback: (resp: number) => void;
+    showAnsCB: () => void;
+    public cardtotalCB: () => number;
+    public notetotalCB: () => number;
+    public openNextCardCB: () => void;
+    public openNextNoteCB: () => void;
+    public barCloseHandler: () => void;
+    infoButton: HTMLButtonElement;
 
     static getInstance() {
         return reviewResponseModal.instance;
     }
 
-    constructor(settings: SRSettings) {
+    constructor(plugin: SRPlugin, settings: SRSettings) {
+        this.app = plugin.app;
+        this.plugin = plugin;
         this.settings = settings;
         const algo = settings.algorithm;
         this.buttonTexts = settings.responseOptionBtnsText[algo];
@@ -47,34 +65,40 @@ export class reviewResponseModal {
 
     public display(
         item?: RepetitionItem,
-        callback?: (opt: string) => void,
-        // mode?: FlashcardModalMode,
+        callback?: (resp: number) => Promise<void>,
+        front?: boolean,
     ): void {
         const settings = this.settings;
         // this.mode = mode;
 
         if (!settings.reviewResponseFloatBar || !settings.autoNextNote) return;
         if (item) {
+            this.item = item;
             this.responseInterval = this.algorithm.calcAllOptsIntervals(item);
         } else {
+            this.item = undefined;
             this.responseInterval = null;
         }
-        const rrBar = document.getElementById(this.barId);
-        if (!rrBar || !this.buttons) {
+        if (!this.hasBar() || !this.buttons) {
+            // console.debug("display didn't find rrbar");
             this.build();
         }
-
-        this.respCallback = callback;
+        this.containerEl.show();
+        if (callback) {
+            this.respCallback = callback;
+        }
 
         // update show text
-        // if (this.mode == null || this.mode == FlashcardModalMode.Front) {
-        this.showAnswer();
-        // } else if (this.mode == FlashcardModalMode.Back) {
-        //     this.showQuestion();
-        // }
+        if (this.item.isCard && front !== false) {
+            this.showQuestion();
+        } else {
+            this.showAnswer();
+        }
     }
 
-    private build() {
+    build() {
+        if (this.isDisplay()) return;
+        // console.debug("build start...");
         // const options = this.plugin.algorithm.srsOptions();
         const optBtnCounts = this.options.length;
         let btnCols = 4;
@@ -83,35 +107,66 @@ export class reviewResponseModal {
         }
         this.containerEl = createEl("div");
         this.containerEl.setAttribute("id", this.barId);
-        // this.containerEl.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
-        // this.containerEl.setAttribute("style", `grid-template-rows: ${"1fr ".repeat(1)}`);
-        this.containerEl.style.visibility = "visible"; // : "hidden"
-        document.body
-            .querySelector(".mod-vertical.mod-root")
-            .insertAdjacentElement("afterbegin", this.containerEl);
+        this.containerEl.hide();
+        // document.body
+        //     // .querySelector(".mod-vertical.mod-root")
+        //     .querySelector(".workspace-leaf.mod-active")
+        //     .insertAdjacentElement("afterbegin", this.containerEl);
+
+        const view = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
+        // const view = this.plugin.app.workspace.containerEl
+        //     .querySelector(".workspace-leaf.mod-active")
+        //     .insertAdjacentElement("afterbegin", this.containerEl);
+        view?.containerEl?.appendChild(this.containerEl);
+        if (view) {
+            this.vwcontainerEl = view.containerEl;
+            this.ownerdoc = view.containerEl.ownerDocument;
+            this.addKeysEvent();
+            view.onunload = () => {
+                this.close();
+                view.containerEl.removeChild(this.containerEl);
+            };
+        }
 
         this.contentEl = this.containerEl.createDiv("sr-show-response");
+        this.contentEl.addClass("sr-modal-content");
+        this.contentEl.addClass("sr-flashcard");
+        this.notecontrols = this.contentEl.createDiv();
+        this.controls = this.contentEl.createDiv();
+
         this.response = this.contentEl.createDiv("sr-show-response");
         this.response.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
 
         this.buttons = [];
+        this._createNoteControls();
         this.createButtons_responses();
-        // this.responseDiv.style.display = "none";
-
         this.createButton_showAnswer();
 
         this.addMenuEvent();
-        this.addKeysEvent();
         this.addTouchEvent();
-        this.autoClose();
+        this._autoClose();
     }
+    set reviewMode(reviewMode: FlashcardReviewMode) {
+        this._reviewMode = reviewMode;
+    }
+    private async buttonClick(s: string) {
+        this.hideControls();
+        let mqs: MixQueSet;
+        const iscard = RepItem.isCard(this.item);
+        if (
+            this._reviewMode === FlashcardReviewMode.Review &&
+            this.settings.mixCardNote &&
+            this.openNextCardCB &&
+            this.openNextNoteCB
+        ) {
+            mqs = MixQueSet.getInstance();
+            mqs.arbitrateCardNote(this.item, this.cardtotalCB(), this.notetotalCB());
+        }
 
-    private buttonClick(s: string) {
-        // this.mode = FlashcardModalMode.Front;
-
-        if (this.respCallback) {
-            this.respCallback(s);
-            return;
+        if (iscard && this.respCallback) {
+            await this.respCallback(this.options.indexOf(s));
+        } else if (!iscard && this.submitCallback) {
+            this.submitCallback(this.options.indexOf(s));
         }
 
         const openFile: TFile | null = Iadapter.instance.app.workspace.getActiveFile();
