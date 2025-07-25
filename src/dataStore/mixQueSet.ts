@@ -89,8 +89,9 @@ export function calcNext(dueCnthad: number, newCnthad: number) {
 }
 
 export function arbitrateCardNote(item: RepetitionItem, cardtlt: number, notetlt: number) {
-    if (instance.CardDefaultCnt === 0) return (instance._isCard = item.isCard);
-    if (instance.NoteDefaultCnt === 0) return (instance._isCard = !item.isCard);
+    const iscard = item.isCard;
+    if (instance.CardDefaultCnt === 0) return (instance._isCard = iscard);
+    if (instance.NoteDefaultCnt === 0) return (instance._isCard = !iscard);
     instance._cnCnt++;
     if (isCard()) {
         if (instance._cnCnt >= instance.CardDefaultCnt && notetlt > 0) {
