@@ -18,7 +18,7 @@ export class ItemInfoModal extends Modal {
     lastInterval: number;
 
     constructor(plugin: SRPlugin, file: TFile, item: RepetitionItem = null) {
-        super(app);
+        super(plugin.app);
         this.plugin = plugin;
         this.store = DataStore.getInstance();
         this.settings = plugin.data.settings;
@@ -33,7 +33,6 @@ export class ItemInfoModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        //TODO: Implement Item info.
         const path = this.file.path;
         // contentEl.createEl("p").setText("Item info of " + this.file.path);
         const buttonDivAll = contentEl.createDiv("srs-flex-row");
@@ -135,7 +134,7 @@ export class ItemInfoModal extends Modal {
                         });
                     });
                 } else {
-                    tablestr += `| ${key} | ${item[key as keyof typeof item]} |\n`;
+                    tablestr += ` ${key} | ${item[key as keyof typeof item]} \n`;
                     // const span = contentdiv.createDiv("span");
                     // span.setText(key + "\t: " + item[key as keyof typeof item]?.toString());
                 }
@@ -157,7 +156,7 @@ export class ItemInfoModal extends Modal {
                     });
                 });
             } else {
-                tablestr += `| ${key} | ${item.data[dkey]} |\n`;
+                tablestr += ` ${key} | ${item.data[dkey]} \n`;
             }
         });
         MarkdownRenderer.render(this.plugin.app, title + tablestr, contentdiv, "", this.plugin);

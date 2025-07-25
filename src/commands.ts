@@ -31,13 +31,13 @@ export default class Commands {
                             const deckname = tkfile.lastTag;
                             const deck = this.plugin.reviewDecks[deckname];
                             const msg = `${deckname} has ${deck?.dueNotesCount} dueCount(till today end),\n note onDueC ${this.plugin.noteStats.onDueCount} (till now).`;
-                            debug("itemInfo", 0, {
-                                msg,
-                                tkfile,
-                                noteDelayed: this.plugin.noteStats.delayedDays.dict,
-                                // decks: deck.scheduledNotes.map((sn) => [sn.note.path, sn.item]),
-                                que: store.data.queues.toDayLaterQueue,
-                            });
+                            // debug("itemInfo", 0, {
+                            //     msg,
+                            //     tkfile,
+                            //     noteDelayed: this.plugin.noteStats.delayedDays.dict,
+                            //     // decks: deck.scheduledNotes.map((sn) => [sn.note.path, sn.item]),
+                            //     que: store.data.queues.toDayLaterQueue,
+                            // });
                             new ItemInfoModal(plugin, file).open();
                         }
                         return true;
