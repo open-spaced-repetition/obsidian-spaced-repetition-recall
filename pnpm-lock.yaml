@@ -85,8 +85,8 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       ts-fsrs:
-        specifier: ^4.7.1
-        version: 4.7.1
+        specifier: ^5.2.1
+        version: 5.2.1
       ts-jest:
         specifier: ^29.2.5
         version: 29.2.5(@babel/core@7.25.2)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.25.2))(esbuild@0.19.12)(jest@29.7.0(@types/node@20.16.2))(typescript@5.1.6)
@@ -3203,8 +3203,8 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
-  ts-fsrs@4.7.1:
-    resolution: {integrity: sha512-uYqKbSCNWLRPT0PfqFFy2rn0YuYz2fKmtgpgHOBd5/DP14oj6diG7P271AwJ8iGrKnmIspzXCF+nTKxict+Lcg==}
+  ts-fsrs@5.2.1:
+    resolution: {integrity: sha512-gyMwhrn08AFTGAjjevsih5M8cVvJee7UNNUn8MRLpZxHHrGm8S/C7+C20s2M02EuM/Zu/RlYcPq66VNmHAOy4Q==}
     engines: {node: '>=18.0.0'}
 
   ts-jest@29.2.5:
@@ -7197,7 +7197,7 @@ snapshots:
     dependencies:
       typescript: 5.1.6
 
-  ts-fsrs@4.7.1: {}
+  ts-fsrs@5.2.1: {}
 
   ts-jest@29.2.5(@babel/core@7.25.2)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.25.2))(esbuild@0.19.12)(jest@29.7.0(@types/node@20.16.2))(typescript@5.1.6):
     dependencies:
