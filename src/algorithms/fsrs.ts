@@ -316,7 +316,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
         containerEl.empty();
 
         containerEl.createDiv().innerHTML =
-            '用于间隔重复的算法. 更多信息请查阅 <a href="https://github.com/open-spaced-repetition/fsrs.js">FSRS算法</a>.';
+            '用于间隔重复的算法. 更多信息请查阅 <a href="https://github.com/open-spaced-repetition/ts-fsrs">FSRS算法</a>.';
 
         new Setting(containerEl)
             .setName(t("REVLOG_TAGS"))
@@ -436,7 +436,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                     });
             })
             .settingEl.querySelector(".setting-item-description").innerHTML =
-            '查阅 <a href= "https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm"> FSRS V5 WIKI </a> 和\
+            '查阅 <a href= "https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm"> FSRS V6 WIKI </a> 和\
             <a href= "https://open-spaced-repetition.github.io/anki_fsrs_visualizer"> FSRS w参数可视化 </a> \
             以对各参数进行设置.';
 
