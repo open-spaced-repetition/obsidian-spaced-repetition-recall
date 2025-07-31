@@ -15,8 +15,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       peggy:
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: ^5.0.5
+        version: 5.0.5
     devDependencies:
       '@popperjs/core':
         specifier: ^2.11.8
@@ -761,9 +761,9 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@peggyjs/from-mem@1.3.0':
-    resolution: {integrity: sha512-kzGoIRJjkg3KuGI4bopz9UvF3KguzfxalHRDEIdqEZUe45xezsQ6cx30e0RKuxPUexojQRBfu89Okn7f4/QXsw==}
-    engines: {node: '>=18'}
+  '@peggyjs/from-mem@2.0.1':
+    resolution: {integrity: sha512-5dAPJsLrb3KQahPb8kUqg9nGS2dKlMC4vCB3dMWoZIRqmPrNbBt6P6jidczFBoz+2EbFXBxXi0o9BUpEPHoD+g==}
+    engines: {node: '>=20'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -1380,9 +1380,9 @@ packages:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
 
-  commander@12.1.0:
-    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
-    engines: {node: '>=18'}
+  commander@14.0.0:
+    resolution: {integrity: sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA==}
+    engines: {node: '>=20'}
 
   commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -2444,10 +2444,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lru-cache@6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-
   lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
@@ -2737,9 +2733,9 @@ packages:
   pathval@1.1.1:
     resolution: {integrity: sha512-Dp6zGqpTdETdR63lehJYPeIOqpiNBNtc7BpWSLrOje7UaIsE5aY92r/AunQA7rsXvet3lrJ3JnZX29UPTKXyKQ==}
 
-  peggy@4.0.3:
-    resolution: {integrity: sha512-v7/Pt6kGYsfXsCrfb52q7/yg5jaAwiVaUMAPLPvy4DJJU6Wwr72t6nDIqIDkGfzd1B4zeVuTnQT0RGeOhe/uSA==}
-    engines: {node: '>=18'}
+  peggy@5.0.5:
+    resolution: {integrity: sha512-YUF8WOj2bvKyhA3aMUYvgPx0OinTmzoNVV2UWwG/BSHfGtNzqBNnafOclCzzz2SrF3MeBQ01fK/oP4Wg6dWAvQ==}
+    engines: {node: '>=20'}
     hasBin: true
 
   pend@1.2.0:
@@ -2947,13 +2943,13 @@ packages:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
 
-  semver@7.6.0:
-    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+  semver@7.6.3:
+    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
     hasBin: true
 
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
+  semver@7.7.2:
+    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -3005,9 +3001,9 @@ packages:
     resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
 
-  source-map-generator@0.8.0:
-    resolution: {integrity: sha512-psgxdGMwl5MZM9S3FWee4EgsEaIjahYV5AzGnwUvPhWeITz/j6rKpysQHlQ4USdxvINlb8lKfWGIXwfkrgtqkA==}
-    engines: {node: '>= 10'}
+  source-map-generator@2.0.1:
+    resolution: {integrity: sha512-AtEu86XavXC2HD/bQVQoDbovnTRZE/0QMAAHn6RxALAoLOM3a47IG06TpsJK23BnCmjbTYNLwx2vUhgzRYgGMA==}
+    engines: {node: '>=20'}
 
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
@@ -3450,9 +3446,6 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
-
-  yallist@4.0.0:
-    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
 
   yargs-parser@20.2.9:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
@@ -4197,9 +4190,9 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@peggyjs/from-mem@1.3.0':
+  '@peggyjs/from-mem@2.0.1':
     dependencies:
-      semver: 7.6.0
+      semver: 7.7.2
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -5042,7 +5035,7 @@ snapshots:
     dependencies:
       delayed-stream: 1.0.0
 
-  commander@12.1.0: {}
+  commander@14.0.0: {}
 
   commander@7.2.0: {}
 
@@ -6415,10 +6408,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lru-cache@6.0.0:
-    dependencies:
-      yallist: 4.0.0
-
   lru-cache@7.18.3: {}
 
   magic-string@0.30.11:
@@ -6708,11 +6697,11 @@ snapshots:
 
   pathval@1.1.1: {}
 
-  peggy@4.0.3:
+  peggy@5.0.5:
     dependencies:
-      '@peggyjs/from-mem': 1.3.0
-      commander: 12.1.0
-      source-map-generator: 0.8.0
+      '@peggyjs/from-mem': 2.0.1
+      commander: 14.0.0
+      source-map-generator: 2.0.1
 
   pend@1.2.0: {}
 
@@ -6913,11 +6902,9 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.6.0:
-    dependencies:
-      lru-cache: 6.0.0
-
   semver@7.6.3: {}
+
+  semver@7.7.2: {}
 
   serialize-error@11.0.3:
     dependencies:
@@ -6966,7 +6953,7 @@ snapshots:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
 
-  source-map-generator@0.8.0: {}
+  source-map-generator@2.0.1: {}
 
   source-map-support@0.5.13:
     dependencies:
@@ -7398,8 +7385,6 @@ snapshots:
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
-
-  yallist@4.0.0: {}
 
   yargs-parser@20.2.9: {}
 

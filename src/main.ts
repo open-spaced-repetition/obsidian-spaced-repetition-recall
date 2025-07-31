@@ -43,8 +43,8 @@ import { NoteEaseList } from "./NoteEaseList";
 import { QuestionPostponementList } from "./QuestionPostponementList";
 import { TextDirection } from "./util/TextDirection";
 import { convertToStringOrEmpty, isEqualOrSubPath } from "./util/utils";
-import { generateParser } from "./generateParser";
-import { setDebugParser } from "./parser";
+import { generateParser } from "src/parser";
+import { setDebugParser } from "src/parser";
 
 // https://github.com/martin-jw/obsidian-recall
 import { DataStore } from "./dataStore/data";
