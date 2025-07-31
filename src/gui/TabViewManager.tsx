@@ -82,10 +82,7 @@ export default class TabViewManager {
      *
      * @returns {Promise<void>} - A promise that resolves when the tab view is opened.
      */
-    public async openSRTabView(
-        reviewMode: FlashcardReviewMode,
-        singleNote?: TFile,
-    ): Promise<void> {
+    public async openSRTabView(reviewMode: FlashcardReviewMode, singleNote?: TFile): Promise<void> {
         this.chosenReviewModeForTabbedView = reviewMode;
         this.shouldOpenSingeNoteTabView = singleNote !== undefined;
         if (singleNote) this.chosenSingleNoteForTabbedView = singleNote;
