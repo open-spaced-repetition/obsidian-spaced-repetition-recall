@@ -2,7 +2,7 @@ import { SRSettings } from "./settings";
 import { Deck } from "./Deck";
 import { Question } from "./Question";
 import { ISRFile } from "./SRFile";
-import { QuestionType_ClozeUtil } from "./QuestionType";
+import { Multi_cloze } from "src/util/multi-cloze-util";
 
 export class Note {
     file: ISRFile;
@@ -33,7 +33,7 @@ export class Note {
     createMultiCloze(settings: SRSettings): void {
         if (!settings.multiClozeCard) return;
         this.questionList.filter((question) => {
-            QuestionType_ClozeUtil.convMultiCloze(
+            Multi_cloze.convMultiCloze(
                 question.cards,
                 question.questionText.actualQuestion,
                 settings,
