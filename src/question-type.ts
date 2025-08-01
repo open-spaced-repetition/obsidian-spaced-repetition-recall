@@ -1,8 +1,8 @@
 import { ClozeCrafter, IClozeFormatter } from "clozecraft";
 
-import { CardType } from "src/question";
+import { CardType } from "src/Question";
 import { SRSettings } from "src/settings";
-import { findLineIndexOfSearchStringIgnoringWs } from "src/utils/strings";
+import { findLineIndexOfSearchStringIgnoringWs } from "src/util/utils";
 
 export class CardFrontBack {
     front: string;

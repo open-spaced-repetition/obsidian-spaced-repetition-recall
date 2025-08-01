@@ -1,9 +1,9 @@
 import { TagCache } from "obsidian";
 import { Card } from "./Card";
 import { CardScheduleInfo, NoteCardScheduleParser } from "./CardSchedule";
-import { parseEx, ParsedQuestionInfo, ParserOptions } from "./parser";
+import { parse, ParsedQuestionInfo, ParserOptions } from "./parser";
 import { Question, QuestionText } from "./Question";
-import { CardFrontBack, CardFrontBackUtil } from "./QuestionType";
+import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { SRSettings, SettingsUtil } from "./settings";
 import { ISRFile, frontmatterTagPseudoLineNum } from "./SRFile";
 import { TopicPath, TopicPathList } from "./TopicPath";
@@ -135,20 +135,18 @@ export class NoteQuestionParser {
     }
 
     private parseQuestions(): ParsedQuestionInfo[] {
-        // We pass contentText which has the frontmatter blanked out; see extractFrontmatter for reasoning
+        const settings = this.settings;
         const parserOptions: ParserOptions = {
-            singleLineCardSeparator: this.settings.singleLineCardSeparator,
-            singleLineReversedCardSeparator: this.settings.singleLineReversedCardSeparator,
-            multilineCardSeparator: this.settings.multilineCardSeparator,
-            multilineReversedCardSeparator: this.settings.multilineReversedCardSeparator,
-            multilineCardEndMarker: this.settings.multilineCardEndMarker,
-            convertHighlightsToClozes: this.settings.convertHighlightsToClozes,
-            convertBoldTextToClozes: this.settings.convertBoldTextToClozes,
-            convertCurlyBracketsToClozes: this.settings.convertCurlyBracketsToClozes,
+            singleLineCardSeparator: settings.singleLineCardSeparator,
+            singleLineReversedCardSeparator: settings.singleLineReversedCardSeparator,
+            multilineCardSeparator: settings.multilineCardSeparator,
+            multilineReversedCardSeparator: settings.multilineReversedCardSeparator,
+            multilineCardEndMarker: settings.multilineCardEndMarker,
+            clozePatterns: settings.clozePatterns,
         };
 
-        const result: ParsedQuestionInfo[] = parseEx(this.contentText, parserOptions);
-        return result;
+        // We pass contentText which has the frontmatter blanked out; see extractFrontmatter for reasoning
+        return parse(this.contentText, parserOptions);
     }
 
     private createQuestionObject(
@@ -318,14 +316,12 @@ export class NoteQuestionParser {
         return new TopicPathList(list, tagCache.position.start.line);
     }
 
-    //
     // A question can be associated with multiple topics (hence returning TopicPathList and not just TopicPath).
     //
     // If the question has an associated question specific TopicPath, then that is returned.
     //
     // Else the first TopicPathList prior to the question (in the order present in the file) is returned.
     // That could be either the tags within the note's frontmatter, or tags on lines within the note's content.
-    //
     private determineQuestionTopicPathList(question: Question): TopicPathList {
         let result: TopicPathList;
         if (this.settings.convertFoldersToDecks) {

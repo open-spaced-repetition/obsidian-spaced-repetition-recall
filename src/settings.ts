@@ -46,6 +46,7 @@ export interface SRSettings {
     convertHighlightsToClozes: boolean;
     convertBoldTextToClozes: boolean;
     convertCurlyBracketsToClozes: boolean;
+    clozePatterns: string[];
     singleLineCardSeparator: string;
     singleLineReversedCardSeparator: string;
     multilineCardSeparator: string;
@@ -120,6 +121,7 @@ export const DEFAULT_SETTINGS: SRSettings = {
     convertHighlightsToClozes: true,
     convertBoldTextToClozes: false,
     convertCurlyBracketsToClozes: false,
+    clozePatterns: ["==[123;;]answer[;;hint]=="],
     singleLineCardSeparator: "::",
     singleLineReversedCardSeparator: ":::",
     multilineCardSeparator: "?",
@@ -183,6 +185,27 @@ export function upgradeSettings(settings: SRSettings) {
 
         // After the upgrade, we don't need the old attribute any more
         settings.randomizeCardOrder = null;
+    }
+
+    if (
+        settings.convertHighlightsToClozes &&
+        !settings.clozePatterns.contains("==[123;;]answer[;;hint]==")
+    ) {
+        settings.clozePatterns.push("==[123;;]answer[;;hint]==");
+    }
+
+    if (
+        settings.convertBoldTextToClozes &&
+        !settings.clozePatterns.contains("**[123;;]answer[;;hint]**")
+    ) {
+        settings.clozePatterns.push("**[123;;]answer[;;hint]**");
+    }
+
+    if (
+        settings.convertCurlyBracketsToClozes &&
+        !settings.clozePatterns.contains("{{[123;;]answer[;;hint]}}")
+    ) {
+        settings.clozePatterns.push("{{[123;;]answer[;;hint]}}");
     }
 }
 

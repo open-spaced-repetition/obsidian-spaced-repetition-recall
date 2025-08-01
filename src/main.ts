@@ -43,7 +43,6 @@ import { NoteEaseList } from "./NoteEaseList";
 import { QuestionPostponementList } from "./QuestionPostponementList";
 import { TextDirection } from "./util/TextDirection";
 import { convertToStringOrEmpty, isEqualOrSubPath } from "./util/utils";
-import { generateParser } from "src/parser";
 import { setDebugParser } from "src/parser";
 
 // https://github.com/martin-jw/obsidian-recall
@@ -134,8 +133,6 @@ export default class SRPlugin extends Plugin {
     static getInstance() {
         return SRPlugin._instance;
     }
-
-    private debouncedGenerateParserTimeout: number | null = null;
 
     async onload(): Promise<void> {
         // Closes all still open tab views when the plugin is loaded, because it causes bugs / empty windows otherwise
@@ -1025,27 +1022,6 @@ export default class SRPlugin extends Plugin {
 
     async savePluginData(): Promise<void> {
         await this.saveData(this.data);
-    }
-
-    async debouncedGenerateParser(timeout_ms = 250) {
-        if (this.debouncedGenerateParserTimeout) {
-            clearTimeout(this.debouncedGenerateParserTimeout);
-        }
-
-        this.debouncedGenerateParserTimeout = window.setTimeout(async () => {
-            const parserOptions = {
-                singleLineCardSeparator: this.data.settings.singleLineCardSeparator,
-                singleLineReversedCardSeparator: this.data.settings.singleLineReversedCardSeparator,
-                multilineCardSeparator: this.data.settings.multilineCardSeparator,
-                multilineReversedCardSeparator: this.data.settings.multilineReversedCardSeparator,
-                multilineCardEndMarker: this.data.settings.multilineCardEndMarker,
-                convertHighlightsToClozes: this.data.settings.convertHighlightsToClozes,
-                convertBoldTextToClozes: this.data.settings.convertBoldTextToClozes,
-                convertCurlyBracketsToClozes: this.data.settings.convertCurlyBracketsToClozes,
-            };
-            generateParser(parserOptions);
-            this.debouncedGenerateParserTimeout = null;
-        }, timeout_ms);
     }
 
     private getActiveLeaf(type: string): WorkspaceLeaf | null {

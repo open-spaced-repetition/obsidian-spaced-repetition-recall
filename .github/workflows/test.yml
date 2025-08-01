@@ -1,0 +1,26 @@
+name: Lint and Test Code
+
+on:
+    pull_request:
+        branches: [master]
+
+jobs:
+    lint_and_test_code:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - uses: actions/checkout@v4
+
+            - name: Install Dependencies
+              run: npm install -g pnpm && pnpm install
+
+            - name: Lint
+              run: pnpm lint || (echo && echo "Run 'pnpm format' to fix." && exit 1)
+
+            - name: Test
+              run: pnpm test

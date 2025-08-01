@@ -128,6 +128,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     CONVERT_HIGHLIGHTS_TO_CLOZES: "Convert ==hightlights== to clozes?",
     CONVERT_BOLD_TEXT_TO_CLOZES: "Convert **bolded text** to clozes?",
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "Convert {{curly brackets}} to clozes?",
+    CLOZE_PATTERNS: "Cloze Patterns",
+    CLOZE_PATTERNS_DESC: "Enter cloze patterns separated by newlines",
     INLINE_CARDS_SEPARATOR: "Separator for inline flashcards",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Note that after changing this you have to manually edit any flashcards you already have.",
