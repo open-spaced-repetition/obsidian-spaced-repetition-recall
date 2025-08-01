@@ -1,7 +1,7 @@
 import { Setting } from "obsidian";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { applySettingsUpdate } from "src/settings";
+import { applySettingsUpdate } from "src/gui/settings";
 
 export function addignoreSetting(containerEl: HTMLElement, plugin: SRPlugin) {
     const settings = plugin.data.settings;

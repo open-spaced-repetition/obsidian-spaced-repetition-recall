@@ -7,9 +7,29 @@ import type SRPlugin from "src/main";
 import { setDebugParser } from "src/parser";
 import { DEFAULT_SETTINGS } from "src/settings";
 
+import { addignoreSetting } from "src/settings/ignoreSetting";
+import { addMultiClozeSetting } from "src/settings/multiClozeSetting";
+
+import { algorithms } from "src/algorithms/algorithms_switch";
+import { addResponseFloatBarSetting } from "src/settings/responseBarSetting";
+import { DataLocation } from "src/dataStore/dataLocation";
+import { addDataLocationSettings } from "src/settings/locationSetting";
+import {
+    addAlgorithmSetting,
+    addAlgorithmSpecificDisplaySetting,
+    addResponseButtonTextSetting,
+} from "src/settings/algorithmSetting";
+import { addUntrackSetting, addTrackedNoteToDecksSetting } from "src/settings/trackSetting";
+import { buildDonation } from "src/settings/donation";
+import { addburySiblingSetting } from "src/settings/burySiblingSetting";
+import { addcardBlockIDSetting } from "src/settings/cardBlockIDSetting";
+import { addmixQueueSetting } from "src/settings/mixQueueSetting";
+import { addIntervalShowHideSetting } from "src/settings/intervalShowHideSetting";
+import { addReviewNoteDirectlySetting } from "src/settings/reviewNoteDirectlySetting";
+
 // https://github.com/mgmeyers/obsidian-kanban/blob/main/src/Settings.ts
 let applyDebounceTimer = 0;
-function applySettingsUpdate(callback: () => void): void {
+export function applySettingsUpdate(callback: () => void): void {
     clearTimeout(applyDebounceTimer);
     applyDebounceTimer = window.setTimeout(callback, 512);
 }
@@ -128,8 +148,12 @@ export class SRSettingTab extends PluginSettingTab {
             );
 
         this.createSettingFoldersToIgnore(containerEl);
+        // addignoreSetting(newSettingEl(containerEl), this.plugin);
 
         containerEl.createEl("h3", { text: t("GROUP_FLASHCARD_REVIEW") });
+        addMultiClozeSetting(newSettingEl(containerEl), this.plugin);
+        addburySiblingSetting(newSettingEl(containerEl), this.plugin);
+        addcardBlockIDSetting(newSettingEl(containerEl), this.plugin);
         new Setting(containerEl)
             .setName(t("BURY_SIBLINGS_TILL_NEXT_DAY"))
             .setDesc(t("BURY_SIBLINGS_TILL_NEXT_DAY_DESC"))
@@ -195,6 +219,7 @@ export class SRSettingTab extends PluginSettingTab {
                     await this.plugin.savePluginData();
                 }),
         );
+        addIntervalShowHideSetting(newSettingEl(containerEl), this.plugin);
 
         containerEl.createEl("h3", { text: t("GROUP_FLASHCARD_SEPARATORS") });
         const convertHighlightsToClozesEl = new Setting(containerEl).setName(
@@ -482,6 +507,12 @@ export class SRSettingTab extends PluginSettingTab {
             );
 
         this.createSettingFoldersToIgnore(containerEl);
+        // addignoreSetting(newSettingEl(containerEl), this.plugin);
+        addmixQueueSetting(newSettingEl(containerEl), this.plugin);
+        addTrackedNoteToDecksSetting(newSettingEl(containerEl), this.plugin);
+        addUntrackSetting(newSettingEl(containerEl), this.plugin);
+        addResponseFloatBarSetting(newSettingEl(containerEl), this.plugin);
+        addReviewNoteDirectlySetting(newSettingEl(containerEl), this.plugin);
 
         containerEl.createEl("h3", { text: t("NOTES_REVIEW_QUEUE") });
         new Setting(containerEl).setName(t("AUTO_NEXT_NOTE")).addToggle((toggle) =>
@@ -574,6 +605,26 @@ export class SRSettingTab extends PluginSettingTab {
 
     private async tabUiPreferences(containerEl: HTMLElement): Promise<void> {
         containerEl.createEl("h3", { text: t("OBSIDIAN_INTEGRATION") });
+        new Setting(containerEl)
+            .setName(t("OPEN_IN_TAB"))
+            .setDesc(t("OPEN_IN_TAB_DESC"))
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(this.plugin.data.settings.openViewInNewTab)
+                    .onChange(async (value) => {
+                        if (value) {
+                            this.plugin.registerSRFocusListener();
+                        } else {
+                            this.plugin.tabViewManager.closeAllTabViews();
+
+                            // Remove focus from SR and remove event listener for focus change
+                            this.plugin.removeSRFocusListener();
+                        }
+                        this.plugin.data.settings.openViewInNewTab = value;
+                        await this.plugin.savePluginData();
+                    }),
+            );
+
         new Setting(containerEl)
             .setName(t("SHOW_RIBBON_ICON"))
             .setDesc(t("SHOW_RIBBON_ICON_DESC"))
@@ -701,6 +752,7 @@ export class SRSettingTab extends PluginSettingTab {
             });
 
         containerEl.createEl("h3", { text: t("GROUP_FLASHCARDS_NOTES") });
+        addResponseButtonTextSetting(newSettingEl(containerEl), this.plugin);
         new Setting(containerEl)
             .setName(t("FLASHCARD_EASY_LABEL"))
             .setDesc(t("FLASHCARD_EASY_DESC"))
@@ -1010,6 +1062,21 @@ export class SRSettingTab extends PluginSettingTab {
                         await this.plugin.savePluginData();
                     }),
             );
+
+        const plugin = this.plugin;
+        const settings = this.plugin.data.settings;
+
+        const issue_url =
+            "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/issues";
+        newSettingEl(containerEl).createEl("p").innerHTML =
+            `Post an <a href= ${issue_url} > issue </a> about this modified sr-plugin which has backgroud color for settings.`;
+
+        // trackfile_setting
+        // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
+        addDataLocationSettings(newSettingEl(containerEl), this.plugin);
+
+        addAlgorithmSetting(newSettingEl(containerEl), this.plugin);
+        addAlgorithmSpecificDisplaySetting(newSettingEl(containerEl), this.plugin);
     }
 
     private async tabHelp(containerEl: HTMLElement): Promise<void> {
@@ -1079,6 +1146,19 @@ export class SRSettingTab extends PluginSettingTab {
                     "https://www.stephenmwangi.com/obsidian-spaced-repetition/contributing/#translating",
             }),
         );
+
+        const issue_url =
+            "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/issues";
+        newSettingEl(containerEl)
+            .createEl("p")
+            .insertAdjacentHTML(
+                "beforeend",
+                t("GITHUB_ISSUES", {
+                    issues_url: "https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/",
+                }) + `about this modified sr-plugin `,
+            );
+
+        buildDonation(containerEl);
     }
 
     private lastPosition: {
@@ -1111,4 +1191,10 @@ export class SRSettingTab extends PluginSettingTab {
             });
         }
     }
+}
+
+export function newSettingEl(containerEl: HTMLElement) {
+    const el = containerEl.createDiv();
+    el.addClass("sr-setting-tab-bg");
+    return el;
 }

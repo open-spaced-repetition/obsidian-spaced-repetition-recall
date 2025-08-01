@@ -5,7 +5,7 @@ import { DataLocation } from "src/dataStore/dataLocation";
 import ConfirmModal from "src/gui/confirm";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { applySettingsUpdate } from "src/settings";
+import { applySettingsUpdate } from "src/gui/settings";
 
 // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
 
