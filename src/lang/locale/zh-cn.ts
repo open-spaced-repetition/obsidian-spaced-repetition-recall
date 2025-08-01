@@ -65,19 +65,17 @@ export default {
     GROUP_DATA_STORAGE_DESC: "选择存储计划数据位置",
     GROUP_FLASHCARDS_NOTES: "闪卡和笔记",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: '了解更多, 请点击<a href="${wiki_url}">wiki</a>.',
+    CHECK_WIKI: '了解更多, 请点击<a href="${wikiUrl}">wiki</a>.',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "忽略此文件夹",
     FOLDERS_TO_IGNORE_DESC:
         "在单独一行中输入文件夹路径或全局模式，例如 Templates/Scripts 或 .excalidraw.md。此设置对闪存卡和笔记都通用。",
@@ -162,7 +160,8 @@ export default {
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "关闭此选项可折叠同一张卡片中的嵌套牌组。如果您的卡片属于同一文件中的许多套牌，则很有用。",
     ALGORITHM: "算法",
-    CHECK_ALGORITHM_WIKI: '了解更多, 请点击<a href="${algo_url}">算法实现</a>.',
+    CHECK_ALGORITHM_WIKI: '了解更多, 请点击<a href="${algoUrl}">算法实现</a>.',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "基础掌握程度",
     BASE_EASE_DESC: "最小值130，推荐值约250.",
     BASE_EASE_MIN_WARNING: "基础掌握程度的最小值为130。",

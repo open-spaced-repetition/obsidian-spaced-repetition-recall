@@ -1,8 +1,8 @@
 import { Notice, PluginSettingTab, Setting, App, Platform } from "obsidian";
 import type SRPlugin from "src/main";
 import { t } from "src/lang/helpers";
-import { pathMatchesPattern } from "src/utils/fs";
-import { TabStructure, createTabs } from "./gui/Tabs";
+// import { pathMatchesPattern } from "src/utils/fs";
+import { TabStructure, createTabs } from "./gui/tabs";
 import { setDebugParser } from "./parser";
 import { addignoreSetting } from "./settings/ignoreSetting";
 import { addMultiClozeSetting } from "./settings/multiClozeSetting";
@@ -24,6 +24,7 @@ import { buildDonation } from "./settings/donation";
 import { addburySiblingSetting } from "./settings/burySiblingSetting";
 import { addcardBlockIDSetting } from "./settings/cardBlockIDSetting";
 import { addmixQueueSetting } from "./settings/mixQueueSetting";
+import { pathMatchesPattern } from "src/utils/fs";
 
 export interface SRSettings {
     // flashcards
@@ -177,7 +178,8 @@ export const DEFAULT_SETTINGS: SRSettings = {
     maxLinkFactor: 1.0,
 
     // storage
-    dataStore: DataStoreName.NOTES,
+    // dataStore: DataStoreName.NOTES,
+    dataStore: "NOTES",
     cardCommentOnSameLine: false,
 
     // logging

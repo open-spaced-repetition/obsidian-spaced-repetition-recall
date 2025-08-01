@@ -753,6 +753,9 @@ export class SRSettingTab extends PluginSettingTab {
 
         containerEl.createEl("h3", { text: t("GROUP_FLASHCARDS_NOTES") });
         addResponseButtonTextSetting(newSettingEl(containerEl), this.plugin);
+
+        return;
+
         new Setting(containerEl)
             .setName(t("FLASHCARD_EASY_LABEL"))
             .setDesc(t("FLASHCARD_EASY_DESC"))
@@ -855,6 +858,24 @@ export class SRSettingTab extends PluginSettingTab {
     private async tabScheduling(containerEl: HTMLElement): Promise<void> {
         containerEl.createEl("h3", { text: t("ALGORITHM") });
         const algoSettingEl = new Setting(containerEl).setName(t("ALGORITHM"));
+
+        const plugin = this.plugin;
+        const settings = this.plugin.data.settings;
+
+        const issue_url =
+            "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/issues";
+        newSettingEl(containerEl).createEl("p").innerHTML =
+            `Post an <a href= ${issue_url} > issue </a> about this modified sr-plugin which has backgroud color for settings.`;
+
+        // trackfile_setting
+        // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
+        addDataLocationSettings(newSettingEl(containerEl), this.plugin);
+
+        addAlgorithmSetting(newSettingEl(containerEl), this.plugin);
+        addAlgorithmSpecificDisplaySetting(newSettingEl(containerEl), this.plugin);
+
+        return;
+
         algoSettingEl.descEl.insertAdjacentHTML(
             "beforeend",
             t("CHECK_ALGORITHM_WIKI", {
@@ -933,43 +954,43 @@ export class SRSettingTab extends PluginSettingTab {
                     });
             });
 
-        new Setting(containerEl)
-            .setName(t("EASY_BONUS"))
-            .setDesc(t("EASY_BONUS_DESC"))
-            .addText((text) =>
-                text
-                    .setValue((this.plugin.data.settings.easyBonus * 100).toString())
-                    .onChange((value) => {
-                        applySettingsUpdate(async () => {
-                            const numValue: number = Number.parseInt(value) / 100;
-                            if (!isNaN(numValue)) {
-                                if (numValue < 1.0) {
-                                    new Notice(t("EASY_BONUS_MIN_WARNING"));
-                                    text.setValue(
-                                        (this.plugin.data.settings.easyBonus * 100).toString(),
-                                    );
-                                    return;
-                                }
+        // new Setting(containerEl)
+        //     .setName(t("EASY_BONUS"))
+        //     .setDesc(t("EASY_BONUS_DESC"))
+        //     .addText((text) =>
+        //         text
+        //             .setValue((this.plugin.data.settings.easyBonus * 100).toString())
+        //             .onChange((value) => {
+        //                 applySettingsUpdate(async () => {
+        //                     const numValue: number = Number.parseInt(value) / 100;
+        //                     if (!isNaN(numValue)) {
+        //                         if (numValue < 1.0) {
+        //                             new Notice(t("EASY_BONUS_MIN_WARNING"));
+        //                             text.setValue(
+        //                                 (this.plugin.data.settings.easyBonus * 100).toString(),
+        //                             );
+        //                             return;
+        //                         }
 
-                                this.plugin.data.settings.easyBonus = numValue;
-                                await this.plugin.savePluginData();
-                            } else {
-                                new Notice(t("VALID_NUMBER_WARNING"));
-                            }
-                        });
-                    }),
-            )
-            .addExtraButton((button) => {
-                button
-                    .setIcon("reset")
-                    .setTooltip(t("RESET_DEFAULT"))
-                    .onClick(async () => {
-                        this.plugin.data.settings.easyBonus = DEFAULT_SETTINGS.easyBonus;
-                        await this.plugin.savePluginData();
+        //                         this.plugin.data.settings.easyBonus = numValue;
+        //                         await this.plugin.savePluginData();
+        //                     } else {
+        //                         new Notice(t("VALID_NUMBER_WARNING"));
+        //                     }
+        //                 });
+        //             }),
+        //     )
+        //     .addExtraButton((button) => {
+        //         button
+        //             .setIcon("reset")
+        //             .setTooltip(t("RESET_DEFAULT"))
+        //             .onClick(async () => {
+        //                 this.plugin.data.settings.easyBonus = DEFAULT_SETTINGS.easyBonus;
+        //                 await this.plugin.savePluginData();
 
-                        this.display();
-                    });
-            });
+        //                 this.display();
+        //             });
+        //     });
 
         new Setting(containerEl)
             .setName(t("MAX_INTERVAL"))
@@ -1035,21 +1056,21 @@ export class SRSettingTab extends PluginSettingTab {
                     });
             });
 
-        containerEl.createEl("h3", { text: t("GROUP_DATA_STORAGE") });
-        new Setting(containerEl)
-            .setName(t("GROUP_DATA_STORAGE"))
-            .setDesc(t("GROUP_DATA_STORAGE_DESC"))
-            .addDropdown((dropdown) =>
-                dropdown
-                    .addOptions({
-                        NOTES: t("STORE_IN_NOTES"),
-                    })
-                    .setValue(this.plugin.data.settings.dataStore)
-                    .onChange(async (value) => {
-                        this.plugin.data.settings.dataStore = value;
-                        await this.plugin.savePluginData();
-                    }),
-            );
+        // containerEl.createEl("h3", { text: t("GROUP_DATA_STORAGE") });
+        // new Setting(containerEl)
+        //     .setName(t("GROUP_DATA_STORAGE"))
+        //     .setDesc(t("GROUP_DATA_STORAGE_DESC"))
+        //     .addDropdown((dropdown) =>
+        //         dropdown
+        //             .addOptions({
+        //                 NOTES: t("STORE_IN_NOTES"),
+        //             })
+        //             .setValue(this.plugin.data.settings.dataStore)
+        //             .onChange(async (value) => {
+        //                 this.plugin.data.settings.dataStore = value;
+        //                 await this.plugin.savePluginData();
+        //             }),
+        //     );
 
         new Setting(containerEl)
             .setName(t("INLINE_SCHEDULING_COMMENTS"))
@@ -1062,21 +1083,6 @@ export class SRSettingTab extends PluginSettingTab {
                         await this.plugin.savePluginData();
                     }),
             );
-
-        const plugin = this.plugin;
-        const settings = this.plugin.data.settings;
-
-        const issue_url =
-            "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/issues";
-        newSettingEl(containerEl).createEl("p").innerHTML =
-            `Post an <a href= ${issue_url} > issue </a> about this modified sr-plugin which has backgroud color for settings.`;
-
-        // trackfile_setting
-        // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
-        addDataLocationSettings(newSettingEl(containerEl), this.plugin);
-
-        addAlgorithmSetting(newSettingEl(containerEl), this.plugin);
-        addAlgorithmSpecificDisplaySetting(newSettingEl(containerEl), this.plugin);
     }
 
     private async tabHelp(containerEl: HTMLElement): Promise<void> {
@@ -1154,7 +1160,7 @@ export class SRSettingTab extends PluginSettingTab {
             .insertAdjacentHTML(
                 "beforeend",
                 t("GITHUB_ISSUES", {
-                    issues_url: "https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/",
+                    issuesUrl: issue_url,
                 }) + `about this modified sr-plugin `,
             );
 
