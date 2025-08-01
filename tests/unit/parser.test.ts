@@ -121,6 +121,19 @@ test("Test parsing of single line reversed cards", () => {
             clozePatterns: [],
         }),
     ).toEqual([[CardType.SingleLineReversed, "Question::Answer", 0, 0]]);
+    expect(
+        parseT("Qn 1?:>Answer.\n\nQn 2?<:>Answer.\n", {
+            singleLineCardSeparator: ":>",
+            singleLineReversedCardSeparator: "<:>",
+            multilineCardSeparator: ";>",
+            multilineReversedCardSeparator: "<;>",
+            multilineCardEndMarker: "---",
+            clozePatterns: [],
+        }),
+    ).toEqual([
+        [CardType.SingleLineBasic, "Qn 1?:>Answer.", 0, 0],
+        [CardType.SingleLineReversed, "Qn 2?<:>Answer.", 2, 2],
+    ]);
 
     // empty string or whitespace character provided
     expect(
@@ -227,7 +240,7 @@ test("Test parsing of multi line basic cards", () => {
         parseT("Question\n?\nAnswer", {
             singleLineCardSeparator: "::",
             singleLineReversedCardSeparator: ":::",
-            multilineCardSeparator: "\n",
+            multilineCardSeparator: "",
             multilineReversedCardSeparator: "??",
             multilineCardEndMarker: "---",
             clozePatterns: [],
@@ -298,6 +311,40 @@ test("Test parsing of multi line reversed cards", () => {
             clozePatterns: [],
         }),
     ).toEqual([[CardType.MultiLineReversed, "Question\n@@@\nAnswer", 0, 2]]);
+    expect(
+        parseT(
+            `line 1
+
+
+line 2
+
+Question 1?
+??
+Answer to question 1
+????
+line 3
+
+line 4
+
+Question 2?
+??
+Answer to question 2
+????
+Line 5
+`,
+            {
+                singleLineCardSeparator: ":::",
+                singleLineReversedCardSeparator: "::::",
+                multilineCardSeparator: "??",
+                multilineReversedCardSeparator: "???",
+                multilineCardEndMarker: "????",
+                clozePatterns: [],
+            },
+        ),
+    ).toEqual([
+        [CardType.MultiLineBasic, "Question 1?\n??\nAnswer to question 1", 5, 7],
+        [CardType.MultiLineBasic, "Question 2?\n??\nAnswer to question 2", 13, 15],
+    ]);
 
     // empty string or whitespace character provided
     expect(
@@ -431,6 +478,99 @@ test("Test parsing of cloze cards", () => {
         }),
     ).toEqual([]);
 
+    // custom cloze formats
+    // Anki-like pattern
+    //  Notice that the single line separators have to be different
+    expect(
+        parseT("Brazilians speak {{Portuguese::language}}", {
+            singleLineCardSeparator: "=",
+            singleLineReversedCardSeparator: "==",
+            multilineCardSeparator: "?",
+            multilineReversedCardSeparator: "??",
+            multilineCardEndMarker: "",
+            clozePatterns: ["{{[123::]answer[::hint]}}"],
+        }),
+    ).toEqual([[CardType.Cloze, "Brazilians speak {{Portuguese::language}}", 0, 0]]);
+    expect(
+        parseT(
+            "Brazilians speak {{1::Portuguese}}\n\nBrazilians speak {{1::Portuguese::language}}",
+            {
+                singleLineCardSeparator: "=",
+                singleLineReversedCardSeparator: "==",
+                multilineCardSeparator: "?",
+                multilineReversedCardSeparator: "??",
+                multilineCardEndMarker: "",
+                clozePatterns: ["{{[123::]answer[::hint]}}"],
+            },
+        ),
+    ).toEqual([
+        [CardType.Cloze, "Brazilians speak {{1::Portuguese}}", 0, 0],
+        [CardType.Cloze, "Brazilians speak {{1::Portuguese::language}}", 2, 2],
+    ]);
+    expect(
+        parseT(
+            "Brazilians speak {{a::Portuguese}}\n\nBrazilians speak {{a::Portuguese::language}}",
+            {
+                singleLineCardSeparator: "=",
+                singleLineReversedCardSeparator: "==",
+                multilineCardSeparator: "?",
+                multilineReversedCardSeparator: "??",
+                multilineCardEndMarker: "",
+                clozePatterns: ["{{[123::]answer[::hint]}}"],
+            },
+        ),
+    ).toEqual([
+        [CardType.Cloze, "Brazilians speak {{a::Portuguese}}", 0, 0],
+        [CardType.Cloze, "Brazilians speak {{a::Portuguese::language}}", 2, 2],
+    ]);
+
+    // Highlighted pattern with hint and sequencer in footnotes
+    expect(
+        parseT("Brazilians speak ==Portuguese==\n\nBrazilians speak ==Portuguese==^[language]", {
+            singleLineCardSeparator: "::",
+            singleLineReversedCardSeparator: ":::",
+            multilineCardSeparator: "?",
+            multilineReversedCardSeparator: "??",
+            multilineCardEndMarker: "",
+            clozePatterns: ["==answer==[^\\[hint\\]][\\[^123\\]]"],
+        }),
+    ).toEqual([
+        [CardType.Cloze, "Brazilians speak ==Portuguese==", 0, 0],
+        [CardType.Cloze, "Brazilians speak ==Portuguese==^[language]", 2, 2],
+    ]);
+    expect(
+        parseT(
+            "Brazilians speak ==Portuguese==[^1]\n\nBrazilians speak ==Portuguese==^[language][^1]",
+            {
+                singleLineCardSeparator: "::",
+                singleLineReversedCardSeparator: ":::",
+                multilineCardSeparator: "?",
+                multilineReversedCardSeparator: "??",
+                multilineCardEndMarker: "",
+                clozePatterns: ["==answer==[^\\[hint\\]][\\[^123\\]]"],
+            },
+        ),
+    ).toEqual([
+        [CardType.Cloze, "Brazilians speak ==Portuguese==[^1]", 0, 0],
+        [CardType.Cloze, "Brazilians speak ==Portuguese==^[language][^1]", 2, 2],
+    ]);
+    expect(
+        parseT(
+            "Brazilians speak ==Portuguese==[^a]\n\nBrazilians speak ==Portuguese==^[language][^a]",
+            {
+                singleLineCardSeparator: "::",
+                singleLineReversedCardSeparator: ":::",
+                multilineCardSeparator: "?",
+                multilineReversedCardSeparator: "??",
+                multilineCardEndMarker: "",
+                clozePatterns: ["==answer==[^\\[hint\\]][\\[^123\\]]"],
+            },
+        ),
+    ).toEqual([
+        [CardType.Cloze, "Brazilians speak ==Portuguese==[^a]", 0, 0],
+        [CardType.Cloze, "Brazilians speak ==Portuguese==^[language][^a]", 2, 2],
+    ]);
+
     // combo
     expect(parseT("cloze **deletion** test ==another deletion==!", parserOptions)).toEqual([
         [CardType.Cloze, "cloze **deletion** test ==another deletion==!", 0, 0],
@@ -543,14 +683,14 @@ test("Test parsing cards with codeblocks", () => {
     expect(
         parseT(
             "How do you ... Python?\n?\n" +
-                "```\nprint('Hello World!')\n\n\nprint('Howdy?')\n\nlambda x: x[0]\n```",
+                "```python\nprint('Hello World!')\n\n\nprint('Howdy?')\n\nlambda x: x[0]\n```",
             parserOptions,
         ),
     ).toEqual([
         [
             CardType.MultiLineBasic,
             "How do you ... Python?\n?\n" +
-                "```\nprint('Hello World!')\n\n\nprint('Howdy?')\n\nlambda x: x[0]\n```",
+                "```python\nprint('Hello World!')\n\n\nprint('Howdy?')\n\nlambda x: x[0]\n```",
             0,
             9,
         ],
