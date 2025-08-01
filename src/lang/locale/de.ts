@@ -112,6 +112,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Kontext in den Karten anzeigen?",
     SHOW_CARD_CONTEXT_DESC: "Bsp. Titel > Überschrift 1 > Sektion > ... > Untersektion",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "Höhe der Lernkartei in Prozent",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "Auf kleinen Bildschirmen (z.B. Smartphones) oder bei sehr grossen Bildern sollte dieser Wert auf 100% gesetzt werden.",
@@ -137,11 +140,18 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Zufällige Karte von zufälligem Stapel",
     DISABLE_CLOZE_CARDS: "Lückentextkarten deaktivieren?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "==Hervorgehobenen== Text in Lückentextkarten umwandeln?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Füge/entferne das <code>${defaultPattern}</code> zu deinen "Lückentextmuster" hinzu',
     CONVERT_BOLD_TEXT_TO_CLOZES: "**Fettgedruckten** Text in Lückentextkarten umwandeln?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Füge/entferne das <code>${defaultPattern}</code> zu deinen "Lückentextmuster" hinzu',
     CONVERT_CURLY_BRACKETS_TO_CLOZES:
         "{{Geschweifte Klammern}} Text in Lückentextkarten umwandeln?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Füge/entferne das <code>${defaultPattern}</code> zu deinen "Lückentextmuster" hinzu',
     CLOZE_PATTERNS: "Lückentextmuster",
-    CLOZE_PATTERNS_DESC: "Geben Sie Lückentextmuster durch Zeilenumbrüche getrennt ein",
+    CLOZE_PATTERNS_DESC:
+        'Geben Sie Lückentextmuster durch Zeilenumbrüche getrennt ein. Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "Trennzeichen für einzeilige Lernkarten",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Wenn diese Einstellung geändert wird, dann müssen die entsprechenden Lernkarten manuell angepasst werden.",
@@ -151,6 +161,7 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTILINE_CARDS_END_MARKER:
         "Zeichen, die das Ende von Lückentexten und mehrzeiligen Flashcards kennzeichnen",
     NOTES: "Notizen",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Öffne Überprüfungswarteschlage beim start",
     TAGS_TO_REVIEW: "Zu wiederholende Tags",
     TAGS_TO_REVIEW_DESC:
@@ -167,10 +178,14 @@ Note that this setting is common to both Flashcards and Notes.`,
         "Maximale Anzahl anstehender Notizen, die im rechten Fensterbereich angezeigt werden",
     MIN_ONE_DAY: "Anzahl der Tage muss mindestens 1 sein.",
     VALID_NUMBER_WARNING: "Bitte eine gültige Zahl eingeben.",
-    UI_PREFERENCES: "Einstellungen der Benutzeroberfläche",
-    OPEN_AS_TAB: "Registerkartenmodus",
-    OPEN_AS_TAB_DESC:
-        "Wenn diese Option aktiviert ist, wird die Überprüfungsoberfläche in einem Tab geöffnet. Andernfalls wird sie in einem Modal-Fenster geöffnet.",
+    UI: "User Interface",
+    OPEN_IN_TAB: "Öffne im neuen Tab",
+    OPEN_IN_TAB_DESC: "Schalte dies aus, um die Notizen in einem Modalfenster zu öffnen",
+    SHOW_STATUS_BAR: "Show status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
+    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Stapelverzeichnis soll beim öffnen erweitert angezeigt werden",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
@@ -202,7 +217,7 @@ Note that this setting is common to both Flashcards and Notes.`,
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Protokollierung",
-    DISPLAY_DEBUG_INFO: "Informationen zum Debugging in der Entwicklerkonsole anzeigen",
+    DISPLAY_SCHEDULING_DEBUG_INFO: "Informationen zum Debugging in der Entwicklerkonsole anzeigen",
     DISPLAY_PARSER_DEBUG_INFO:
         "Informationen zum parser Debugging in der Entwicklerkonsole anzeigen",
 
@@ -272,12 +287,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     INTERVALS_SUMMARY: "Durchschnittliches Intervall: ${avg}, Längstes Intervall: ${longest}",
     EASES: "Schwierigkeit",
     EASES_SUMMARY: "Durchschnittliche Schwierigkeit: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "Kategorisierung",
     CARD_TYPES_DESC: "Verlegte Karten eingeschlossen",
     CARD_TYPE_NEW: "Neu",
     CARD_TYPE_YOUNG: "Jung",
     CARD_TYPE_MATURE: "Ausgereift",
     CARD_TYPES_SUMMARY: "Insgesamt ${totalCardsCount} Karten",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
     REVIEWED_TODAY: "Reviewed today",
     REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
     NEW_LEARNED: "New Learned",

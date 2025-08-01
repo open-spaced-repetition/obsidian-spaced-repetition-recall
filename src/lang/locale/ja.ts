@@ -129,8 +129,14 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Random card from random deck",
     DISABLE_CLOZE_CARDS: "穴埋めカードを無効化しますか？",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "==ハイライト==を穴埋めとして使用しますか？",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
     CONVERT_BOLD_TEXT_TO_CLOZES: "**ボールド体**を穴埋めとして使用しますか？",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "{{中括弧}}を穴埋めとして使用しますか？",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
     CLOZE_PATTERNS: "穴埋めパターン",
     CLOZE_PATTERNS_DESC: "改行で区切って穴埋めパターンを入力してください。",
     INLINE_CARDS_SEPARATOR: "インラインフラッシュカードに使用するセパレーター",

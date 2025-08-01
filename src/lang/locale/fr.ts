@@ -98,6 +98,9 @@ export default {
         "Les cartes sœurs sont les cartes générées depuis le même texte, par exemple pour les textes à trous",
     SHOW_CARD_CONTEXT: "Montrer le contexte dans les cartes ?",
     SHOW_CARD_CONTEXT_DESC: "ex. Titre de la note > Titre 1 > Sous-titre > ... > Sous-titre",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "Pourcentage de hauteur de la flashcard",
     CARD_MODAL_SIZE_PERCENT_DESC: "Devrait être 100% sur mobile ou en cas de grandes images",
     RESET_DEFAULT: "Réinitialiser les paramètres",
@@ -117,10 +120,17 @@ export default {
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Carte au hasard dans un paquet au hasard",
     DISABLE_CLOZE_CARDS: "Désactiver les textes à trous ?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "Convertir ==soulignages== en trous ?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Ajouter/supprimer le <code>${defaultPattern}</code> de vos "Cloze Patterns"',
     CONVERT_BOLD_TEXT_TO_CLOZES: "Convertir **gras** en trous ?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Ajouter/supprimer le <code>${defaultPattern}</code> de vos "Cloze Patterns"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "Convertir {{crochets}} en trous ?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Ajouter/supprimer le <code>${defaultPattern}</code> de vos "Cloze Patterns"',
     CLOZE_PATTERNS: "Cloze Patterns",
-    CLOZE_PATTERNS_DESC: "Enter cloze patterns separated by newlines",
+    CLOZE_PATTERNS_DESC:
+        'Enter cloze patterns separated by newlines. Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "Séparateur pour flashcards en une ligne",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Après avoir changé ce réglage, vous devrez manuellement mettre à jour toutes vos flashcards.",
@@ -130,6 +140,7 @@ export default {
     MULTILINE_CARDS_END_MARKER:
         "Caractères de fin de textes à trous ou de flashcards en plusieurs lignes",
     NOTES: "Notes",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Montrer le module d'apprentissage des notes au démarrage",
     TAGS_TO_REVIEW: "Tags à apprendre",
     TAGS_TO_REVIEW_DESC:
@@ -142,6 +153,8 @@ export default {
     MIN_ONE_DAY: "Le nombre de jours doit être au moins 1.",
     VALID_NUMBER_WARNING: "Entrez un nombre valide.",
     UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
     SHOW_STATUS_BAR_DESC:
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
@@ -212,10 +225,14 @@ export default {
     INTERVALS_SUMMARY: "Intervalle moyen : ${avg}. Intervalle maximum: ${longest}",
     EASES: "Facilité",
     EASES_SUMMARY: "Facilité moyenne : ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "Types de cartes",
     CARD_TYPES_DESC: "Ceci inclut les cartes enterrées, s'il y en a",
     CARD_TYPE_NEW: "Nouvelles",
     CARD_TYPE_YOUNG: "En cours d'apprentissage",
     CARD_TYPE_MATURE: "Matures",
     CARD_TYPES_SUMMARY: "Total de cartes : ${totalCardsCount}",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
 };

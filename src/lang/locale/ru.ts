@@ -136,9 +136,15 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Случайная карта из случайной колоды",
     DISABLE_CLOZE_CARDS: "Выключить карты с пропусками (пример: [...])?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "Конвертировать ==выделенный текст== в пропуски (пример: [...])?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
     CONVERT_BOLD_TEXT_TO_CLOZES: "Конвертировать **жирный текст** в пропуски (пример: [...])?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES:
         "Конвертировать {{фигурные скобки}} в пропуски (пример: [...])?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
     CLOZE_PATTERNS: "Шаблоны пропусков",
     CLOZE_PATTERNS_DESC: "Введите шаблоны пропусков, разделенные переводами строк",
     INLINE_CARDS_SEPARATOR: "Разделитель для внутристрочных карточек",

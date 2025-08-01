@@ -62,6 +62,7 @@ export default {
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
     GROUP_DATA_STORAGE: "Storage of Scheduling Data",
+    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
     CHECK_WIKI: 'Para más información revisa la <a href="${wiki_url}">wiki</a>.',
@@ -78,11 +79,9 @@ export default {
     PROJECT_CONTRIBUTIONS:
         'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
     FOLDERS_TO_IGNORE: "Directorios a ignorar",
-    FOLDERS_TO_IGNORE_DESC: `Escriba las rutas de los directorios separadas por saltos de línea, por ejemplo, Plantillas Extra/Guiones.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "Tarjetas de Memorización",
     FLASHCARD_EASY_LABEL: "Texto del botón: Fácil",
     FLASHCARD_GOOD_LABEL: "Texto del botón: Bien",
@@ -107,6 +106,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "¿Mostrar contexto en las tarjetas?",
     SHOW_CARD_CONTEXT_DESC: "Por Ejemplo: Título > Cabecera > Sub-Cabecera > ... > Sub-Cabecera",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "Porcentaje de la altura de las tarjetas de memoria",
     CARD_MODAL_SIZE_PERCENT_DESC: "Debería ser establecido en 100% si tienes imágenes grandes",
     RESET_DEFAULT: "Reiniciar a la configuración por defecto",
@@ -126,10 +128,17 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Random card from random deck",
     DISABLE_CLOZE_CARDS: "¿Deshabilitar deletreo de huecos en las tarjetas?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "¿Convertir ==resaltados== a deletreo de huecos?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Añadir/eliminar el <code>${defaultPattern}</code> de tus "Patrones de Deletreo de Huecos"',
     CONVERT_BOLD_TEXT_TO_CLOZES: "¿Convertir **texto en negrita** a deletreo de huecos?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Añadir/eliminar el <code>${defaultPattern}</code> de tus "Patrones de Deletreo de Huecos"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "¿Convertir {{llaves rizadas}} a deletreo de huecos?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Añadir/eliminar el <code>${defaultPattern}</code> de tus "Patrones de Deletreo de Huecos"',
     CLOZE_PATTERNS: "Patrones de deletreo de huecos",
-    CLOZE_PATTERNS_DESC: "Escriba los patrones de deletreo de huecos separados por saltos de línea",
+    CLOZE_PATTERNS_DESC:
+        'Escriba los patrones de deletreo de huecos separados por saltos de línea. . Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "Separador de tarjetas de memorización en línea",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Note que después de cambiar este ajuste, tendrá que cambiar manualmente todas las notas que tenga.",
@@ -141,6 +150,7 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTILINE_CARDS_END_MARKER:
         "Caracteres que denotan el fin de los clozes y tarjetas didácticas de varias líneas",
     NOTES: "Notes",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Activar panel de revisión de notas al arrancar",
     TAGS_TO_REVIEW: "Etiquetas a revisar",
     TAGS_TO_REVIEW_DESC:
@@ -149,17 +159,21 @@ Note that this setting is common to both Flashcards and Notes.`,
     OPEN_RANDOM_NOTE_DESC:
         "Cuando deshabilita esto, las notas son ordenadas por importancia (Algoritmo PageRank).",
     AUTO_NEXT_NOTE: "Abrir la siguiente nota automáticamente después de una revisión",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Deshabilitar opciones de revisión en el menú de archivo, por ejemplo, Revisión: Fácil Bien Difícil",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "Después de deshabilitarlo, puede hacer las revisiones utilizando atajos de teclado. Reinicie Obsidian después de cambiar esto.",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "Habilita las opciones de revisión en el menú Archivo (por ejemplo: Revisar: Fácil, Bien, Difícil)",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "Si desactivas las opciones de revisión en el menú Archivo, puedes revisar tus notas usando los comandos del plugin y, si los definiste, las teclas rápidas asociadas.",
     MAX_N_DAYS_REVIEW_QUEUE: "Número máximo de días a mostrar en el panel derecho.",
     MIN_ONE_DAY: "El número de días debe ser al menos uno.",
     VALID_NUMBER_WARNING: "Por favor especifique un número válido.",
-    UI_PREFERENCES: "Preferencias de la interfaz de usuario.",
-    OPEN_AS_TAB: "Modo de pestaña",
-    OPEN_AS_TAB_DESC:
-        "Si esta opción está activada, la interfaz de repaso se abrirá como una pestaña. Si está desactivada, se abrirá como una ventana modal.",
+    UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
+    SHOW_STATUS_BAR: "Show status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
+    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Los árboles de mazos deberían ser expandidos al inicio.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Desactiva esto para contraer mazos anidados en la misma tarjeta. Útil si tienes tarjetas que pertenecen a muchos mazos en el mismo archivo.",
@@ -190,9 +204,13 @@ Note that this setting is common to both Flashcards and Notes.`,
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Registro",
-    DISPLAY_DEBUG_INFO: "¿Mostrar información de depuración en la consola de desarrollador",
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO:
+        "¿Mostrar información de depuración en la consola de desarrollador",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
@@ -260,12 +278,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     INTERVALS_SUMMARY: "Intervalo de carga: ${avg}, Intervalo mayor: ${longest}",
     EASES: "Facilidad",
     EASES_SUMMARY: "Carga de Facilidad: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "Tipos de tarjetas",
     CARD_TYPES_DESC: "Esto incluye también a las tarjetas enterradas, si las hay",
     CARD_TYPE_NEW: "Nueva",
     CARD_TYPE_YOUNG: "Joven",
     CARD_TYPE_MATURE: "Madura",
     CARD_TYPES_SUMMARY: "Tarjetas Totales: ${totalCardsCount}",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
     REVIEWED_TODAY: "Reviewed today",
     REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
     NEW_LEARNED: "New Learned",

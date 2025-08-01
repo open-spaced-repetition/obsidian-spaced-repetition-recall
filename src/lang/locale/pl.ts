@@ -129,8 +129,14 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Losowa karta z losowej talii",
     DISABLE_CLOZE_CARDS: "Wyłączyć karty zamaskowane?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "Konwertować ==podświetlenia== na karty zamaskowane?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
     CONVERT_BOLD_TEXT_TO_CLOZES: "Konwertować pogrubiony tekst na karty zamaskowane?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "Konwertować {{klamry}} na karty zamaskowane?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
     CLOZE_PATTERNS: "Wzory kart zamaskowanych",
     CLOZE_PATTERNS_DESC: "Wprowadź wzory kart zamaskowanych oddzielone nowymi liniami",
     INLINE_CARDS_SEPARATOR: "Separator dla kart zamaskowanych w linii",
