@@ -104,8 +104,9 @@ export function convMultiCloze(
 }
 
 function renderClozeFront(len: number = 3): string {
-    const rpt = Math.max(1, Math.round(len / 6));
-    return "<span style='color:#2196f3'>[" + "...".repeat(rpt) + "]</span>";
+    // const rpt = Math.max(1, Math.round(len / 6));
+    // return "<span style='color:#2196f3'>[" + "...".repeat(rpt) + "]</span>";
+    return "<span style='color:#2196f3'>[" + "..." + "]</span>";
 }
 
 function renderClozeBack(str: string): string {

@@ -625,42 +625,42 @@ export class SRSettingTab extends PluginSettingTab {
                     }),
             );
 
-        new Setting(containerEl)
-            .setName(t("SHOW_RIBBON_ICON"))
-            .setDesc(t("SHOW_RIBBON_ICON_DESC"))
-            .addToggle((toggle) =>
-                toggle
-                    .setValue(this.plugin.data.settings.showRibbonIcon)
-                    .onChange(async (value) => {
-                        this.plugin.data.settings.showRibbonIcon = value;
-                        await this.plugin.savePluginData();
-                        this.plugin.showRibbonIcon(value);
-                    }),
-            );
+        // new Setting(containerEl)
+        //     .setName(t("SHOW_RIBBON_ICON"))
+        //     .setDesc(t("SHOW_RIBBON_ICON_DESC"))
+        //     .addToggle((toggle) =>
+        //         toggle
+        //             .setValue(this.plugin.data.settings.showRibbonIcon)
+        //             .onChange(async (value) => {
+        //                 this.plugin.data.settings.showRibbonIcon = value;
+        //                 await this.plugin.savePluginData();
+        //                 this.plugin.showRibbonIcon(value);
+        //             }),
+        //     );
 
-        new Setting(containerEl)
-            .setName(t("SHOW_STATUS_BAR"))
-            .setDesc(t("SHOW_STATUS_BAR_DESC"))
-            .addToggle((toggle) =>
-                toggle.setValue(this.plugin.data.settings.showStatusBar).onChange(async (value) => {
-                    this.plugin.data.settings.showStatusBar = value;
-                    await this.plugin.savePluginData();
-                    this.plugin.showStatusBar(value);
-                }),
-            );
+        // new Setting(containerEl)
+        //     .setName(t("SHOW_STATUS_BAR"))
+        //     .setDesc(t("SHOW_STATUS_BAR_DESC"))
+        //     .addToggle((toggle) =>
+        //         toggle.setValue(this.plugin.data.settings.showStatusBar).onChange(async (value) => {
+        //             this.plugin.data.settings.showStatusBar = value;
+        //             await this.plugin.savePluginData();
+        //             this.plugin.showStatusBar(value);
+        //         }),
+        //     );
 
-        new Setting(containerEl)
-            .setName(t("ENABLE_FILE_MENU_REVIEW_OPTIONS"))
-            .setDesc(t("ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC"))
-            .addToggle((toggle) =>
-                toggle
-                    .setValue(!this.plugin.data.settings.disableFileMenuReviewOptions)
-                    .onChange(async (value) => {
-                        this.plugin.data.settings.disableFileMenuReviewOptions = !value;
-                        await this.plugin.savePluginData();
-                        this.plugin.showFileMenuItems(value);
-                    }),
-            );
+        // new Setting(containerEl)
+        //     .setName(t("ENABLE_FILE_MENU_REVIEW_OPTIONS"))
+        //     .setDesc(t("ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC"))
+        //     .addToggle((toggle) =>
+        //         toggle
+        //             .setValue(!this.plugin.data.settings.disableFileMenuReviewOptions)
+        //             .onChange(async (value) => {
+        //                 this.plugin.data.settings.disableFileMenuReviewOptions = !value;
+        //                 await this.plugin.savePluginData();
+        //                 this.plugin.showFileMenuItems(value);
+        //             }),
+        //     );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
         new Setting(containerEl)

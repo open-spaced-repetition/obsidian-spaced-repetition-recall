@@ -61,11 +61,16 @@ This is a really very {{interesting}} and ==fascinating== and **great** test
         settings2.convertBoldTextToClozes = true;
         settings2.convertHighlightsToClozes = true;
         settings2.convertCurlyBracketsToClozes = true;
-        // let parser: NoteParser = new NoteParser(settings2);
-        var noteFileLoader: NoteFileLoader = new NoteFileLoader(settings2);
+        settings2.clozePatterns = [
+            "==[123;;]answer[;;hint]==",
+            "**[123;;]answer[;;hint]**",
+            "{{[123;;]answer[;;hint]}}",
+        ];
 
         let file: UnitTestSRFile = new UnitTestSRFile(originalText);
-        let note: Note = await noteFileLoader.load(file, TextDirection.Ltr, TopicPath.emptyPath);
+        let folderTopicPath = TopicPath.emptyPath;
+        const parser = new NoteParser(settings2);
+        let note: Note = await parser.parse(file, TextDirection.Ltr, folderTopicPath);
 
         note.createMultiCloze(settings2);
 
@@ -73,43 +78,43 @@ This is a really very {{interesting}} and ==fascinating== and **great** test
         note.appendCardsToDeck(deck);
         let subdeck: Deck = deck.getDeck(new TopicPath(["flashcards", "test"]));
         expect(subdeck.newFlashcards[0].front).toEqual(
-            "This is a really very {{interesting}} and ==fascinating== and <span style='color:#2196f3'>[......]</span> test",
+            "This is a really very {{interesting}} and ==fascinating== and <span style='color:#2196f3'>[...]</span> test",
         );
         expect(subdeck.newFlashcards[0].back).toEqual(
             "This is a really very interesting and fascinating and <span style='color:#2196f3'>great</span> test",
         );
 
         expect(subdeck.dueFlashcards[0].front).toEqual(
-            "This is a really very <span style='color:#2196f3'>[.........]</span> and <span style='color:#2196f3'>[.........]</span> and <span style='color:#2196f3'>[......]</span> test",
+            "This is a really very <span style='color:#2196f3'>[...]</span> and <span style='color:#2196f3'>[...]</span> and <span style='color:#2196f3'>[...]</span> test",
         );
         expect(subdeck.dueFlashcards[0].back).toEqual(
-            "This is a really very <span style='color:#2196f3'>interesting</span> and <span style='color:#2196f3'>[.........]</span> and <span style='color:#2196f3'>[......]</span> test",
+            "This is a really very <span style='color:#2196f3'>interesting</span> and <span style='color:#2196f3'>[...]</span> and <span style='color:#2196f3'>[...]</span> test",
         );
         expect(subdeck.dueFlashcards[1].front).toEqual(
-            "This is a really very {{interesting}} and <span style='color:#2196f3'>[.........]</span> and <span style='color:#2196f3'>[......]</span> test",
+            "This is a really very {{interesting}} and <span style='color:#2196f3'>[...]</span> and <span style='color:#2196f3'>[...]</span> test",
         );
         expect(subdeck.dueFlashcards[1].back).toEqual(
-            "This is a really very interesting and <span style='color:#2196f3'>fascinating</span> and <span style='color:#2196f3'>[......]</span> test",
+            "This is a really very interesting and <span style='color:#2196f3'>fascinating</span> and <span style='color:#2196f3'>[...]</span> test",
         );
     });
 });
 
 describe("writeNoteFile", () => {
     test("Multiple questions, some with too many schedule details", async () => {
-        let originalText: string = `#flashcards/test
+        const originalText: string = `#flashcards/test
 Q1::A1
 #flashcards Q2::A2
 <!--SR:!2023-09-02,4,270!2023-09-02,5,270-->
 Q3:::A3
 <!--SR:!2023-09-02,4,270!2023-09-02,5,270!2023-09-02,6,270!2023-09-02,7,270-->
 `;
-        let file: UnitTestSRFile = new UnitTestSRFile(originalText);
-        let note: Note = await noteFileLoader.load(file, TextDirection.Ltr, TopicPath.emptyPath);
+        const file: UnitTestSRFile = new UnitTestSRFile(originalText);
+        const note: Note = await noteFileLoader.load(file, TextDirection.Ltr, TopicPath.emptyPath);
 
         await note.writeNoteFile(DEFAULT_SETTINGS);
-        let updatedText: string = file.content;
+        const updatedText: string = file.content;
 
-        let expectedText: string = `#flashcards/test
+        const expectedText: string = `#flashcards/test
 Q1::A1
 #flashcards Q2::A2
 <!--SR:!2023-09-02,4,270-->
