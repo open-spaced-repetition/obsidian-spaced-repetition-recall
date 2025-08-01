@@ -57,7 +57,7 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}分",
 
     // settings.ts
-    SETTINGS_HEADER: "間隔重複外掛 - 設定",
+    SETTINGS_HEADER: "間隔重複外掛",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
@@ -87,6 +87,8 @@ export default {
     FLASHCARD_EASY_DESC: "自訂「簡單」按鈕的標籤",
     FLASHCARD_GOOD_DESC: "自訂「記得」按鈕的標籤",
     FLASHCARD_HARD_DESC: "自訂「較難」按鈕的標籤",
+    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
+    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "卡片標籤",
     FLASHCARD_TAGS_DESC: "輸入標籤（用空白或換行字元分隔），例如：#flashcards #deck2 #deck3.",
     CONVERT_FOLDERS_TO_DECKS: "是否將資料夾內容轉換為牌組和子牌組？",
@@ -172,6 +174,10 @@ export default {
     EASY_BONUS: "簡單獎勵",
     EASY_BONUS_DESC: "簡單獎勵設定「記得」和「簡單」卡片或筆記的復習間隔差距（最小值100%）。",
     EASY_BONUS_MIN_WARNING: "簡單獎勵至少為100。",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "最大間隔（天）",
     MAX_INTERVAL_DESC: "設定復習的最大間隔時間（預設值100年）。",
     MAX_INTERVAL_MIN_WARNING: "最大間隔至少為1天",

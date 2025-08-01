@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "Review: ${dueNotesCount} note(s), ${dueFlashcardsCount} card(s) due",
     SYNC_TIME_TAKEN: "Sync took ${t}ms",
     NOTE_IN_IGNORED_FOLDER: "Note is saved under ignored folder (check settings).",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE: "Please tag the note appropriately for reviewing (in settings).",
     RESPONSE_RECEIVED: "Response received.",
     NO_DECK_EXISTS: "No deck exists for ${deckName}",
@@ -57,7 +56,7 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition - Settings",
+    SETTINGS_HEADER: "Spaced Repetition",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
@@ -103,7 +102,7 @@ export default {
         "Siblings are cards generated from the same card text i.e. cloze deletions",
     MULTI_CLOZE: "enable multi-cloze card?",
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
-    SHOW_CARD_CONTEXT: "Show context in cards?",
+    SHOW_CARD_CONTEXT: "Show context in cards",
     SHOW_CARD_CONTEXT_DESC: "i.e. Title > Heading 1 > Subheading > ... > Subheading",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
@@ -154,11 +153,7 @@ export default {
     OPEN_RANDOM_NOTE: "Open a random note for review",
     OPEN_RANDOM_NOTE_DESC: "When you turn this off, notes are ordered by importance (PageRank).",
     AUTO_NEXT_NOTE: "Open next note automatically after a review",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Disable review options in the file menu i.e. Review: Easy Good Hard",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "After disabling, you can review using the command hotkeys. Reload Obsidian after changing this.",
-    MAX_N_DAYS_REVIEW_QUEUE: "Maximum number of days to display on right panel",
+    MAX_N_DAYS_REVIEW_QUEUE: "Maximum number of days to display on note review panel",
     MIN_ONE_DAY: "The number of days must be at least 1.",
     VALID_NUMBER_WARNING: "Please provide a valid number.",
     UI: "User Interface",
