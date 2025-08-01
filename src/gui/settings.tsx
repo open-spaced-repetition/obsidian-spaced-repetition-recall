@@ -508,13 +508,15 @@ export class SRSettingTab extends PluginSettingTab {
 
         this.createSettingFoldersToIgnore(containerEl);
         // addignoreSetting(newSettingEl(containerEl), this.plugin);
+
+        containerEl.createEl("h3", { text: t("NOTES_REVIEW_QUEUE") });
+
         addmixQueueSetting(newSettingEl(containerEl), this.plugin);
         addTrackedNoteToDecksSetting(newSettingEl(containerEl), this.plugin);
         addUntrackSetting(newSettingEl(containerEl), this.plugin);
         addResponseFloatBarSetting(newSettingEl(containerEl), this.plugin);
         addReviewNoteDirectlySetting(newSettingEl(containerEl), this.plugin);
 
-        containerEl.createEl("h3", { text: t("NOTES_REVIEW_QUEUE") });
         new Setting(containerEl).setName(t("AUTO_NEXT_NOTE")).addToggle((toggle) =>
             toggle.setValue(this.plugin.data.settings.autoNextNote).onChange(async (value) => {
                 this.plugin.data.settings.autoNextNote = value;
@@ -649,18 +651,18 @@ export class SRSettingTab extends PluginSettingTab {
         //         }),
         //     );
 
-        // new Setting(containerEl)
-        //     .setName(t("ENABLE_FILE_MENU_REVIEW_OPTIONS"))
-        //     .setDesc(t("ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC"))
-        //     .addToggle((toggle) =>
-        //         toggle
-        //             .setValue(!this.plugin.data.settings.disableFileMenuReviewOptions)
-        //             .onChange(async (value) => {
-        //                 this.plugin.data.settings.disableFileMenuReviewOptions = !value;
-        //                 await this.plugin.savePluginData();
-        //                 this.plugin.showFileMenuItems(value);
-        //             }),
-        //     );
+        new Setting(containerEl)
+            .setName(t("ENABLE_FILE_MENU_REVIEW_OPTIONS"))
+            .setDesc(t("ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC"))
+            .addToggle((toggle) =>
+                toggle
+                    .setValue(!this.plugin.data.settings.disableFileMenuReviewOptions)
+                    .onChange(async (value) => {
+                        this.plugin.data.settings.disableFileMenuReviewOptions = !value;
+                        await this.plugin.savePluginData();
+                        // this.plugin.showFileMenuItems(value);
+                    }),
+            );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
         new Setting(containerEl)

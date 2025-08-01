@@ -9,7 +9,7 @@ import {
 } from "obsidian";
 import * as graph from "pagerank.js";
 
-import { DEFAULT_SETTINGS, SRSettings, upgradeSettings } from "src/settings";
+import { DEFAULT_SETTINGS, SettingsUtil, SRSettings, upgradeSettings } from "src/settings";
 import { FlashcardModal } from "src/gui/FlashcardModal";
 import { StatsModal } from "src/gui/StatsModal";
 import { REVIEW_QUEUE_VIEW_TYPE, ReviewQueueListView } from "src/gui/Sidebar";
@@ -719,22 +719,18 @@ export default class SRPlugin extends Plugin {
 
         const tags = getAllTags(fileCachedData) || [];
         let shouldIgnore = true;
-        if (
-            this.data.settings.noteFoldersToIgnore.some((folder) =>
-                isEqualOrSubPath(note.path, folder),
-            )
-        ) {
+        if (SettingsUtil.isPathInNoteIgnoreFolder(this.data.settings, note.path)) {
             new Notice(t("NOTE_IN_IGNORED_FOLDER"));
             return false;
         }
-        if (
-            this.data.settings.tagsToIgnore.some((igntag) =>
-                tags.some((notetag) => notetag.startsWith(igntag)),
-            )
-        ) {
-            new Notice(t("NOTE_IN_IGNORED_TAGS"));
-            return false;
-        }
+        // if (
+        //     this.data.settings.tagsToIgnore.some((igntag) =>
+        //         tags.some((notetag) => notetag.startsWith(igntag)),
+        //     )
+        // ) {
+        //     new Notice(t("NOTE_IN_IGNORED_TAGS"));
+        //     return false;
+        // }
 
         for (const tag of tags) {
             if (
