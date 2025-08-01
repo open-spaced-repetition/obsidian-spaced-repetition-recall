@@ -79,11 +79,9 @@ export default {
     PROJECT_CONTRIBUTIONS:
         'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
     FOLDERS_TO_IGNORE: "Folders to ignore",
-    FOLDERS_TO_IGNORE_DESC: `Enter folder paths separated by newlines e.g. Templates Meta/Scripts.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "Flashcards",
     FLASHCARD_EASY_LABEL: "Easy Button Text",
     FLASHCARD_GOOD_LABEL: "Good Button Text",
@@ -91,6 +89,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     FLASHCARD_EASY_DESC: 'Customize the label for the "Easy" Button',
     FLASHCARD_GOOD_DESC: 'Customize the label for the "Good" Button',
     FLASHCARD_HARD_DESC: 'Customize the label for the "Hard" Button',
+    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
+    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "Flashcard tags",
     FLASHCARD_TAGS_DESC:
         "Enter tags separated by spaces or newlines i.e. #flashcards #deck2 #deck3.",
@@ -164,6 +164,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     MIN_ONE_DAY: "The number of days must be at least 1.",
     VALID_NUMBER_WARNING: "Please provide a valid number.",
     UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
     SHOW_STATUS_BAR_DESC:
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
@@ -188,6 +190,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     EASY_BONUS_DESC:
         "The easy bonus allows you to set the difference in intervals between answering Good and Easy on a flashcard/note (minimum = 100%).",
     EASY_BONUS_MIN_WARNING: "The easy bonus must be at least 100.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maximum interval in days",
     MAX_INTERVAL_DESC: "Allows you to place an upper limit on the interval (default = 100 years).",
     MAX_INTERVAL_MIN_WARNING: "The maximum interval must be at least 1 day.",

@@ -1,6 +1,6 @@
 import { App, Notice, PluginSettingTab, Setting } from "obsidian";
 
-import { StatisticsView } from "src/gui/statistics";
+// import { StatisticsView } from "src/gui/statistics";
 import { createTabs, TabStructure } from "src/gui/tabs";
 import { t } from "src/lang/helpers";
 import type SRPlugin from "src/main";
@@ -37,7 +37,7 @@ export function applySettingsUpdate(callback: () => void): void {
 export class SRSettingTab extends PluginSettingTab {
     private plugin: SRPlugin;
     private tabStructure: TabStructure;
-    private statistics: StatisticsView;
+    // private statistics: StatisticsView;
 
     constructor(app: App, plugin: SRPlugin) {
         super(app, plugin);
@@ -81,21 +81,21 @@ export class SRSettingTab extends PluginSettingTab {
                     contentGenerator: (containerElement: HTMLElement) =>
                         this.tabUiPreferences(containerElement),
                 },
-                "main-statistics": {
-                    title: t("STATS_TITLE"),
-                    icon: "bar-chart-3",
-                    contentGenerator: async (containerElement: HTMLElement): Promise<void> => {
-                        if (this.plugin.osrAppCore.cardStats == null) {
-                            await this.plugin.sync();
-                        }
+                // "main-statistics": {
+                //     title: t("STATS_TITLE"),
+                //     icon: "bar-chart-3",
+                //     contentGenerator: async (containerElement: HTMLElement): Promise<void> => {
+                //         if (this.plugin.osrAppCore.cardStats == null) {
+                //             await this.plugin.sync();
+                //         }
 
-                        this.statistics = new StatisticsView(
-                            containerElement,
-                            this.plugin.osrAppCore,
-                        );
-                        this.statistics.render();
-                    },
-                },
+                //         this.statistics = new StatisticsView(
+                //             containerElement,
+                //             this.plugin.osrAppCore,
+                //         );
+                //         this.statistics.render();
+                //     },
+                // },
                 "main-help": {
                     title: t("HELP"),
                     icon: "badge-help",
@@ -115,7 +115,7 @@ export class SRSettingTab extends PluginSettingTab {
     }
 
     hide(): void {
-        this.statistics.destroy();
+        // this.statistics.destroy();
         this.containerEl.empty();
     }
 
