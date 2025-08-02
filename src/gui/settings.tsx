@@ -1163,7 +1163,7 @@ export class SRSettingTab extends PluginSettingTab {
                 "beforeend",
                 t("GITHUB_ISSUES", {
                     issuesUrl: issue_url,
-                }) + `about this modified sr-plugin `,
+                }) + "about this modified sr-plugin ",
             );
 
         buildDonation(containerEl);

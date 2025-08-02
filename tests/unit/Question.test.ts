@@ -3,17 +3,17 @@ import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { Question, QuestionText } from "src/Question";
 import { TextDirection } from "src/util/TextDirection";
 
-let settings_cardCommentOnSameLine: SRSettings = { ...DEFAULT_SETTINGS };
+const settings_cardCommentOnSameLine: SRSettings = { ...DEFAULT_SETTINGS };
 settings_cardCommentOnSameLine.cardCommentOnSameLine = true;
 
 describe("Question", () => {
     describe("getHtmlCommentSeparator", () => {
         test("Ends with a code block", async () => {
-            let text: string =
+            const text: string =
                 "How do you ... Python?\n?\n" +
                 "```\nprint('Hello World!')\nprint('Howdy?')\nlambda x: x[0]\n```";
 
-            let question: Question = new Question({
+            const question: Question = new Question({
                 questionText: new QuestionText(text, null, text, TextDirection.Ltr, null),
             });
 
@@ -22,9 +22,9 @@ describe("Question", () => {
         });
 
         test("Doesn't end with a code block", async () => {
-            let text: string = "Q1::A1";
+            const text: string = "Q1::A1";
 
-            let question: Question = new Question({
+            const question: Question = new Question({
                 questionText: new QuestionText(text, null, text, TextDirection.Ltr, null),
             });
 

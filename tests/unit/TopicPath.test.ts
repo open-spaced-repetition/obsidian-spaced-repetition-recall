@@ -6,19 +6,19 @@ import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 describe("Constructor exception handling", () => {
     test("Constructor rejects null path", () => {
         const t = () => {
-            let path: TopicPath = new TopicPath(null);
+            const path: TopicPath = new TopicPath(null);
         };
         expect(t).toThrow();
     });
 
     test("Constructor allows zero length array", () => {
-        let path: TopicPath = new TopicPath([]);
+        const path: TopicPath = new TopicPath([]);
         expect(path.hasPath).toEqual(false);
     });
 
     test("Constructor rejects path that includes '/'", () => {
         const t = () => {
-            let path: TopicPath = new TopicPath(["Hello/Goodbye"]);
+            const path: TopicPath = new TopicPath(["Hello/Goodbye"]);
         };
         expect(t).toThrow();
     });
@@ -26,24 +26,24 @@ describe("Constructor exception handling", () => {
 
 describe("shift", () => {
     test("shift() on multi-part path", () => {
-        let path: TopicPath = new TopicPath(["Level1", "Level2", "Level3"]);
-        let result: string = path.shift();
+        const path: TopicPath = new TopicPath(["Level1", "Level2", "Level3"]);
+        const result: string = path.shift();
 
         expect(result).toEqual("Level1");
         expect(path).toEqual(new TopicPath(["Level2", "Level3"]));
     });
 
     test("shift() on single-part path", () => {
-        let path: TopicPath = new TopicPath(["Level1"]);
-        let result: string = path.shift();
+        const path: TopicPath = new TopicPath(["Level1"]);
+        const result: string = path.shift();
 
         expect(result).toEqual("Level1");
         expect(path.hasPath).toEqual(false);
     });
 
     test("shift() on empty path", () => {
-        let path: TopicPath = new TopicPath(["Level1"]);
-        let result: string = path.shift();
+        const path: TopicPath = new TopicPath(["Level1"]);
+        const result: string = path.shift();
 
         const t = () => {
             path.shift();
@@ -54,15 +54,15 @@ describe("shift", () => {
 
 describe("getTopicPathFromCardText", () => {
     test("Card text doesn't include tag", () => {
-        let cardText: string = "Card text doesn't include tag";
-        let path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
+        const cardText: string = "Card text doesn't include tag";
+        const path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
 
         expect(path).toEqual(null);
     });
 
     test("Card text includes single level tag", () => {
-        let cardText: string = "#flashcards Card text does include tag";
-        let path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
+        const cardText: string = "#flashcards Card text does include tag";
+        const path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
 
         expect(path).toEqual(new TopicPath(["flashcards"]));
     });
@@ -80,9 +80,9 @@ describe("getTopicPathFromCardText", () => {
     });
 
     test("Card text includes 2 multi level tags", () => {
-        let cardText: string =
+        const cardText: string =
             "#flashcards/science/chemistry Card text includes multiple tag #flashcards/test/chemistry";
-        let path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
+        const path: TopicPath = TopicPath.getTopicPathFromCardText(cardText);
 
         expect(path).toEqual(new TopicPath(["flashcards", "science", "chemistry"]));
     });
@@ -118,25 +118,25 @@ describe("getTopicPathFromTag", () => {
     });
 
     test("Single level tag", () => {
-        let result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard");
+        const result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard");
 
         expect(result.path).toEqual(["flashcard"]);
     });
 
     test("Multi level tag", () => {
-        let result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard/science/physics");
+        const result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard/science/physics");
 
         expect(result.path).toEqual(["flashcard", "science", "physics"]);
     });
 
     test("Tag with trailing slash", () => {
-        let result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard/science/physics/");
+        const result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard/science/physics/");
 
         expect(result.path).toEqual(["flashcard", "science", "physics"]);
     });
 
     test("Tag with multiple adjacent slashes", () => {
-        let result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard///science//physics");
+        const result: TopicPath = TopicPath.getTopicPathFromTag("#flashcard///science//physics");
 
         expect(result.path).toEqual(["flashcard", "science", "physics"]);
     });
@@ -144,20 +144,20 @@ describe("getTopicPathFromTag", () => {
 
 describe("isSameOrAncestorOf", () => {
     test("a, b are both empty", () => {
-        let a: TopicPath = TopicPath.emptyPath;
-        let b: TopicPath = TopicPath.emptyPath;
+        const a: TopicPath = TopicPath.emptyPath;
+        const b: TopicPath = TopicPath.emptyPath;
         expect(a.isSameOrAncestorOf(b)).toEqual(true);
     });
 
     test("a is empty, b has path", () => {
-        let a: TopicPath = TopicPath.emptyPath;
-        let b: TopicPath = new TopicPath(["flashcard"]);
+        const a: TopicPath = TopicPath.emptyPath;
+        const b: TopicPath = new TopicPath(["flashcard"]);
         expect(a.isSameOrAncestorOf(b)).toEqual(false);
     });
 
     test("a has path, b is empty", () => {
-        let a: TopicPath = new TopicPath(["flashcard"]);
-        let b: TopicPath = TopicPath.emptyPath;
+        const a: TopicPath = new TopicPath(["flashcard"]);
+        const b: TopicPath = TopicPath.emptyPath;
         expect(a.isSameOrAncestorOf(b)).toEqual(false);
     });
 
@@ -196,8 +196,8 @@ describe("isSameOrAncestorOf", () => {
 
 describe("clone", () => {
     test("clone of empty", () => {
-        let a: TopicPath = TopicPath.emptyPath;
-        let b: TopicPath = a.clone();
+        const a: TopicPath = TopicPath.emptyPath;
+        const b: TopicPath = a.clone();
         expect(b.isEmptyPath).toEqual(true);
     });
 
@@ -214,14 +214,14 @@ describe("clone", () => {
 
 describe("formatTag", () => {
     test("Simple test", () => {
-        let topicPath: TopicPath = new TopicPath(["flashcards", "science"]);
+        const topicPath: TopicPath = new TopicPath(["flashcards", "science"]);
 
         expect(topicPath.formatAsTag()).toEqual("#flashcards/science");
     });
 
     test("Empty path", () => {
         const t = () => {
-            let str: string = TopicPath.emptyPath.formatAsTag();
+            const str: string = TopicPath.emptyPath.formatAsTag();
         };
         expect(t).toThrow();
     });

@@ -42,6 +42,7 @@ info 1:::info 2
 ```
 
 !!! note "Card 1"
+
 <div class="grid" markdown>
 
     !!! tip "Front"
@@ -55,6 +56,7 @@ info 1:::info 2
     </div>
 
 !!! note "Card 2"
+
 <div class="grid" markdown>
 !!! tip "Front"
 
@@ -85,6 +87,7 @@ the answer
 ```
 
 !!! note "Displayed when reviewed"
+
 <div class="grid" markdown>
 
     !!! tip "Card Front"
@@ -127,6 +130,7 @@ These can also span over multiple lines as long as both sides "touch" the `??`:
 To include blank lines, see the section below.
 
 !!! note "Card 1"
+
 <div class="grid" markdown>
 
     !!! tip "Front"
@@ -143,6 +147,7 @@ To include blank lines, see the section below.
     </div>
 
 !!! note "Card 2"
+
 <div class="grid" markdown>
 !!! tip "Front"
 

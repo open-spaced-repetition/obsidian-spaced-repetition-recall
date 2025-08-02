@@ -14,12 +14,12 @@ import {
     setupStaticRandomNumberProvider,
 } from "src/util/RandomNumberProvider";
 
-let order_DueFirst_Sequential: IIteratorOrder = {
+const order_DueFirst_Sequential: IIteratorOrder = {
     cardOrder: CardOrder.DueFirstSequential,
     deckOrder: DeckOrder.PrevDeckComplete_Sequential,
 };
 
-var iterator: DeckTreeIterator;
+let iterator: DeckTreeIterator;
 
 beforeAll(() => {
     setupStaticDateProvider_20230906();
@@ -28,12 +28,12 @@ beforeAll(() => {
 
 describe("setDeck", () => {
     test("currentDeck null immediately after setDeck", async () => {
-        let text: string = `
+        const text: string = `
 Q1::A1
 Q2::A2
 Q3::A3`;
-        let deck: Deck = await SampleItemDecks.createDeckFromText(text, new TopicPath(["Root"]));
-        let iterator: DeckTreeIterator = new DeckTreeIterator(
+        const deck: Deck = await SampleItemDecks.createDeckFromText(text, new TopicPath(["Root"]));
+        const iterator: DeckTreeIterator = new DeckTreeIterator(
             {
                 cardOrder: CardOrder.NewFirstSequential,
                 deckOrder: DeckOrder.PrevDeckComplete_Sequential,
@@ -49,15 +49,15 @@ describe("nextCard - Cards only present in a single deck", () => {
     describe("DeckOrder.PrevDeckComplete_Sequential; Sequential card ordering", () => {
         describe("Due cards before new cards", () => {
             test("Single topic, new cards only", async () => {
-                let text: string = `#flashcards
+                const text: string = `#flashcards
 Q1::A1
 Q2::A2
 Q3::A3`;
-                let deck: Deck = await SampleItemDecks.createDeckFromText(
+                const deck: Deck = await SampleItemDecks.createDeckFromText(
                     text,
                     TopicPath.emptyPath,
                 );
-                let iterator: DeckTreeIterator = new DeckTreeIterator(
+                const iterator: DeckTreeIterator = new DeckTreeIterator(
                     {
                         cardOrder: CardOrder.DueFirstSequential,
                         deckOrder: DeckOrder.PrevDeckComplete_Sequential,
@@ -82,14 +82,14 @@ Q3::A3`;
 
             describe("Single topic, mixture of new and scheduled cards", () => {
                 test("Get the scheduled cards first", async () => {
-                    let text: string = `#flashcards
+                    const text: string = `#flashcards
 Q1::A1
 Q2::A2 <!--SR:!2023-09-02,4,270-->
 Q3::A3
 Q4::A4 <!--SR:!2023-09-02,4,270-->
 Q5::A5 <!--SR:!2023-09-02,4,270-->
 Q6::A6`;
-                    let deck: Deck = await SampleItemDecks.createDeckFromText(
+                    const deck: Deck = await SampleItemDecks.createDeckFromText(
                         text,
                         TopicPath.emptyPath,
                     );
@@ -119,7 +119,7 @@ Q6::A6`;
 
             describe("Multiple topics, mixture of new and scheduled cards", () => {
                 test("Get the ancestor deck's cards first, then descendants", async () => {
-                    let text: string = `
+                    const text: string = `
                     #flashcards Q1::A1
                     #flashcards Q2::A2 <!--SR:!2023-09-02,4,270-->
                     #flashcards Q3::A3
@@ -132,7 +132,7 @@ Q6::A6`;
                     
                     #flashcards/science/chemistry Q8::A8
                                 `;
-                    let deck: Deck = await SampleItemDecks.createDeckFromText(
+                    const deck: Deck = await SampleItemDecks.createDeckFromText(
                         text,
                         TopicPath.emptyPath,
                     );
@@ -171,15 +171,15 @@ Q6::A6`;
 
         describe("New cards before due cards", () => {
             test("Single topic, new cards only", async () => {
-                let text: string = `#flashcards
+                const text: string = `#flashcards
 Q1::A1
 Q2::A2
 Q3::A3`;
-                let deck: Deck = await SampleItemDecks.createDeckFromText(
+                const deck: Deck = await SampleItemDecks.createDeckFromText(
                     text,
                     TopicPath.emptyPath,
                 );
-                let iterator: DeckTreeIterator = new DeckTreeIterator(
+                const iterator: DeckTreeIterator = new DeckTreeIterator(
                     {
                         cardOrder: CardOrder.NewFirstSequential,
                         deckOrder: DeckOrder.PrevDeckComplete_Sequential,
@@ -203,14 +203,14 @@ Q3::A3`;
 
             describe("Single topic, mixture of new and scheduled cards", () => {
                 test("Get the new cards first", async () => {
-                    let text: string = `#flashcards
+                    const text: string = `#flashcards
 Q1::A1
 Q2::A2 <!--SR:!2023-09-02,4,270-->
 Q3::A3
 Q4::A4 <!--SR:!2023-09-02,4,270-->
 Q5::A5 <!--SR:!2023-09-02,4,270-->
 Q6::A6`;
-                    let deck: Deck = await SampleItemDecks.createDeckFromText(
+                    const deck: Deck = await SampleItemDecks.createDeckFromText(
                         text,
                         TopicPath.emptyPath,
                     );
@@ -238,14 +238,14 @@ Q6::A6`;
                 });
 
                 test("Get the scheduled cards first", async () => {
-                    let text: string = `#flashcards
+                    const text: string = `#flashcards
 Q1::A1
 Q2::A2 <!--SR:!2023-09-02,4,270-->
 Q3::A3
 Q4::A4 <!--SR:!2023-09-02,4,270-->
 Q5::A5 <!--SR:!2023-09-02,4,270-->
 Q6::A6`;
-                    let deck: Deck = await SampleItemDecks.createDeckFromText(
+                    const deck: Deck = await SampleItemDecks.createDeckFromText(
                         text,
                         TopicPath.emptyPath,
                     );
@@ -275,7 +275,7 @@ Q6::A6`;
 
             describe("Multiple topics, mixture of new and scheduled cards", () => {
                 test("Get the ancestor deck's cards first, then descendants", async () => {
-                    let text: string = `
+                    const text: string = `
                     #flashcards Q1::A1
                     #flashcards Q2::A2 <!--SR:!2023-09-02,4,270-->
                     #flashcards Q3::A3
@@ -288,7 +288,7 @@ Q6::A6`;
                     
                     #flashcards/science/chemistry Q8::A8
                                 `;
-                    let deck: Deck = await SampleItemDecks.createDeckFromText(
+                    const deck: Deck = await SampleItemDecks.createDeckFromText(
                         text,
                         TopicPath.emptyPath,
                     );
@@ -327,7 +327,7 @@ Q6::A6`;
     describe("DeckOrder.PrevDeckComplete_Sequential; Random card ordering", () => {
         describe("Due cards before new cards", () => {
             test("All new cards", async () => {
-                let text: string = `#flashcards
+                const text: string = `#flashcards
 Q0::A0
 Q1::A1
 Q2::A2
@@ -335,7 +335,7 @@ Q3::A3
 Q4::A4
 Q5::A5
 Q6::A6`;
-                let deck: Deck = await SampleItemDecks.createDeckFromText(
+                const deck: Deck = await SampleItemDecks.createDeckFromText(
                     text,
                     TopicPath.emptyPath,
                 );
@@ -375,7 +375,7 @@ Q6::A6`;
             });
 
             test("Mixture new/scheduled", async () => {
-                let text: string = `#flashcards
+                const text: string = `#flashcards
 QN0::A
 QS0::A <!--SR:!2023-09-02,4,270-->
 QN1::A
@@ -384,7 +384,7 @@ QS2::A <!--SR:!2023-09-02,4,270-->
 QN2::A
 QN3::A
 QS3::Q <!--SR:!2023-09-02,4,270-->`;
-                let deck: Deck = await SampleItemDecks.createDeckFromText(
+                const deck: Deck = await SampleItemDecks.createDeckFromText(
                     text,
                     TopicPath.emptyPath,
                 );
@@ -439,7 +439,7 @@ QS3::Q <!--SR:!2023-09-02,4,270-->`;
 
     describe("DeckOrder.PrevDeckComplete_Random", () => {
         test("CardOrder.NewFirstSequential", async () => {
-            let text: string = `
+            const text: string = `
 #flashcards Q1::A1
 #flashcards Q2::A2 <!--SR:!2023-09-02,4,270-->
 #flashcards Q3::A3
@@ -452,7 +452,7 @@ QS3::Q <!--SR:!2023-09-02,4,270-->`;
 
 #flashcards/science/chemistry Q8::A8
                         `;
-            let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+            const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
             iterator = new DeckTreeIterator(
                 {
                     cardOrder: CardOrder.NewFirstSequential,
@@ -494,7 +494,7 @@ QS3::Q <!--SR:!2023-09-02,4,270-->`;
 
     describe("DeckOrder.EveryCardRandomDeckAndCard", () => {
         test("Simple test", async () => {
-            let text: string = `
+            const text: string = `
 #flashcards Q1::A1
 #flashcards Q2::A2 <!--SR:!2023-09-02,4,270-->
 #flashcards Q3::A3
@@ -507,7 +507,7 @@ QS3::Q <!--SR:!2023-09-02,4,270-->`;
 
 #flashcards/science/chemistry Q8::A8
                         `;
-            let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+            const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
             iterator = new DeckTreeIterator(
                 {
                     cardOrder: CardOrder.EveryCardRandomDeckAndCard,
@@ -561,7 +561,7 @@ QS3::Q <!--SR:!2023-09-02,4,270-->`;
 describe("nextCard - Some cards present in multiple decks", () => {
     describe("DeckOrder.PrevDeckComplete_Sequential; Sequential card ordering", () => {
         test("Iterating over complete deck tree", async () => {
-            let text: string = `#flashcards
+            const text: string = `#flashcards
 Q1::A1
 
 #flashcards/folder1
@@ -605,7 +605,7 @@ Q12::A12
         });
 
         test("Iterating over portion of deck tree still deletes hard-linked cards in non-iterated portion of the deck", async () => {
-            let text: string = `#flashcards
+            const text: string = `#flashcards
 Q1::A1
 
 #flashcards/folder1
@@ -649,12 +649,12 @@ Q12::A12
 
 describe("hasCurrentCard", () => {
     test("false immediately after setDeck", async () => {
-        let text: string = `#flashcards
+        const text: string = `#flashcards
         Q1::A1
         Q2::A2
         Q3::A3`;
-        let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
-        let iterator: DeckTreeIterator = new DeckTreeIterator(
+        const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+        const iterator: DeckTreeIterator = new DeckTreeIterator(
             {
                 cardOrder: CardOrder.NewFirstSequential,
                 deckOrder: DeckOrder.PrevDeckComplete_Sequential,
@@ -667,12 +667,12 @@ describe("hasCurrentCard", () => {
     });
 
     test("true immediately after nextCard", async () => {
-        let text: string = `#flashcards
+        const text: string = `#flashcards
         Q1::A1
         Q2::A2
         Q3::A3`;
-        let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
-        let iterator: DeckTreeIterator = new DeckTreeIterator(
+        const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+        const iterator: DeckTreeIterator = new DeckTreeIterator(
             {
                 cardOrder: CardOrder.NewFirstSequential,
                 deckOrder: DeckOrder.PrevDeckComplete_Sequential,
@@ -688,11 +688,11 @@ describe("hasCurrentCard", () => {
 
 describe("deleteCurrentCard", () => {
     test("Delete after all cards iterated - exception throw", async () => {
-        let text: string = `#flashcards
+        const text: string = `#flashcards
 Q1::A1
 Q2::A2
 Q3::A3`;
-        let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+        const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
         iterator = new DeckTreeIterator(
             {
                 cardOrder: CardOrder.NewFirstSequential,
@@ -714,11 +714,11 @@ Q3::A3`;
     });
 
     test("Delete card, with single card remaining after it", async () => {
-        let text: string = `#flashcards
+        const text: string = `#flashcards
 Q1::A1
 Q2::A2
 Q3::A3`;
-        let deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
+        const deck: Deck = await SampleItemDecks.createDeckFromText(text, TopicPath.emptyPath);
         const flashcardDeck: Deck = deck.getDeckByTopicTag("#flashcards");
         expect(flashcardDeck.newFlashcards.length).toEqual(3);
         iterator = new DeckTreeIterator(

@@ -19,6 +19,7 @@ The first female prime minister of Australia was ==Julia Gillard==
 ```
 
 !!! note "Displayed when reviewed"
+
 <div class="grid" markdown>
 
     !!! tip "Initial View"
@@ -42,6 +43,7 @@ The first female ==prime minister== of Australia was ==Julia Gillard==
 ```
 
 !!! note ""
+
 <div class="grid" markdown>
 
     !!! tip "Card 1 Initial View"

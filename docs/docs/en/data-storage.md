@@ -27,11 +27,12 @@ For example:
 
 ![note-frontmatter](https://github.com/user-attachments/assets/b9744f50-c897-46ad-ab34-1bbc55796b57)
 
-!!! note "Raw text format"
----
+## !!! note "Raw text format"
+
 sr-due: 2024-07-01
 sr-interval: 3
 sr-ease: 269
+
 ---
 
 ### Single Scheduling File
