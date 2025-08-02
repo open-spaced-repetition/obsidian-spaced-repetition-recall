@@ -10,6 +10,7 @@ export default {
     SKIP: "Atla",
     EDIT_CARD: "Kartı Düzenle",
     RESET_CARD_PROGRESS: "Kartın ilerlemesini sıfırla",
+    RESET: "Reset",
     HARD: "Zor",
     GOOD: "Orta",
     EASY: "Kolay",
@@ -21,6 +22,7 @@ export default {
     CURRENT_EASE_HELP_TEXT: "Mevcut Kolaylık: ",
     CURRENT_INTERVAL_HELP_TEXT: "Mevcut Aralık: ",
     CARD_GENERATED_FROM: "${notePath} kaynağından oluşturuldu.",
+    OPEN_NOTE: "Open Note",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Gözden geçirmek için bir not aç",
@@ -48,6 +50,10 @@ export default {
     DAYS_STR_IVL_MOBILE: "${interval}g",
     MONTHS_STR_IVL_MOBILE: "${interval}a",
     YEARS_STR_IVL_MOBILE: "${interval}y",
+    HOURS_STR_IVL: "${interval}hour(s)",
+    MINUTES_STR_IVL: "${interval}minute(s)",
+    HOURS_STR_IVL_MOBILE: "${interval}h",
+    MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
     SETTINGS_HEADER: "Aralıklı Tekrar",
@@ -94,8 +100,13 @@ export default {
     BURY_SIBLINGS_TILL_NEXT_DAY: "Kardeş kartları bir sonraki güne kadar gizle?",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Kardeş kartlar, aynı kart metninden üretilen kartlardır (örneğin gizlemeler).",
+    MULTI_CLOZE: "enable multi-cloze card?",
+    MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Kartlarda bağlamı göster?",
     SHOW_CARD_CONTEXT_DESC: "Örneğin: Başlık > Başlık 1 > Alt Başlık > ... > Alt Başlık",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "Flash Kart Yükseklik Yüzdesi",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "Mobilde veya çok büyük resimleriniz varsa %100 olarak ayarlayın.",
@@ -125,7 +136,8 @@ export default {
     CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
         '"Cloze Patterns"den <code>${defaultPattern</code> öğesini ekleyin/kaldırın',
     CLOZE_PATTERNS: "Cloze Patterns",
-    CLOZE_PATTERNS_DESC: "Enter cloze patterns separated by newlines",
+    CLOZE_PATTERNS_DESC:
+        'Enter cloze patterns separated by newlines. Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "Satır içi flash kartlar için ayırıcı",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Bunu değiştirdikten sonra mevcut flash kartlarınızı manuel olarak düzenlemeniz gerektiğini unutmayın.",
@@ -135,6 +147,7 @@ export default {
     MULTILINE_CARDS_END_MARKER:
         "Gizli kartlar ve çok satırlı flash kartların sonunu belirten karakterler",
     NOTES: "Notlar",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Başlangıçta not inceleme panelini etkinleştir",
     TAGS_TO_REVIEW: "Gözden geçirilecek etiketler",
     TAGS_TO_REVIEW_DESC:
@@ -146,6 +159,8 @@ export default {
     MIN_ONE_DAY: "Gün sayısı en az 1 olmalıdır.",
     VALID_NUMBER_WARNING: "Lütfen geçerli bir sayı girin.",
     UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
     SHOW_STATUS_BAR_DESC:
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
@@ -172,12 +187,23 @@ export default {
     EASY_BONUS_DESC:
         "Kolaylık bonusu, bir flash kartı/notu İyi ve Kolay yanıtladığınızda aralıklardaki farkı ayarlamanıza olanak tanır (minimum = %100).",
     EASY_BONUS_MIN_WARNING: "Kolaylık bonusu en az %100 olmalıdır.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maksimum aralık (gün)",
     MAX_INTERVAL_DESC: "Aralığa bir üst sınır koymanıza olanak tanır (varsayılan = 100 yıl).",
     MAX_INTERVAL_MIN_WARNING: "Maksimum aralık en az 1 gün olmalıdır.",
     MAX_LINK_CONTRIB: "Maksimum bağlantı katkısı",
     MAX_LINK_CONTRIB_DESC:
         "Bağlantılı notların ağırlıklı kolaylık değerinin başlangıç kolaylığına maksimum katkısı.",
+    FUZZING: "Fuzzing",
+    FUZZING_DESC:
+        "When enabled, this adds a small random delay to the new interval time to prevent cards from sticking together and always being reviewed on the same day.",
+    SWITCH_SHORT_TERM: "Switch to Short-term Scheduler",
+    SWITCH_SHORT_TERM_DESC:
+        "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
+
     LOGGING: "Kayıt tutma",
     DISPLAY_SCHEDULING_DEBUG_INFO: "Geliştirici konsolunda hata ayıklama bilgilerini göster",
     DISPLAY_PARSER_DEBUG_INFO:
@@ -186,6 +212,48 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
+
+    DATA_LOC: "Data Location",
+    DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
+    DATA_FOLDER: "Folder for `tracked_files.json`",
+    NEW_PER_DAY: "New Per Day",
+    NEW_PER_DAY_DESC:
+        "Maximum number of new (unreviewed) notes to add to the queue each day, set `-1` with unlimit.",
+    NEW_PER_DAY_NAN: "Timeout must be a number",
+    NEW_PER_DAY_NEG: "New per day must be -1 or greater.",
+    REPEAT_ITEMS: "Repeat Items",
+    REPEAT_ITEMS_DESC: "Should items marked as incorrect be repeated until correct?",
+    ALGORITHMS_CONFIRM: `Switching algorithms might reset or impact review timings on existing items.
+    This change is irreversible. Changing algorithms only takes effect after a restart
+    or a plugin reload. Are you sure you want to switch algorithms?
+    `,
+    ALGORITHMS_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://github.com/martin-jw/obsidian-recall">algorithms</a>.',
+    CONVERT_TRACKED_TO_DECK: "Convert Tracked Notes to decks?",
+    REVIEW_FLOATBAR: "Review Response FloatBar",
+    REVIEW_FLOATBAR_DESC:
+        "only working when autoNextNote is true. show it when reviewing note via click statusbar/sidebar/command.",
+    REVIEW_NOTE_DIRECTLY: "Reviewing Note directly?",
+    REVIEW_NOTE_DIRECTLY_DESC:
+        "when reviewing note via click statusbar or command, open it directly without having to select a tag to open a note",
+    INTERVAL_SHOWHIDE: "Display Next Review Interval",
+    INTERVAL_SHOWHIDE_DESC: "whether to display next revivew iterval on the response buttons.",
+    REQUEST_RETENTION: "Request_retention",
+    REQUEST_RETENTION_DESC:
+        "The probability (percentage) that you expect to recall the answer the next time you review",
+    REVLOG_TAGS: "Tags for output review log",
+    REVLOG_TAGS_DESC:
+        "Tags for output review log, could be flashcards tags or/and notes tags(e.g. #review #flashcards #tag1), default empty means it output to the review log file normally without filtered by tags",
+
+    FLASHCARD_AGAIN_LABEL: "Again Button Text",
+    FLASHCARD_BLACKOUT_LABEL: "Blackout Button Text",
+    FLASHCARD_INCORRECT_LABEL: "Incorrect Button Text",
+    "FLASHCARD_INCORRECT (EASY)_LABEL": "Incorrect (Easy) Button Text",
+    FLASHCARD_AGAIN_DESC: 'Customize the label for the "Again" Button',
+    FLASHCARD_BLACKOUT_DESC: 'Customize the label for the "Blackout" Button',
+    FLASHCARD_INCORRECT_DESC: 'Customize the label for the "Incorrect" Button',
+    "FLASHCARD_INCORRECT (EASY)_DESC": 'Customize the label for the "Incorrect (Easy)" Button',
+    UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
     NOTES_REVIEW_QUEUE: "Not İnceleme Sırası",
@@ -213,10 +281,20 @@ export default {
     INTERVALS_SUMMARY: "Ortalama aralık: ${avg}, En uzun aralık: ${longest}",
     EASES: "Kolaylıklar",
     EASES_SUMMARY: "Ortalama kolaylık: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "Kart Türleri",
     CARD_TYPES_DESC: "Bu, gömülü kartları da içerir (varsa)",
     CARD_TYPE_NEW: "Yeni",
     CARD_TYPE_YOUNG: "Genç",
     CARD_TYPE_MATURE: "Olgun",
     CARD_TYPES_SUMMARY: "Toplam kart: ${totalCardsCount}",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
+    REVIEWED_TODAY: "Reviewed today",
+    REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
+    NEW_LEARNED: "New Learned",
+    DUE_REVIEWED: "due Reviewed",
+    REVIEWED_TODAY_SUMMARY: "Total Reviewed today: ${totalreviewedCount}",
+    DATE: "Date",
 };

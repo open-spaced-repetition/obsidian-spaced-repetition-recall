@@ -10,6 +10,7 @@ export default {
     SKIP: "Sauter",
     EDIT_CARD: "Modifier la carte",
     RESET_CARD_PROGRESS: "Remettre à zéro le niveau de cette carte",
+    RESET: "Reset",
     HARD: "Difficile",
     GOOD: "Correct",
     EASY: "Facile",
@@ -21,6 +22,7 @@ export default {
     CURRENT_EASE_HELP_TEXT: "Facilité actuelle : ",
     CURRENT_INTERVAL_HELP_TEXT: "Intervalle actuel : ",
     CARD_GENERATED_FROM: "Généré depuis : ${notePath}",
+    OPEN_NOTE: "Open Note",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Ouvrir une note à apprendre",
@@ -49,6 +51,10 @@ export default {
     DAYS_STR_IVL_MOBILE: "${interval}j",
     MONTHS_STR_IVL_MOBILE: "${interval}m",
     YEARS_STR_IVL_MOBILE: "${interval}a",
+    HOURS_STR_IVL: "${interval}hour(s)",
+    MINUTES_STR_IVL: "${interval}minute(s)",
+    HOURS_STR_IVL_MOBILE: "${interval}h",
+    MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
     SETTINGS_HEADER: "Spaced Repetition",
@@ -96,6 +102,8 @@ export default {
     BURY_SIBLINGS_TILL_NEXT_DAY: "Enterrer les cartes sœurs jusqu'au lendemain ?",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Les cartes sœurs sont les cartes générées depuis le même texte, par exemple pour les textes à trous",
+    MULTI_CLOZE: "enable multi-cloze card?",
+    MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Montrer le contexte dans les cartes ?",
     SHOW_CARD_CONTEXT_DESC: "ex. Titre de la note > Titre 1 > Sous-titre > ... > Sous-titre",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
@@ -182,6 +190,10 @@ export default {
     EASY_BONUS_DESC:
         "Le bonus Facile vous permet d'augmenter l'intervalle entre une réponse Correct et une réponse Facile sur une flashcard/note (minimum = 100%).",
     EASY_BONUS_MIN_WARNING: "Le bonus Facile doit être au moins 100.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Intervalle maximum (en jours)",
     MAX_INTERVAL_DESC:
         "Vous permet de mettre une limite maximale sur l'intervalle (par défaut, 100 ans).",
@@ -189,6 +201,12 @@ export default {
     MAX_LINK_CONTRIB: "Contribution maximum des liens",
     MAX_LINK_CONTRIB_DESC:
         "Contribution maximum de la facilité pondérée des notes liées à la facilité initiale.",
+    FUZZING: "Fuzzing",
+    FUZZING_DESC:
+        "When enabled, this adds a small random delay to the new interval time to prevent cards from sticking together and always being reviewed on the same day.",
+    SWITCH_SHORT_TERM: "Switch to Short-term Scheduler",
+    SWITCH_SHORT_TERM_DESC:
+        "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Logging",
     DISPLAY_SCHEDULING_DEBUG_INFO:
         "Afficher les informations de débogage dans la console de développement",
@@ -198,6 +216,48 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
+
+    DATA_LOC: "Data Location",
+    DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
+    DATA_FOLDER: "Folder for `tracked_files.json`",
+    NEW_PER_DAY: "New Per Day",
+    NEW_PER_DAY_DESC:
+        "Maximum number of new (unreviewed) notes to add to the queue each day, set `-1` with unlimit.",
+    NEW_PER_DAY_NAN: "Timeout must be a number",
+    NEW_PER_DAY_NEG: "New per day must be -1 or greater.",
+    REPEAT_ITEMS: "Repeat Items",
+    REPEAT_ITEMS_DESC: "Should items marked as incorrect be repeated until correct?",
+    ALGORITHMS_CONFIRM: `Switching algorithms might reset or impact review timings on existing items.
+    This change is irreversible. Changing algorithms only takes effect after a restart
+    or a plugin reload. Are you sure you want to switch algorithms?
+    `,
+    ALGORITHMS_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://github.com/martin-jw/obsidian-recall">algorithms</a>.',
+    CONVERT_TRACKED_TO_DECK: "Convert Tracked Notes to decks?",
+    REVIEW_FLOATBAR: "Review Response FloatBar",
+    REVIEW_FLOATBAR_DESC:
+        "only working when autoNextNote is true. show it when reviewing note via click statusbar/sidebar/command.",
+    REVIEW_NOTE_DIRECTLY: "Reviewing Note directly?",
+    REVIEW_NOTE_DIRECTLY_DESC:
+        "when reviewing note via click statusbar or command, open it directly without having to select a tag to open a note",
+    INTERVAL_SHOWHIDE: "Display Next Review Interval",
+    INTERVAL_SHOWHIDE_DESC: "whether to display next revivew iterval on the response buttons.",
+    REQUEST_RETENTION: "Request_retention",
+    REQUEST_RETENTION_DESC:
+        "The probability (percentage) that you expect to recall the answer the next time you review",
+    REVLOG_TAGS: "Tags for output review log",
+    REVLOG_TAGS_DESC:
+        "Tags for output review log, could be flashcards tags or/and notes tags(e.g. #review #flashcards #tag1), default empty means it output to the review log file normally without filtered by tags",
+
+    FLASHCARD_AGAIN_LABEL: "Again Button Text",
+    FLASHCARD_BLACKOUT_LABEL: "Blackout Button Text",
+    FLASHCARD_INCORRECT_LABEL: "Incorrect Button Text",
+    "FLASHCARD_INCORRECT (EASY)_LABEL": "Incorrect (Easy) Button Text",
+    FLASHCARD_AGAIN_DESC: 'Customize the label for the "Again" Button',
+    FLASHCARD_BLACKOUT_DESC: 'Customize the label for the "Blackout" Button',
+    FLASHCARD_INCORRECT_DESC: 'Customize the label for the "Incorrect" Button',
+    "FLASHCARD_INCORRECT (EASY)_DESC": 'Customize the label for the "Incorrect (Easy)" Button',
+    UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
     NOTES_REVIEW_QUEUE: "Cartes à apprendre",
@@ -235,4 +295,10 @@ export default {
     SEARCH: "Search",
     PREVIOUS: "Previous",
     NEXT: "Next",
+    REVIEWED_TODAY: "Reviewed today",
+    REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
+    NEW_LEARNED: "New Learned",
+    DUE_REVIEWED: "due Reviewed",
+    REVIEWED_TODAY_SUMMARY: "Total Reviewed today: ${totalreviewedCount}",
+    DATE: "Date",
 };

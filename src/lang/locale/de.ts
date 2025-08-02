@@ -30,8 +30,8 @@ export default {
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Notiz zur Wiederholung öffnen",
     REVIEW_CARDS: "Lernkarten wiederholen",
-    REVIEW_DIFFICULTY_FILE_MENU: "Notiz abschliessen als: ${difficulty}",
-    REVIEW_NOTE_DIFFICULTY_CMD: "Notiz abschliessen als: ${difficulty}",
+    REVIEW_DIFFICULTY_FILE_MENU: "Notizen wiederholen als: ${difficulty}",
+    REVIEW_NOTE_DIFFICULTY_CMD: "Notizen wiederholen als: ${difficulty}",
     REVIEW_ALL_CARDS: "Alle Lernkarten wiederholen",
     CRAM_ALL_CARDS: "Wähle ein Stapel zum pauken",
     REVIEW_CARDS_IN_NOTE: "Lernkarten in dieser Notiz wiederholen",
@@ -43,7 +43,6 @@ export default {
     SYNC_TIME_TAKEN: "Synchronisierung dauerte ${t}ms",
     NOTE_IN_IGNORED_FOLDER:
         "Notiz befindet sich in einem ausgeschlossenen Ordner (siehe Einstellungen).",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE:
         "Bitte die Notiz für Wiederholungen entsprechend taggen (siehe Einstellungen).",
     RESPONSE_RECEIVED: "Antwort erhalten.",
@@ -63,32 +62,29 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition - Einstellungen",
+    SETTINGS_HEADER: "Spaced Repetition",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
     GROUP_DATA_STORAGE: "Storage of Scheduling Data",
+    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: 'Weitere Informationen gibt es im <a href="${wiki_url}">Wiki</a> (english).',
+    CHECK_WIKI: 'Weitere Informationen gibt es im <a href="${wikiUrl}">Wiki</a> (english).',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "Ausgeschlossene Ordner",
-    FOLDERS_TO_IGNORE_DESC: `Mehrere Ordner mit Zeilenumbrüchen getrennt angeben. Bsp. OrdnerA[Zeilenumbruch]OrdnerB/Unterordner.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "Lernkarten",
     FLASHCARD_EASY_LABEL: "Einfach Knopf Text",
     FLASHCARD_GOOD_LABEL: "Gut Knopf Text",
@@ -96,6 +92,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     FLASHCARD_GOOD_DESC: 'Passe die Beschriftung für "Gut" Knopf an',
     FLASHCARD_EASY_DESC: 'Passe die Beschriftung für "Einfach" Knopf an',
     FLASHCARD_HARD_DESC: 'Passe die Beschriftung für "Schwer" Knopf an',
+    REVIEW_BUTTON_DELAY: "Druckknopfverzögerung (ms)",
+    REVIEW_BUTTON_DELAY_DESC:
+        "Fügt den Überprüfungsschaltflächen („Einfach“, „Gut“, „Schwer“, „Antwort anzeigen“) eine Verzögerung hinzu, bevor sie erneut gedrückt werden können.",
     FLASHCARD_TAGS: "Lernkarten Tags",
     FLASHCARD_TAGS_DESC:
         "Mehrere Tags mit Leerzeichen oder Zeilenumbrüchen getrennt angeben. Bsp. #karte #stapel2 #stapel3.",
@@ -170,10 +169,6 @@ Note that this setting is common to both Flashcards and Notes.`,
     OPEN_RANDOM_NOTE_DESC:
         "Wenn dies deaktiviert wird, dann werden die Notizen nach Wichtigkeit wiederholt (PageRank).",
     AUTO_NEXT_NOTE: "Nach einer Wiederholung automatisch die nächste Karte öffnen",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Optionen zur Wiederholung im Menü einer Datei deaktivieren. Bsp. Wiederholen: Einfach Gut Schwer",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "Nach dem Deaktivieren können die Tastenkürzel zur Wiederholung verwendet werden. Obsidian muss nach einer Änderung neu geladen weren.",
     MAX_N_DAYS_REVIEW_QUEUE:
         "Maximale Anzahl anstehender Notizen, die im rechten Fensterbereich angezeigt werden",
     MIN_ONE_DAY: "Anzahl der Tage muss mindestens 1 sein.",
@@ -186,13 +181,18 @@ Note that this setting is common to both Flashcards and Notes.`,
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "Aktiviere die Überprüfungsoptionen im Dateimenü (z. B. Notizen wiederholen als: Einfach, Gut, Schwer)",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "Wenn du die Überprüfungsoptionen im Dateimenü deaktivierst, kannst du deine Notizen mit den Plugin-Befehlen und, falls definiert, den zugehörigen Tastenkombinationen überprüfen.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Stapelverzeichnis soll beim öffnen erweitert angezeigt werden",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Deaktivieren Sie dies, um verschachtelte Stapel in derselben Karte zu reduzieren. Nützlich, wenn Sie Karten haben, die zu vielen Stapeln in derselben Datei gehören.",
     ALGORITHM: "Algorithmus",
     CHECK_ALGORITHM_WIKI:
-        'Weiterführende Informationen: <a href="${algo_url}">Implementierung des Algorithmus</a> (english).',
+        'Weiterführende Informationen: <a href="${algoUrl}">Implementierung des Algorithmus</a> (english).',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "Basis der Schwierigkeit",
     BASE_EASE_DESC: "Minimum ist 130. Empfohlen wird ca. 250.",
     BASE_EASE_MIN_WARNING: "Basis der Schwierigkeit muss mindestens 130 sein.",
@@ -203,6 +203,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     EASY_BONUS_DESC:
         "Der Einfachheit-Bonus gibt an um welchen Faktor (in Prozent) das Intervall länger sein soll, wenn eine Notiz / Karte 'Einfach' statt 'Gut' abgeschlossen wird. Minimum ist 100%.",
     EASY_BONUS_MIN_WARNING: "Der Einfachheit-Bonus muss mindestens 100 sein.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maximale Intervall in Tagen",
     MAX_INTERVAL_DESC:
         "Das maximale Intervall (in Tagen) für Wiederholungen. Standard sind 100 Jahre.",
@@ -220,6 +224,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     DISPLAY_SCHEDULING_DEBUG_INFO: "Informationen zum Debugging in der Entwicklerkonsole anzeigen",
     DISPLAY_PARSER_DEBUG_INFO:
         "Informationen zum parser Debugging in der Entwicklerkonsole anzeigen",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",

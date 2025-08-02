@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "Revize: ${dueNotesCount} poznámek, ${dueFlashcardsCount} kartiček po termínu",
     SYNC_TIME_TAKEN: "Synchronizace trvala ${t}ms",
     NOTE_IN_IGNORED_FOLDER: "Poznámka je uložena v ignorované složce (zkontrolujte nastavení).",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE: "Prosím označne poznámku odpovídajícím tagem pro revizi (v nastavení).",
     RESPONSE_RECEIVED: "Odpověď přijata.",
     NO_DECK_EXISTS: "Neexistuje žádný balíček pro ${deckName}",
@@ -65,19 +64,17 @@ export default {
     GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: 'Pro více informací jděte na <a href="${wiki_url}">wiki</a>.',
+    CHECK_WIKI: 'Pro více informací jděte na <a href="${wikiUrl}">wiki</a>.',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "Ignorované složky",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
@@ -157,10 +154,6 @@ export default {
     OPEN_RANDOM_NOTE: "Otevřít náhodnou poznámku pro revizi",
     OPEN_RANDOM_NOTE_DESC: "Pokud toto vypnete, poznámky budou řazeny dle důležitosti (PageRank).",
     AUTO_NEXT_NOTE: "Otevřít automaticky další poznámku po dokončení revize",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Vypnout volby revize v menu souboru například 'Revize: Jednoduché'",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "Po vypnutí můžete používat klávesové zkratky. Restartujte Obsidian po změně nastavení.",
     MAX_N_DAYS_REVIEW_QUEUE: "Maximální počet dní zobrazených v pravém panelu",
     MIN_ONE_DAY: "Počet dní musí být minimálně 1.",
     VALID_NUMBER_WARNING: "Prosím zadejte validní číslo.",
@@ -172,12 +165,17 @@ export default {
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "Povolte možnosti revize v nabídce souboru (např. Revize: Jednoduché, Dobré, Těžké)",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "Pokud v nabídce souboru zakážete možnosti revize, můžete své poznámky revidovat pomocí příkazů pluginu a, pokud jste je definovali, pomocí přiřazených klávesových zkratek.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Stromy balíčky by měly být zpočátku zobrazeny jako rozbalené",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Vypněte toto, chcete-li sbalit vnořené balíčky na stejné kartě. To je užitečné, pokud máte kartičky, které patří k mnoha balíčkům ve stejném souboru.",
     ALGORITHM: "Algoritmus",
-    CHECK_ALGORITHM_WIKI: 'Pro více informací jděte na <a href="${algo_url}">popis algoritmu</a>.',
+    CHECK_ALGORITHM_WIKI: 'Pro více informací jděte na <a href="${algoUrl}">popis algoritmu</a>.',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "Základní složitost",
     BASE_EASE_DESC: "minimum = 130, nejlépe přibližně 250.",
     BASE_EASE_MIN_WARNING: "Základní složitost musí být minimálně 130.",
@@ -187,6 +185,10 @@ export default {
     EASY_BONUS_DESC:
         "Tento bonus umožňuje nastavit rozdíl intervalu mezi jednoduchými a dobrými kartičkami/poznámkami (minimum = 100%).",
     EASY_BONUS_MIN_WARNING: "Bonus pro jednoduchost musí být minimálně 100.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maximum interval in days",
     MAX_INTERVAL_DESC: "Umožňuje nastavit horní limit pro interval (defaultně = 100 let).",
     MAX_INTERVAL_MIN_WARNING: "Maximální interval musí být alespoň 1 den.",
@@ -200,9 +202,12 @@ export default {
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Zaznamenávám",
-    DISPLAY_DEBUG_INFO: "Zobrazit informace pro ladění na vývojářské konzoli",
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO: "Zobrazit informace pro ladění na vývojářské konzoli",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",

@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "復習: ${dueNotesCount} 筆記, ${dueFlashcardsCount} 卡片已到期",
     SYNC_TIME_TAKEN: "同步時間 ${t}ms",
     NOTE_IN_IGNORED_FOLDER: "筆記儲存在已被忽略的路徑中（檢查設定選項）。",
-    NOTE_IN_IGNORED_TAGS: "儲存的筆記带有已被忽略的標籤（檢查設定選項）。",
     PLEASE_TAG_NOTE: "請將需要復習的筆記中加入正確的標籤（檢查設定選項）。",
     RESPONSE_RECEIVED: "回饋已收到",
     NO_DECK_EXISTS: "沒有 ${deckName} 牌組",
