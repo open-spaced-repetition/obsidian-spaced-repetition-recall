@@ -507,7 +507,7 @@ export class reviewResponseModal {
     }
 
     close() {
-        const rrBar = this.vwcontainerEl.querySelector("#" + this.barId) as HTMLElement;
+        const rrBar = this.vwcontainerEl?.querySelector("#" + this.barId) as HTMLElement;
         if (rrBar) {
             this.removeKeysEvent();
             rrBar.style.visibility = "hidden";
