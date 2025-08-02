@@ -1,20 +1,19 @@
 # Notes
 
 !!! tip
-    For guidelines on how to write and structure notes, see [Spaced Repetition Guides](resources.md#notes)
+For guidelines on how to write and structure notes, see [Spaced Repetition Guides](resources.md#notes)
 
 ## Getting started
 
-
-Tag any markdown files for review with the `note review` tag, which by default is `#review`. 
+Tag any markdown files for review with the `note review` tag, which by default is `#review`.
 
 The note will appear under `New` in the `Note Review Queue` in the right pane.
 
 !!! note
-    When you tag a note with `#review` the note doesn't immediately appear in the review queue.
-    You will need to first click on the `Flashcard Review Icon` or the `Spaced Repetition Status Area`
-    for the queue to update
- 
+When you tag a note with `#review` the note doesn't immediately appear in the review queue.
+You will need to first click on the `Flashcard Review Icon` or the `Spaced Repetition Status Area`
+for the queue to update
+
 ## Note Review Queue
 
 ![note-review-queue](https://github.com/user-attachments/assets/c0e1d09c-610f-4775-b532-ab78369b117a)
@@ -32,7 +31,7 @@ The note will appear under `New` in the `Note Review Queue` in the right pane.
 By default, the Note Review Queue is displayed when the plugin starts. This can be changed with
 the `Enable note review pane on startup` [setting](user-options.md#note-settings).
 
-The Note Review Queue can also be shown by using the `Open Notes Review Queue in sidebar` 
+The Note Review Queue can also be shown by using the `Open Notes Review Queue in sidebar`
 [command](plugin-commands.md).
 
 ## Reviewing
@@ -54,7 +53,7 @@ The note will then be scheduled appropriately by the [learning algorithm](algori
 The `Easy`, `Good`, and `Hard` review result can also be selected from the plugin's [command list](plugin-commands.md).
 
 This is less practical than the methods described above, but does enable the definition of keyboard shortcuts.
-You can create custom hotkeys for the review result in `Settings -> HotKeys`. 
+You can create custom hotkeys for the review result in `Settings -> HotKeys`.
 
 ### Selecting a Note for Review
 
@@ -67,8 +66,8 @@ There are a few ways to open a note for review:
 
 There are also the following relevant options:
 
--   [Open a random note for review](user-options.md)
--   [Open next note automatically after a review](user-options.md)
+- [Open a random note for review](user-options.md)
+- [Open next note automatically after a review](user-options.md)
 
 ## Multiple Note Review Decks
 
@@ -78,10 +77,6 @@ This default tag can be changed in the [settings](user-options.md#note-settings)
 
 ## Spaced Repetition Status Area
 
-`Review: N note(s)` on the status bar at the bottom of the screen shows how many notes one has to review today (Today's notes + overdue notes). 
+`Review: N note(s)` on the status bar at the bottom of the screen shows how many notes one has to review today (Today's notes + overdue notes).
 
 Clicking on that opens one of the notes for review.
-
-
-
-

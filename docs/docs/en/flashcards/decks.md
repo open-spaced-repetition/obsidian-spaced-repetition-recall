@@ -2,7 +2,6 @@
 
 ![flashcard-decks-1](https://github.com/user-attachments/assets/a207b0f6-b064-443c-9c55-540681b10891)
 
-
 ## Using Obsidian Tags
 
 1. Specify flashcard tags in settings (`#flashcards` is the default).
@@ -68,7 +67,6 @@ Here `Question6` will be part of `deckA` and not `deckB` as `deckB` is specific 
 
 ---
 
-
 ## Using Folder Structure
 
 The plugin will automatically search for folders that contain flashcards & use their paths to create decks & sub-decks
@@ -76,4 +74,3 @@ The plugin will automatically search for folders that contain flashcards & use t
 e.g. `Folder/sub-folder/sub-sub-folder` ⇔ `Deck/sub-deck/sub-sub-deck`.
 
 This is an alternative to the tagging option and can be enabled in [settings](../user-options.md#tags--folders).
-

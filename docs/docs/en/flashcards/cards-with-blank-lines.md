@@ -1,6 +1,6 @@
 # Including Blank Lines in Flashcards
 
-By default, [Multi-line Basic](qanda-cards.md#multi-line-basic), [Multi-line Bidirectional](qanda-cards.md#multi-line-bidirectional) 
+By default, [Multi-line Basic](qanda-cards.md#multi-line-basic), [Multi-line Bidirectional](qanda-cards.md#multi-line-bidirectional)
 and [Cloze](basic-cloze-cards.md) type flashcards recognize a blank line as the end of the flashcard text.
 This means that blank lines can not be included within the text.
 
@@ -11,12 +11,12 @@ needs to be changed.
 For example, it could be changed to `+++`.
 
 !!! warning "Global Edit Required"
-    Note that after changing this you have to manually edit any flashcards you already have.
+Note that after changing this you have to manually edit any flashcards you already have.
 
 ## Including a Table in the Flashcard Answer
 
 !!! note "Obsidian requires a blank line before a table for it to be displayed correctly."
-    Without it, Obsidian displays it just as text and not correctly formatted.
+Without it, Obsidian displays it just as text and not correctly formatted.
 
     ![table-with-no-preceding-blank-line](https://github.com/user-attachments/assets/daed1309-3b38-4d14-bb42-b302efda96df)
 
@@ -57,4 +57,3 @@ And after `Show Answer` is clicked, the following is displayed:
 ### Blank Lines in Answer Side Only
 
 Blank lines are only supported in the answer side of a multiline flashcard, and not in the question side.
-
