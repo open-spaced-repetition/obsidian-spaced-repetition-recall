@@ -4,6 +4,7 @@
 
 # vscode
 .vscode
+.history
 
 # npm
 node_modules
@@ -35,5 +36,3 @@ docs/docs/en/media/~*
 
 # env
 env.sh
-
-
