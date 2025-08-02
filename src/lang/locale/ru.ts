@@ -347,5 +347,42 @@ export default {
     DATA_LOCATION_WARNING_TO_TRACKED: "ОСТОРОЖНО!!!\nЕсли вы подтвердите это, все ваши данные планирования из заметки (которые будут удалены одновременно) будут преобразованы В `tracked_files.json`.",
 
     // settings.ts - additional strings
-    POST_ISSUE_MODIFIED_PLUGIN: "Создать <a href=\"${issue_url}\">issue</a> об этом модифицированном sr-плагине с фоновым цветом для настроек."
+    POST_ISSUE_MODIFIED_PLUGIN: "Создать <a href=\"${issue_url}\">issue</a> об этом модифицированном sr-плагине с фоновым цветом для настроек.",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Информация об элементе",
+    CMD_TRACK_NOTE: "Отслеживать заметку",
+    CMD_UNTRACK_NOTE: "Не отслеживать заметку",
+    CMD_RESCHEDULE: "Перепланировать",
+    CMD_POSTPONE_CARDS: "Отложить карточки",
+    CMD_POSTPONE_NOTES: "Отложить заметки",
+    CMD_POSTPONE_ALL: "Отложить всё",
+    CMD_POSTPONE_NOTE_MANUAL: "Отложить эту заметку на x дней",
+    CMD_POSTPONE_CARDS_MANUAL: "Отложить карточки в этой заметке на x дней",
+    CMD_BUILD_QUEUE: "Построить очередь",
+    CMD_REVIEW: "Повторение",
+    CMD_PRINT_VIEW_STATE: "Вывести состояние вида",
+    CMD_PRINT_EPHEMERAL_STATE: "Вывести эфемерное состояние",
+    CMD_CLEAR_QUEUE: "Очистить очередь",
+    CMD_QUEUE_ALL: "Поставить всё в очередь",
+    CMD_PRINT_DATA: "Вывести данные",
+    CMD_UPDATE_ITEMS: "Обновить элементы",
+    CMD_INPUT_POSITIVE_NUMBER: "пожалуйста, введите положительное число",
+    CMD_NOTE_POSTPONED: "Эта заметка была отложена на ${days} дней",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Отслеживать все заметки",
+    MENU_UNTRACK_ALL_NOTES: "Не отслеживать все заметки",
+    MENU_TRACK_NOTE: "Отслеживать заметку",
+    MENU_UNTRACK_NOTE: "Не отслеживать заметку",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK: "это файл с тегом, нельзя отменить отслеживание таким образом. Вы можете удалить тег #review в файле заметки.",
+    DATA_UNTRACKED_ITEMS: "Отменено отслеживание ${numItems} элементов${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Невозможно сохранить файл данных!",
+    DATA_FOLDER_UNTRACKED: "В папке ${folderPath} больше не отслеживается ${totalRemoved} файлов",
+    DATA_ADDED_REMOVED_ITEMS: "Добавлено ${totalAdded} новых элементов, удалено ${totalRemoved} элементов.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Добавлено ${added} новых элементов, удалено ${removed} элементов.",
+    DATA_FILE_UPDATE: "${filePath} обновлен - строка: ${lineNo}\nДобавлено: ${added} новых элементов карточек, удалено ${removed} элементов карточек.",
+    DATA_ALL_ITEMS_UPDATED: "все элементы были обновлены.",
 };

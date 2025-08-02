@@ -1,6 +1,7 @@
 import { Menu, TAbstractFile, TFile, TFolder } from "obsidian";
 import { DataLocation } from "src/dataStore/dataLocation";
 import SRPlugin from "src/main";
+import { t } from "src/lang/helpers";
 
 export function registerTrackFileEvents(plugin: SRPlugin) {
     const settings = plugin.data.settings;
@@ -50,7 +51,7 @@ export function addFileMenuEvt(plugin: SRPlugin, menu: Menu, fileish: TAbstractF
 
         menu.addItem((item) => {
             item.setIcon("plus-with-circle");
-            item.setTitle("Track All Notes");
+            item.setTitle(t("MENU_TRACK_ALL_NOTES"));
             item.onClick(async (_evt) => {
                 store.trackFilesInFolder(folder);
                 await store.save();
@@ -60,7 +61,7 @@ export function addFileMenuEvt(plugin: SRPlugin, menu: Menu, fileish: TAbstractF
 
         menu.addItem((item) => {
             item.setIcon("minus-with-circle");
-            item.setTitle("Untrack All Notes");
+            item.setTitle(t("MENU_UNTRACK_ALL_NOTES"));
             item.onClick(async (_evt) => {
                 store.untrackFilesInFolder(folder);
                 await store.save();
@@ -71,7 +72,7 @@ export function addFileMenuEvt(plugin: SRPlugin, menu: Menu, fileish: TAbstractF
         if (store.getTrackedFile(fileish.path)?.isTrackedNote) {
             menu.addItem((item) => {
                 item.setIcon("minus-with-circle");
-                item.setTitle("Untrack Note");
+                item.setTitle(t("MENU_UNTRACK_NOTE"));
                 item.onClick(async (_evt) => {
                     store.untrackFile(fileish.path, true);
                     await store.save();
@@ -84,7 +85,7 @@ export function addFileMenuEvt(plugin: SRPlugin, menu: Menu, fileish: TAbstractF
         } else {
             menu.addItem((item) => {
                 item.setIcon("plus-with-circle");
-                item.setTitle("Track Note");
+                item.setTitle(t("MENU_TRACK_NOTE"));
                 item.onClick(async (_evt) => {
                     store.trackFile(fileish.path, undefined, true);
                     await store.save();

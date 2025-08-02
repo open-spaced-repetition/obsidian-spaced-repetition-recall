@@ -7,6 +7,7 @@ import { postponeItems } from "./algorithms/balance/postpone";
 import { reschedule } from "./algorithms/balance/reschedule";
 import { GetInputModal } from "./gui/getInputModal";
 import { ReviewView } from "./gui/reviewView";
+import { t } from "src/lang/helpers";
 
 export default class Commands {
     plugin: ObsidianSrsPlugin;
@@ -20,7 +21,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "view-item-info",
-            name: "Item Info",
+            name: t("CMD_ITEM_INFO"),
             checkCallback: (checking: boolean) => {
                 const file = plugin.app.workspace.getActiveFile();
                 if (file) {
@@ -49,7 +50,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "track-file",
-            name: "Track Note",
+            name: t("CMD_TRACK_NOTE"),
             checkCallback: (checking: boolean) => {
                 const file = plugin.app.workspace.getActiveFile();
                 if (file != null) {
@@ -69,7 +70,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "untrack-file",
-            name: "Untrack Note",
+            name: t("CMD_UNTRACK_NOTE"),
             checkCallback: (checking: boolean) => {
                 const file = plugin.app.workspace.getActiveFile();
                 if (file != null) {
@@ -89,7 +90,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "reschedule",
-            name: "Reschedule",
+            name: t("CMD_RESCHEDULE"),
             callback: () => {
                 reschedule(plugin.store.items.filter((item) => item.hasDue && item.isTracked));
             },
@@ -97,21 +98,21 @@ export default class Commands {
 
         plugin.addCommand({
             id: "postpone-cards",
-            name: "Postpone cards",
+            name: t("CMD_POSTPONE_CARDS"),
             callback: () => {
                 postponeItems(plugin.store.items.filter((item) => item.isCard && item.isTracked));
             },
         });
         plugin.addCommand({
             id: "postpone-notes",
-            name: "Postpone notes",
+            name: t("CMD_POSTPONE_NOTES"),
             callback: () => {
                 postponeItems(plugin.store.items.filter((item) => !item.isCard && item.isTracked));
             },
         });
         plugin.addCommand({
             id: "postpone-all",
-            name: "Postpone All",
+            name: t("CMD_POSTPONE_ALL"),
             callback: () => {
                 postponeItems(plugin.store.items.filter((item) => item.isTracked));
             },
@@ -119,7 +120,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "postpone-note-manual",
-            name: "Postpone this note after x days",
+            name: t("CMD_POSTPONE_NOTE_MANUAL"),
             checkCallback: (checking: boolean) => {
                 const file = plugin.app.workspace.getActiveFile();
                 const settings = plugin.data.settings;
@@ -129,12 +130,12 @@ export default class Commands {
                             const tkfile = plugin.store.getTrackedFile(file.path);
                             const input = new GetInputModal(
                                 plugin.app,
-                                "please input positive number",
+                                t("CMD_INPUT_POSITIVE_NUMBER"),
                             );
                             input.submitCallback = async (days: number) => {
                                 postponeItems([plugin.store.getItembyID(tkfile.noteID)], days);
                                 plugin.store.save();
-                                new Notice(`This note has been postponed ${days} days`);
+                                new Notice(t("CMD_NOTE_POSTPONED", { days: days }));
                                 await plugin.sync();
                                 if (settings.autoNextNote && plugin.lastSelectedReviewDeck) {
                                     plugin.reviewNextNote(plugin.lastSelectedReviewDeck);
@@ -151,7 +152,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "postpone-cards-manual",
-            name: "Postpone cards in this note after x days",
+            name: t("CMD_POSTPONE_CARDS_MANUAL"),
             checkCallback: (checking: boolean) => {
                 const file = plugin.app.workspace.getActiveFile();
                 if (file != null) {
@@ -160,7 +161,7 @@ export default class Commands {
                             const tkfile = plugin.store.getTrackedFile(file.path);
                             const input = new GetInputModal(
                                 plugin.app,
-                                "please input positive number",
+                                t("CMD_INPUT_POSITIVE_NUMBER"),
                             );
                             input.submitCallback = (days: number) =>
                                 postponeItems(
@@ -207,7 +208,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "build-queue",
-            name: "Build Queue",
+            name: t("CMD_BUILD_QUEUE"),
             callback: () => {
                 Queue.getInstance().buildQueue();
             },
@@ -215,7 +216,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "review-view",
-            name: "Review",
+            name: t("CMD_REVIEW"),
             callback: () => {
                 Queue.getInstance().buildQueue();
                 ReviewView.getInstance().recallReviewNote(this.plugin.data.settings);
@@ -224,7 +225,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "debug-print-view-state",
-            name: "Print View State",
+            name: t("CMD_PRINT_VIEW_STATE"),
             callback: () => {
                 const state = plugin.app.workspace.getActiveViewOfType(MarkdownView).getState();
                 console.log(state);
@@ -233,7 +234,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "debug-print-eph-state",
-            name: "Print Ephemeral State",
+            name: t("CMD_PRINT_EPHEMERAL_STATE"),
             callback: () => {
                 console.log(plugin.app.workspace.activeLeaf.getEphemeralState());
             },
@@ -253,7 +254,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "debug-clear-queue",
-            name: "Clear Queue",
+            name: t("CMD_CLEAR_QUEUE"),
             callback: () => {
                 Queue.getInstance().clearQueue();
             },
@@ -261,7 +262,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "debug-queue-all",
-            name: "Queue All",
+            name: t("CMD_QUEUE_ALL"),
             callback: () => {
                 const que = Queue.getInstance();
                 que.buildQueueAll();
@@ -271,7 +272,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "debug-print-data",
-            name: "Print Data",
+            name: t("CMD_PRINT_DATA"),
             callback: () => {
                 console.log(plugin.store.data);
             },
@@ -299,7 +300,7 @@ export default class Commands {
 
         plugin.addCommand({
             id: "update-dataItems",
-            name: "Update Items",
+            name: t("CMD_UPDATE_ITEMS"),
             callback: () => {
                 plugin.store.verifyItems();
             },

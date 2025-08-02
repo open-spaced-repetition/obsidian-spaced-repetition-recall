@@ -13,6 +13,7 @@ import { CardInfo, TrackedFile } from "./trackedFile";
 import { RPITEMTYPE, RepetitionItem, ReviewResult } from "./repetitionItem";
 import { DEFAULT_QUEUE_DATA, Queue } from "./queue";
 import { Iadapter } from "./adapter";
+import { t } from "src/lang/helpers";
 
 /**
  * SrsData.
@@ -160,7 +161,7 @@ export class DataStore {
             await Iadapter.instance.adapter.write(path, JSON.stringify(this.data));
             this.data.mtime = await this.getmtime();
         } catch (error) {
-            MiscUtils.notice("Unable to save data file!");
+            MiscUtils.notice(t("DATA_UNABLE_TO_SAVE"));
             console.log(error);
             return;
         }
@@ -264,10 +265,10 @@ export class DataStore {
         return id < 0
             ? null
             : this.data.items.find((item: RepetitionItem, _idx) => {
-                  if (item != null && item.ID === id) {
-                      return true;
-                  }
-              });
+                if (item != null && item.ID === id) {
+                    return true;
+                }
+            });
     }
 
     getFileByIndex(idx: number): TrackedFile {
@@ -394,7 +395,7 @@ export class DataStore {
             }
         });
         if (firstCalled) {
-            const msg = `在文件夹 ${folder.path} 下，共有 ${totalRemoved} 个文件不再跟踪重复了`;
+            const msg = t("DATA_FOLDER_UNTRACKED", { folderPath: folder.path, totalRemoved: totalRemoved });
             MiscUtils.notice(msg);
             console.log(msg);
         }
@@ -440,7 +441,7 @@ export class DataStore {
             }
         });
 
-        MiscUtils.notice("Added " + totalAdded + " new items, removed " + totalRemoved + " items.");
+        MiscUtils.notice(t("DATA_ADDED_REMOVED_ITEMS", { totalAdded: totalAdded, totalRemoved: totalRemoved }));
     }
 
     /**
@@ -505,9 +506,7 @@ export class DataStore {
                 // || cardName !== null
                 // it's taged file, can't untrack by this.
                 console.log(path + " is taged file, can't untrack by this.");
-                MiscUtils.notice(
-                    "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
-                );
+                MiscUtils.notice(t("DATA_TAGGED_FILE_CANT_UNTRACK"));
                 return 0;
             }
         }
@@ -541,7 +540,7 @@ export class DataStore {
         // this.plugin.updateStatusBar();
 
         if (notice) {
-            MiscUtils.notice("Untracked " + numItems + " items" + nulrstr);
+            MiscUtils.notice(t("DATA_UNTRACKED_ITEMS", { numItems: numItems, nulrstr: nulrstr }));
         }
 
         console.log("Untracked: " + path + nulrstr);
@@ -651,7 +650,7 @@ export class DataStore {
         // this.save();     // will be used when plugin.sync_Algo(), which shouldn't
 
         if (notice) {
-            MiscUtils.notice("Added " + added + " new items, removed " + removed + " items.");
+            MiscUtils.notice(t("DATA_ADDED_REMOVED_ITEMS_SHORT", { added: added, removed: removed }));
         }
         return { added, removed };
     }
@@ -709,8 +708,12 @@ export class DataStore {
         cardinfo.itemIds = newitemIds;
         // this.save();
 
-        const msg = `${trackedFile.path} update - lineNo: ${cardinfo.lineNo}  \n Added: ${added} new card items, removed \
-        ${removed}  card items.`;
+        const msg = t("DATA_FILE_UPDATE", {
+            filePath: trackedFile.path,
+            lineNo: cardinfo.lineNo,
+            added: added,
+            removed: removed
+        });
         console.debug(msg);
         if (notice) {
             MiscUtils.notice(msg);
@@ -729,7 +732,7 @@ export class DataStore {
                 }
             }),
         );
-        MiscUtils.notice("all items have been updated.");
+        MiscUtils.notice(t("DATA_ALL_ITEMS_UPDATED"));
     }
 
     updateReviewedCounts(id: number, type: RPITEMTYPE = RPITEMTYPE.NOTE) {
@@ -849,10 +852,10 @@ export class DataStore {
 
         console.log(
             "removed " +
-                removedtkfiles +
-                " nullTrackedfile(s), removed " +
-                removedItems +
-                " nullitem(s).",
+            removedtkfiles +
+            " nullTrackedfile(s), removed " +
+            removedItems +
+            " nullitem(s).",
         );
         return;
     }

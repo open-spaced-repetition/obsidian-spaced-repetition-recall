@@ -332,5 +332,42 @@ Note that this setting is common to both Flashcards and Notes.`,
     DATA_LOCATION_WARNING_TO_TRACKED: "BE CAREFUL!!! \n if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO `tracked_files.json`.",
 
 
-    POST_ISSUE_MODIFIED_PLUGIN: "Post an <a href=\"${issue_url}\">issue</a> about this modified sr-plugin which has background color for settings."
+    POST_ISSUE_MODIFIED_PLUGIN: "Post an <a href=\"${issue_url}\">issue</a> about this modified sr-plugin which has background color for settings.",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Item Info",
+    CMD_TRACK_NOTE: "Track Note",
+    CMD_UNTRACK_NOTE: "Untrack Note",
+    CMD_RESCHEDULE: "Reschedule",
+    CMD_POSTPONE_CARDS: "Postpone cards",
+    CMD_POSTPONE_NOTES: "Postpone notes",
+    CMD_POSTPONE_ALL: "Postpone All",
+    CMD_POSTPONE_NOTE_MANUAL: "Postpone this note after x days",
+    CMD_POSTPONE_CARDS_MANUAL: "Postpone cards in this note after x days",
+    CMD_BUILD_QUEUE: "Build Queue",
+    CMD_REVIEW: "Review",
+    CMD_PRINT_VIEW_STATE: "Print View State",
+    CMD_PRINT_EPHEMERAL_STATE: "Print Ephemeral State",
+    CMD_CLEAR_QUEUE: "Clear Queue",
+    CMD_QUEUE_ALL: "Queue All",
+    CMD_PRINT_DATA: "Print Data",
+    CMD_UPDATE_ITEMS: "Update Items",
+    CMD_INPUT_POSITIVE_NUMBER: "please input positive number",
+    CMD_NOTE_POSTPONED: "This note has been postponed ${days} days",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Track All Notes",
+    MENU_UNTRACK_ALL_NOTES: "Untrack All Notes",
+    MENU_TRACK_NOTE: "Track Note",
+    MENU_UNTRACK_NOTE: "Untrack Note",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Unable to save data file!",
+    DATA_FOLDER_UNTRACKED: "In folder ${folderPath}, ${totalRemoved} files are no longer tracked for repetition",
+    DATA_ADDED_REMOVED_ITEMS: "Added ${totalAdded} new items, removed ${totalRemoved} items.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Added ${added} new items, removed ${removed} items.",
+    DATA_FILE_UPDATE: "${filePath} update - lineNo: ${lineNo}\nAdded: ${added} new card items, removed ${removed} card items.",
+    DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
 };
