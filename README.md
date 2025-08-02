@@ -57,8 +57,6 @@ I develop this plugin as a hobby, spending my free time doing this. If you find 
 
 or buy original plugin author(@st3v3nmw) a coffee...
 
-## Supported By
-
 <a href='https://ko-fi.com/M4M44DEN6' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ---
