@@ -3,8 +3,8 @@
 
 ## Features
 
--   [@st3v3nmw's ReadMe](https://github.com/st3v3nmw/obsidian-spaced-repetition#readme)
--   [english ReadMe](../README.md)
+- [@st3v3nmw's ReadMe](https://github.com/st3v3nmw/obsidian-spaced-repetition#readme)
+- [english ReadMe](../README.md)
 
 1. 复习时间信息可以保存在单独文件内，不修改原笔记文件内容；
 2. 在复习笔记时可以显示悬浮栏（跟复习卡片时类似），方便选择记忆效果，且可显隐到下次重复的时间间隔；
@@ -70,7 +70,7 @@ github: https://github.com/open-spaced-repetition/obsidian-spaced-repetition-rec
 
 Thank you to everyone who has created a plugin that inspired me and I took code from.
 
--   first, thanks to [@st3v3nmw's obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) and [@martin-jw recall plugin](https://github.com/martin-jw/obsidian-recall)
--   floatbar(thanks to [@chetachi's cMenu](https://github.com/chetachiezikeuzor/cMenu-Plugin))
--   [Fsrs Algorithm](https://github.com/open-spaced-repetition)
--   ReleaseNotes(thanks to [@Zsolt Viczian Excalidraw](https://zsolt.blog))
+- first, thanks to [@st3v3nmw's obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) and [@martin-jw recall plugin](https://github.com/martin-jw/obsidian-recall)
+- floatbar(thanks to [@chetachi's cMenu](https://github.com/chetachiezikeuzor/cMenu-Plugin))
+- [Fsrs Algorithm](https://github.com/open-spaced-repetition)
+- ReleaseNotes(thanks to [@Zsolt Viczian Excalidraw](https://zsolt.blog))
