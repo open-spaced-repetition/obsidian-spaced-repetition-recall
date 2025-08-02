@@ -216,8 +216,7 @@ export class DefaultAlgorithm extends SrsAlgorithm {
         containerEl.createDiv().innerHTML = t("CHECK_ALGORITHM_WIKI", {
             algo_url: "https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/",
         });
-        containerEl.createDiv().innerHTML =
-            '用于间隔重复的算法. 更多信息请查阅 <a href="https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/">anki修改算法</a>.';
+        containerEl.createDiv().innerHTML = t("DEFAULT_ALGORITHM_DESC");
 
         const DEFAULTSETTINGS = this.defaultSettings();
 

@@ -241,7 +241,7 @@ export class SRSettingTab extends PluginSettingTab {
                         this.tabNotes(container_element),
                 },
                 "main-algorithm": {
-                    title: "Algorithm",
+                    title: t("ALGORITHM"),
                     icon: null, // "dot-network",
                     content_generator: (container_element: HTMLElement) =>
                         this.tabAlgorithm(container_element),
@@ -253,13 +253,13 @@ export class SRSettingTab extends PluginSettingTab {
                         this.tabUiPreferences(container_element),
                 },
                 "main-developer": {
-                    title: "Developer",
+                    title: t("DEVELOPER"),
                     icon: null, // "code-glyph",
                     content_generator: (container_element: HTMLElement) =>
                         this.tabDeveloper(container_element),
                 },
                 "main-help": {
-                    title: "Help",
+                    title: t("HELP"),
                     icon: null, // "help",
                     content_generator: (container_element: HTMLElement) =>
                         this.tabHelp(container_element),
@@ -353,18 +353,18 @@ export class SRSettingTab extends PluginSettingTab {
                     .addOptions(
                         deckOrderEnabled
                             ? {
-                                  PrevDeckComplete_Sequential: t(
-                                      "REVIEW_DECK_ORDER_PREV_DECK_COMPLETE_SEQUENTIAL",
-                                  ),
-                                  PrevDeckComplete_Random: t(
-                                      "REVIEW_DECK_ORDER_PREV_DECK_COMPLETE_RANDOM",
-                                  ),
-                              }
+                                PrevDeckComplete_Sequential: t(
+                                    "REVIEW_DECK_ORDER_PREV_DECK_COMPLETE_SEQUENTIAL",
+                                ),
+                                PrevDeckComplete_Random: t(
+                                    "REVIEW_DECK_ORDER_PREV_DECK_COMPLETE_RANDOM",
+                                ),
+                            }
                             : {
-                                  EveryCardRandomDeckAndCard: t(
-                                      "REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD",
-                                  ),
-                              },
+                                EveryCardRandomDeckAndCard: t(
+                                    "REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD",
+                                ),
+                            },
                     )
                     .setValue(
                         deckOrderEnabled
@@ -864,8 +864,9 @@ export class SRSettingTab extends PluginSettingTab {
 
         const issue_url =
             "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/issues";
-        newSettingEl(containerEl).createEl("p").innerHTML =
-            `Post an <a href= ${issue_url} > issue </a> about this modified sr-plugin which has backgroud color for settings.`;
+        newSettingEl(containerEl).createEl("p").innerHTML = t("POST_ISSUE_MODIFIED_PLUGIN", {
+            issue_url: issue_url,
+        });
 
         // trackfile_setting
         // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
@@ -1085,7 +1086,7 @@ export class SRSettingTab extends PluginSettingTab {
                 }) + `about this modified sr-plugin `,
             );
 
-        /* 
+        /*
         // Documentation link & GitHub links
         containerEl.createEl("hr").insertAdjacentHTML("beforeend");
 
@@ -1103,9 +1104,9 @@ export class SRSettingTab extends PluginSettingTab {
         scroll_position: number;
         tab_name: string;
     } = {
-        scroll_position: 0,
-        tab_name: "main-flashcards",
-    };
+            scroll_position: 0,
+            tab_name: "main-flashcards",
+        };
     private rememberLastPosition(container_element: HTMLElement) {
         const last_position = this.last_position;
 

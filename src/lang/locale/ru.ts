@@ -70,6 +70,8 @@ export default {
 
     // settings.ts
     SETTINGS_HEADER: "Плагин Spaced Repetition Recall - Настройки",
+    HELP: "Помощь",
+    DEVELOPER: "Разработчик",
     GROUP_TAGS_FOLDERS: "Теги и Папки",
     GROUP_FLASHCARD_REVIEW: "Повторение карточек",
     GROUP_FLASHCARD_SEPARATORS: "Разделители карточек",
@@ -280,4 +282,70 @@ export default {
     DUE_REVIEWED: "Просроченных повторено",
     REVIEWED_TODAY_SUMMARY: "Всего повторено сегодня: ${totalreviewedCount}",
     DATE: "Дата",
+
+    // cardBlockIDSetting.ts
+    CARD_BLOCK_ID: "ID блока карточки",
+    CARD_BLOCK_ID_DESC: "Использовать ID блока карточки вместо номера строки и хеша текста.<br><b>Если установлено True, ID блока будет добавлен после текста карточки. И ID блока останется в заметке после сброса на False.</b>",
+    CARD_BLOCK_ID_CONFIRM: "**Если установлено True, ID блока будет добавлен после текста карточки. И ID блока останется в заметке после сброса на False.** \n\nРекомендация: сделайте резервную копию вашего хранилища перед установкой True. Или попробуйте в песочнице.\n\nУстановка включения приведет к добавлению blockid ко всем карточкам, даже если позже отключить, добавленные blockid останутся в заметке и не будут удалены.\n\nРекомендуется **сначала сделать резервную копию** хранилища заметок или попробовать в песочнице.",
+
+    // mixQueueSetting.ts
+    MIX_QUEUE: "Смешанная очередь",
+    MIX_QUEUE_DESC: "Смешивать просроченные и новые заметки при повторении. **Первый** слайдер для общего количества, второй слайдер для количества просроченных. А количество новых = (общее - просроченные).",
+
+    // trackSetting.ts
+    UNTRACK_WITH_REVIEWTAG_DESC: "При удалении тега повторения из заметки синхронно выполнять операцию untrack, чтобы больше не повторять эту заметку<br><b>true</b>: синхронная операция untrack;<br><b>false</b>: после удаления тега повторения нужно снова выполнить untrack, чтобы не повторять эту заметку. (как в предыдущей версии)",
+
+    // dataLocation.ts
+    DATA_LOCATION_PLUGIN_FOLDER: "В папке плагина",
+    DATA_LOCATION_ROOT_FOLDER: "В папке хранилища",
+    DATA_LOCATION_SPECIFIED_FOLDER: "В указанной ниже папке",
+    DATA_LOCATION_SAVE_ON_NOTE_FILE: "Сохранить в файле заметки",
+
+    // fsrs.ts
+    FSRS_ALGORITHM_DESC: "Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href=\"https://github.com/open-spaced-repetition/ts-fsrs\">алгоритм FSRS</a>.",
+    FSRS_W_PARAM_DESC: "Смотрите <a href=\"https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm\">FSRS V6 WIKI</a> и <a href=\"https://open-spaced-repetition.github.io/anki_fsrs_visualizer\">визуализацию параметров FSRS w</a> для настройки различных параметров.",
+
+    // anki.ts
+    ANKI_ALGORITHM_DESC: "Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href=\"https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html\">алгоритм Anki</a>.",
+    STARTING_EASE: "Начальная лёгкость",
+    STARTING_EASE_DESC: "Начальная лёгкость, присваиваемая элементу.",
+    STARTING_EASE_ERROR: "Начальная лёгкость должна быть положительным числом.",
+    STARTING_EASE_WARNING: "Начальная лёгкость менее 1.3 не рекомендуется.",
+    EASY_BONUS_ANKI: "Бонус за \"Легко\"",
+    EASY_BONUS_ANKI_DESC: "Бонусный множитель для элементов, отмеченных как легкие.",
+    EASY_BONUS_ANKI_ERROR: "Бонус за \"Легко\" должен быть числом больше или равным 1.",
+    LAPSE_INTERVAL_MODIFIER: "Модификатор интервала провала",
+    LAPSE_INTERVAL_MODIFIER_DESC: "Коэффициент для изменения интервала повторения, когда элемент отмечен как неправильный.",
+    LAPSE_INTERVAL_ERROR: "Интервал провала должен быть положительным числом.",
+    GRADUATING_INTERVAL: "Интервал выпуска",
+    GRADUATING_INTERVAL_DESC: "Интервал (в днях) до следующего повторения после отметки нового элемента как 'Хорошо'.",
+    GRADUATING_INTERVAL_ERROR: "Интервал должен быть положительным числом.",
+    EASY_INTERVAL: "Интервал \"Легко\"",
+    EASY_INTERVAL_DESC: "Интервал (в днях) до следующего повторения после отметки нового элемента как 'Легко'.",
+    EASY_INTERVAL_ERROR: "Интервал должен быть положительным числом.",
+
+    // scheduling_default.ts
+    DEFAULT_ALGORITHM_DESC: "Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href=\"https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/\">модифицированный алгоритм Anki</a>.",
+
+    // supermemo.ts
+    SM2_ALGORITHM_DESC: "Алгоритм, используемый для интервального повторения. В настоящее время использует те же параметры, что и алгоритм Anki (отличается только способ обработки алгоритма). Для получения дополнительной информации см. <a href=\"https://www.supermemo.com/en/archives1990-2015/english/ol/sm2\">алгоритм SM2</a>.",
+
+    // info.ts
+    ITEM_INFO_TITLE: "Информация об элементе",
+    CARDS_IN_NOTE: "Карточки в этой заметке",
+    SAVE_ITEM_INFO: "Сохранить",
+    SAVE_ITEM_INFO_TOOLTIP: "сохранить только информацию об элементе текущей заметки",
+    CLOSE_ITEM_INFO: "Закрыть",
+    LINE_NO: "НомерСтроки:",
+    NEXT_REVIEW: "СледующееПовторение:",
+    NEW_CARD: "НоваяКарточка",
+    ITEM_DATA_INFO: "Информация о данных элемента",
+
+    // locationSetting.ts
+    DATA_LOCATION_WARNING_TO_NOTE: "ОСТОРОЖНО!!!\nЕсли вы подтвердите это, все ваши данные планирования из `tracked_files.json` будут преобразованы в заметку, что изменит множество ваших файлов заметок одновременно.\nПожалуйста, убедитесь, что настройки тегов карточек и заметок соответствуют тому, что вы используете.",
+    DATA_LOCATION_WARNING_OTHER_ALGO: "если вы хотите сохранить данные в файле заметки, вы **должны** использовать алгоритм по умолчанию.",
+    DATA_LOCATION_WARNING_TO_TRACKED: "ОСТОРОЖНО!!!\nЕсли вы подтвердите это, все ваши данные планирования из заметки (которые будут удалены одновременно) будут преобразованы В `tracked_files.json`.",
+
+    // settings.ts - additional strings
+    POST_ISSUE_MODIFIED_PLUGIN: "Создать <a href=\"${issue_url}\">issue</a> об этом модифицированном sr-плагине с фоновым цветом для настроек."
 };
