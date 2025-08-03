@@ -5,6 +5,7 @@ import deepcopy from "deepcopy";
 import { FsrsData } from "./fsrs";
 import { balance } from "./balance/balance";
 import { RepetitionItem, ReviewResult } from "src/dataStore/repetitionItem";
+import { t } from "src/lang/helpers";
 
 export interface AnkiData {
     ease: number;
@@ -172,25 +173,24 @@ export class AnkiAlgorithm extends SrsAlgorithm {
         containerEl: HTMLElement,
         update: (settings: AnkiSettings, refresh?: boolean) => void,
     ) {
-        containerEl.createDiv().innerHTML =
-            '用于间隔重复的算法. 更多信息请查阅 <a href="https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html">Anki算法</a>.';
+        containerEl.createDiv().innerHTML = t("ANKI_ALGORITHM_DESC");
         new Setting(containerEl)
-            .setName("Starting Ease")
-            .setDesc("The initial ease given to an item.")
+            .setName(t("STARTING_EASE"))
+            .setDesc(t("STARTING_EASE_DESC"))
             .addText((text) =>
                 text
-                    .setPlaceholder("Starting Ease")
+                    .setPlaceholder(t("STARTING_EASE"))
                     .setValue(this.settings.baseEase.toString())
                     .onChange((newValue) => {
                         const ease = Number(newValue);
 
                         if (isNaN(ease) || ease < 0) {
-                            new Notice("Starting ease must be a positive number.");
+                            new Notice(t("STARTING_EASE_ERROR"));
                             return;
                         }
 
                         if (ease < 1.3) {
-                            new Notice("Starting ease lower than 1.3 is not recommended.");
+                            new Notice(t("STARTING_EASE_WARNING"));
                         }
 
                         this.settings.baseEase = ease;
@@ -199,17 +199,17 @@ export class AnkiAlgorithm extends SrsAlgorithm {
             );
 
         new Setting(containerEl)
-            .setName("Easy Bonus")
-            .setDesc("A bonus multiplier for items reviewed as easy.")
+            .setName(t("EASY_BONUS_ANKI"))
+            .setDesc(t("EASY_BONUS_ANKI_DESC"))
             .addText((text) =>
                 text
-                    .setPlaceholder("Easy Bonus")
+                    .setPlaceholder(t("EASY_BONUS_ANKI"))
                     .setValue(this.settings.easyBonus.toString())
                     .onChange((newValue) => {
                         const bonus = Number(newValue);
 
                         if (isNaN(bonus) || bonus < 1) {
-                            new Notice("Easy bonus must be a number greater than or equal to 1.");
+                            new Notice(t("EASY_BONUS_ANKI_ERROR"));
                             return;
                         }
 
@@ -219,19 +219,17 @@ export class AnkiAlgorithm extends SrsAlgorithm {
             );
 
         new Setting(containerEl)
-            .setName("Lapse Interval Modifier")
-            .setDesc(
-                "A factor to modify the review interval with when an item is reviewed as wrong.",
-            )
+            .setName(t("LAPSE_INTERVAL_MODIFIER"))
+            .setDesc(t("LAPSE_INTERVAL_MODIFIER_DESC"))
             .addText((text) =>
                 text
-                    .setPlaceholder("Lapse Interval")
+                    .setPlaceholder(t("LAPSE_INTERVAL_MODIFIER"))
                     .setValue(this.settings.lapseInterval.toString())
                     .onChange((newValue) => {
                         const lapse = Number(newValue);
 
                         if (isNaN(lapse) || lapse <= 0) {
-                            new Notice("Lapse interval must be a positive number.");
+                            new Notice(t("LAPSE_INTERVAL_ERROR"));
                             return;
                         }
 
@@ -241,19 +239,17 @@ export class AnkiAlgorithm extends SrsAlgorithm {
             );
 
         new Setting(containerEl)
-            .setName("Graduating Interval")
-            .setDesc(
-                "The interval (in days) to the next review after reviewing a new item as 'Good'.",
-            )
+            .setName(t("GRADUATING_INTERVAL"))
+            .setDesc(t("GRADUATING_INTERVAL_DESC"))
             .addText((text) =>
                 text
-                    .setPlaceholder("Graduating Interval")
+                    .setPlaceholder(t("GRADUATING_INTERVAL"))
                     .setValue(this.settings.graduatingInterval.toString())
                     .onChange((newValue) => {
                         const interval = Number(newValue);
 
                         if (isNaN(interval) || interval <= 0) {
-                            new Notice("Interval must be a positive number.");
+                            new Notice(t("GRADUATING_INTERVAL_ERROR"));
                             return;
                         }
 
@@ -263,19 +259,17 @@ export class AnkiAlgorithm extends SrsAlgorithm {
             );
 
         new Setting(containerEl)
-            .setName("Easy Interval")
-            .setDesc(
-                "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
-            )
+            .setName(t("EASY_INTERVAL"))
+            .setDesc(t("EASY_INTERVAL_DESC"))
             .addText((text) =>
                 text
-                    .setPlaceholder("Easy Interval")
+                    .setPlaceholder(t("EASY_INTERVAL"))
                     .setValue(this.settings.easyInterval.toString())
                     .onChange((newValue) => {
                         const interval = Number(newValue);
 
                         if (isNaN(interval) || interval <= 0) {
-                            new Notice("Interval must be a positive number.");
+                            new Notice(t("EASY_INTERVAL_ERROR"));
                             return;
                         }
 

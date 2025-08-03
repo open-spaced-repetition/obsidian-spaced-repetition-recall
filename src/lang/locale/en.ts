@@ -56,7 +56,9 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition",
+    SETTINGS_HEADER: "Spaced Repetition Recall - Settings",
+    HELP: "Help",
+    DEVELOPER: "Developer",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
@@ -201,13 +203,9 @@ export default {
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Logging",
-    DISPLAY_SCHEDULING_DEBUG_INFO:
-        "Show the scheduler's debugging information on the developer console",
-    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
-    SCHEDULING: "Scheduling",
-    EXPERIMENTAL: "Experimental",
-    HELP: "Help",
-    STORE_IN_NOTES: "In the notes",
+    DISPLAY_DEBUG_INFO: "Display debugging information on the developer console",
+    DISPLAY_PARSER_DEBUG_INFO:
+        "Display debugging information for the parser on the developer console",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
@@ -293,4 +291,107 @@ export default {
     DUE_REVIEWED: "due Reviewed",
     REVIEWED_TODAY_SUMMARY: "Total Reviewed today: ${totalreviewedCount}",
     DATE: "Date",
+
+    // cardBlockIDSetting.ts
+    CARD_BLOCK_ID: "Card Block ID",
+    CARD_BLOCK_ID_DESC: "use Card Block ID instead of line number and text hash.<br>  <b>If set True, block id will append after card text. And block id will keep in note after reset to False again.</b>",
+    CARD_BLOCK_ID_CONFIRM: "**If set True, block id will append after card text. And block id will keep in note after reset to False again. ** \n\nSuggestion： backup your vault before set True. Or try it in sandbox vault. \n\nAfter setting is turned on, blockid will be added after all cards. Even if it is turned off again, the added blockid will still remain in the note and will not be deleted.\n\nIt is recommended to **backup first** the note library, or try it in a sandbox library.",
+
+    // mixQueueSetting.ts
+    MIX_QUEUE: "Mix queue",
+    MIX_QUEUE_DESC: "mix ondue and new notes when review. **first** slider for total count, second slider for ondue count. And new count is (total - ondue).",
+
+    // trackSetting.ts
+    UNTRACK_WITH_REVIEWTAG_DESC: "When deleting the review tag in the note, synchronously untrack the operation, so that the note will no longer be reviewed<br><b>true</b>: synchronous untrack operation;<br><b>false</b>：After deleting the review tag, you need to untrack again before the note will no longer be reviewed. (same as previous version)",
+
+    // dataLocation.ts
+    DATA_LOCATION_PLUGIN_FOLDER: "In Plugin Folder",
+    DATA_LOCATION_ROOT_FOLDER: "In Vault Folder",
+    DATA_LOCATION_SPECIFIED_FOLDER: "In the folder specified below",
+    DATA_LOCATION_SAVE_ON_NOTE_FILE: "Save On Note File",
+
+    // fsrs.ts
+    FSRS_ALGORITHM_DESC: "The algorithm used for spaced repetition. For more information see <a href=\"https://github.com/open-spaced-repetition/ts-fsrs\">FSRS algorithm</a>.",
+    FSRS_W_PARAM_DESC: "See <a href=\"https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm\">FSRS V6 WIKI</a> and <a href=\"https://open-spaced-repetition.github.io/anki_fsrs_visualizer\">FSRS w parameter visualization</a> to set various parameters.",
+
+    // anki.ts
+    ANKI_ALGORITHM_DESC: "The algorithm used for spaced repetition. For more information see <a href=\"https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html\">Anki algorithm</a>.",
+    STARTING_EASE: "Starting Ease",
+    STARTING_EASE_DESC: "The initial ease given to an item.",
+    STARTING_EASE_ERROR: "Starting ease must be a positive number.",
+    STARTING_EASE_WARNING: "Starting ease lower than 1.3 is not recommended.",
+    EASY_BONUS_ANKI: "Easy Bonus",
+    EASY_BONUS_ANKI_DESC: "A bonus multiplier for items reviewed as easy.",
+    EASY_BONUS_ANKI_ERROR: "Easy bonus must be a number greater than or equal to 1.",
+    LAPSE_INTERVAL_MODIFIER: "Lapse Interval Modifier",
+    LAPSE_INTERVAL_MODIFIER_DESC: "A factor to modify the review interval with when an item is reviewed as wrong.",
+    LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
+    GRADUATING_INTERVAL: "Graduating Interval",
+    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
+    EASY_INTERVAL: "Easy Interval",
+    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_ERROR: "Interval must be a positive number.",
+
+    // scheduling_default.ts
+    DEFAULT_ALGORITHM_DESC: "The algorithm used for spaced repetition. For more information see <a href=\"https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/\">modified Anki algorithm</a>.",
+
+    // supermemo.ts
+    SM2_ALGORITHM_DESC: "The algorithm used for spaced repetition. Currently shares the same parameters as the Anki algorithm (only the algorithm processing method is different). For more information see <a href=\"https://www.supermemo.com/en/archives1990-2015/english/ol/sm2\">SM2 algorithm</a>.",
+
+    // info.ts
+    ITEM_INFO_TITLE: "Item info of",
+    CARDS_IN_NOTE: "Cards in this Note",
+    SAVE_ITEM_INFO: "Save",
+    SAVE_ITEM_INFO_TOOLTIP: "only save current note's item info",
+    CLOSE_ITEM_INFO: "Close",
+    LINE_NO: "LineNo:",
+    NEXT_REVIEW: "nextReivew:",
+    NEW_CARD: "NewCard",
+    ITEM_DATA_INFO: "Item.data info",
+
+    // locationSetting.ts
+    DATA_LOCATION_WARNING_TO_NOTE: "BE CAREFUL!!!\n  if you confirm this, it will convert all your scheduling informations in `tracked_files.json` to note, which will change lots of your note file in the same time.\n Please make sure the setting tags of flashcards and notes is what you are using.",
+    DATA_LOCATION_WARNING_OTHER_ALGO: "if you want to save data on notefile, you **have to** use Default Algorithm.",
+    DATA_LOCATION_WARNING_TO_TRACKED: "BE CAREFUL!!! \n if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO `tracked_files.json`.",
+
+
+    POST_ISSUE_MODIFIED_PLUGIN: "Post an <a href=\"${issue_url}\">issue</a> about this modified sr-plugin which has background color for settings.",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Item Info",
+    CMD_TRACK_NOTE: "Track Note",
+    CMD_UNTRACK_NOTE: "Untrack Note",
+    CMD_RESCHEDULE: "Reschedule",
+    CMD_POSTPONE_CARDS: "Postpone cards",
+    CMD_POSTPONE_NOTES: "Postpone notes",
+    CMD_POSTPONE_ALL: "Postpone All",
+    CMD_POSTPONE_NOTE_MANUAL: "Postpone this note after x days",
+    CMD_POSTPONE_CARDS_MANUAL: "Postpone cards in this note after x days",
+    CMD_BUILD_QUEUE: "Build Queue",
+    CMD_REVIEW: "Review",
+    CMD_PRINT_VIEW_STATE: "Print View State",
+    CMD_PRINT_EPHEMERAL_STATE: "Print Ephemeral State",
+    CMD_CLEAR_QUEUE: "Clear Queue",
+    CMD_QUEUE_ALL: "Queue All",
+    CMD_PRINT_DATA: "Print Data",
+    CMD_UPDATE_ITEMS: "Update Items",
+    CMD_INPUT_POSITIVE_NUMBER: "please input positive number",
+    CMD_NOTE_POSTPONED: "This note has been postponed ${days} days",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Track All Notes",
+    MENU_UNTRACK_ALL_NOTES: "Untrack All Notes",
+    MENU_TRACK_NOTE: "Track Note",
+    MENU_UNTRACK_NOTE: "Untrack Note",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Unable to save data file!",
+    DATA_FOLDER_UNTRACKED: "In folder ${folderPath}, ${totalRemoved} files are no longer tracked for repetition",
+    DATA_ADDED_REMOVED_ITEMS: "Added ${totalAdded} new items, removed ${totalRemoved} items.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Added ${added} new items, removed ${removed} items.",
+    DATA_FILE_UPDATE: "${filePath} update - lineNo: ${lineNo}\nAdded: ${added} new card items, removed ${removed} card items.",
+    DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
 };

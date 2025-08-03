@@ -7,6 +7,7 @@ import { RepetitionItem } from "src/dataStore/repetitionItem";
 import { TrackedFile } from "src/dataStore/trackedFile";
 import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
+import { t } from "src/lang/helpers";
 
 export class ItemInfoModal extends Modal {
     plugin: SRPlugin;
@@ -34,7 +35,7 @@ export class ItemInfoModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         const path = this.file.path;
-        // contentEl.createEl("p").setText("Item info of " + this.file.path);
+        // contentEl.createEl("p").setText(t("ITEM_INFO_TITLE") + " " + this.file.path);
         const buttonDivAll = contentEl.createDiv("srs-flex-row");
         buttonDivAll.setAttr("style", "position: sticky;top: 0");
         const contentdiv = contentEl.createEl("div");
@@ -46,7 +47,7 @@ export class ItemInfoModal extends Modal {
                     this.displayitem(contentdiv, this.item);
                 });
             }
-            new ButtonComponent(buttonDivAll).setButtonText("Cards in this Note").onClick(() => {
+            new ButtonComponent(buttonDivAll).setButtonText(t("CARDS_IN_NOTE")).onClick(() => {
                 this.displayAllitems(contentdiv, tkfile);
                 // this.close();
             });
@@ -61,13 +62,13 @@ export class ItemInfoModal extends Modal {
         buttonDiv.setAttr("style", "position: sticky;bottom: 0;margin-top: auto;");
 
         new ButtonComponent(buttonDiv)
-            .setButtonText("Save")
-            .setTooltip("only save current note's item info")
+            .setButtonText(t("SAVE_ITEM_INFO"))
+            .setTooltip(t("SAVE_ITEM_INFO_TOOLTIP"))
             .onClick(() => {
                 this.submit();
                 this.close();
             });
-        new ButtonComponent(buttonDiv).setButtonText("Close").onClick(() => {
+        new ButtonComponent(buttonDiv).setButtonText(t("CLOSE_ITEM_INFO")).onClick(() => {
             // this.callback(false);
             this.close();
         });
@@ -75,7 +76,7 @@ export class ItemInfoModal extends Modal {
 
     displayAllitems(contentEl: HTMLElement, tkfile: TrackedFile) {
         contentEl.empty();
-        const stext = "LineNo:";
+        const stext = t("LINE_NO");
         tkfile.cardItems.forEach((cinfo) => {
             const ln = cinfo.lineNo + 1;
             this.displayitemWithSummary(contentEl, this.store.getItems(cinfo.itemIds), stext + ln);
@@ -95,9 +96,9 @@ export class ItemInfoModal extends Modal {
             let cardmsg = "";
             if (item.hasDue) {
                 const dt = window.moment(item.nextReview).format("YYYY-MM-DD HH:mm:ss");
-                cardmsg = `nextReivew: ${dt}`;
+                cardmsg = `${t("NEXT_REVIEW")} ${dt}`;
             } else {
-                cardmsg = "NewCard";
+                cardmsg = t("NEW_CARD");
             }
 
             divsummary.setText(`ID: ${item.ID} \t ${cardmsg}`);
@@ -111,7 +112,7 @@ export class ItemInfoModal extends Modal {
     displayitem(contentEl: HTMLElement, item: RepetitionItem) {
         const path = this.store.getFilePath(item);
         contentEl.empty();
-        contentEl.createEl("p").setText("Item info of " + path);
+        contentEl.createEl("p").setText(t("ITEM_INFO_TITLE") + " " + path);
         const contentdiv = contentEl.createEl("div");
 
         console.debug("item: ", item);
@@ -141,7 +142,7 @@ export class ItemInfoModal extends Modal {
             }
         });
         MarkdownRenderer.render(this.plugin.app, title + tablestr, contentdiv, "", this.plugin);
-        contentdiv.createEl("p").setText("Item.data info");
+        contentdiv.createEl("p").setText(t("ITEM_DATA_INFO"));
 
         tablestr = "";
         Object.keys(item.data).forEach((key) => {

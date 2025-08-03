@@ -119,7 +119,7 @@ export class ReviewQueueListView extends ItemView {
                         } else if (nDays === 1) {
                             folderTitle = t("TOMORROW");
                         } else {
-                            folderTitle = new Date(sNote.dueUnix).toDateString();
+                            folderTitle = window.moment(sNote.dueUnix).format("ddd MMM D.YY");
                         }
 
                         if (!Object.prototype.hasOwnProperty.call(schedFolderElDict, folderTitle)) {

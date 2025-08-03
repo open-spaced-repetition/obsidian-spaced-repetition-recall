@@ -20,10 +20,7 @@ export function addUntrackSetting(containerEl: HTMLElement, plugin: SRPlugin) {
     // const plugin = this.plugin;
     const settings = plugin.data.settings;
     const desc = createFragment((frag) => {
-        frag.createDiv().innerHTML =
-            "在删除笔记中复习标签时，即同步untrack操作，以后不再复习该笔记<br>\
-        <b>true</b>: 同步untrack操作；<br>\
-        <b>false</b>：删除复习标签后，需再次untrack，才不再复习该笔记。（同之前版本）";
+        frag.createDiv().innerHTML = t("UNTRACK_WITH_REVIEWTAG_DESC");
     });
     new Setting(containerEl)
         .setName(t("UNTRACK_WITH_REVIEWTAG"))

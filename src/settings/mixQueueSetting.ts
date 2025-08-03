@@ -8,10 +8,8 @@ import { DEFAULT_SETTINGS } from "src/settings";
 export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
     const settings = plugin.data.settings;
     new Setting(containerEl)
-        .setName("Mix queue")
-        .setDesc(
-            "mix ondue and new notes when review. **first** slider for total count, second slider for ondue count. And new count is (total - ondue).",
-        )
+        .setName(t("MIX_QUEUE"))
+        .setDesc(t("MIX_QUEUE_DESC"))
         .addSlider((slider) =>
             slider
                 .setLimits(1, 7, 1)

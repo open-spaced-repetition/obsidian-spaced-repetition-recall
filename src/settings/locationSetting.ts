@@ -1,7 +1,7 @@
 import deepcopy from "deepcopy";
 import { Setting } from "obsidian";
 import { algorithmNames } from "src/algorithms/algorithms";
-import { DataLocation, locationMap } from "src/dataStore/dataLocation";
+import { DataLocation, locationMap, getLocalizedLocationMap } from "src/dataStore/dataLocation";
 import { LocationSwitch } from "src/dataStore/location_switch";
 import ConfirmModal from "src/gui/confirm";
 import { t } from "src/lang/helpers";
@@ -13,28 +13,23 @@ export function addDataLocationSettings(containerEl: HTMLElement, plugin: SRPlug
     // const plugin = this.plugin;
     const settings = plugin.data.settings;
     const locSwitch = new LocationSwitch(plugin, settings);
-    const desc_toNote =
-        "BE CAREFUL!!!\n  if you confirm this, it will convert \
-    all your scheduling informations in `tracked_files.json` to note,\
-    which will change lots of your note file in the same time.\n\
-    Please make sure the setting tags of flashcards and notes is what you are using.\n";
-    const desc_toNote_otherAlgo =
-        "if you want to save data on notefile, you **have to** use Default Algorithm.\n";
-    const desc_toTrackedFiles =
-        "BE CAREFUL!!! \n if you confirm this, it will converte \
-    all your scheduling informations on note(which will be deleted in the same time) TO `tracked_files.json`.\n";
+    const desc_toNote = t("DATA_LOCATION_WARNING_TO_NOTE");
+    const desc_toNote_otherAlgo = t("DATA_LOCATION_WARNING_OTHER_ALGO");
+    const desc_toTrackedFiles = t("DATA_LOCATION_WARNING_TO_TRACKED");
 
     new Setting(containerEl)
         .setName(t("DATA_LOC"))
         .setDesc(t("DATA_LOC_DESC"))
         .addDropdown((dropdown) => {
-            Object.values(DataLocation).forEach((val) => {
-                dropdown.addOption(val, val);
+            // Добавляем локализованные опции
+            const localizedMap = getLocalizedLocationMap();
+            Object.entries(localizedMap).forEach(([localizedName, dataLocation]) => {
+                dropdown.addOption(dataLocation, localizedName);
             });
             dropdown.setValue(plugin.data.settings.dataLocation);
 
             dropdown.onChange(async (val) => {
-                const loc = locationMap[val];
+                const loc = val as DataLocation;
                 await plugin.sync();
                 const noteStats = deepcopy(plugin.noteStats);
                 const cardStats = deepcopy(plugin.cardStats);
