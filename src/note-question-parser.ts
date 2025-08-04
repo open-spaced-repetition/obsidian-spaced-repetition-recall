@@ -1,14 +1,19 @@
 import { TagCache } from "obsidian";
-import { Card } from "./Card";
-import { CardScheduleInfo, NoteCardScheduleParser } from "./CardSchedule";
-import { parse, ParsedQuestionInfo, ParserOptions } from "./parser";
-import { Question, QuestionText } from "./Question";
+
+import { RepItemScheduleInfo } from "src/algorithms/base/rep-item-schedule-info";
+import { Card } from "src/card";
+import { DataStore } from "src/data-stores/base/data-store";
+import { frontmatterTagPseudoLineNum, ISRFile } from "src/file";
+import { parse, ParsedQuestionInfo, ParserOptions } from "src/parser";
+import { Question, QuestionText } from "src/question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
-import { SRSettings, SettingsUtil } from "./settings";
-import { ISRFile, frontmatterTagPseudoLineNum } from "./SRFile";
-import { TopicPath, TopicPathList } from "./TopicPath";
-import { TextDirection } from "./util/TextDirection";
-import { extractFrontmatter, splitTextIntoLineArray } from "./util/utils";
+import { SettingsUtil, SRSettings } from "src/settings";
+import { TopicPath, TopicPathList } from "src/topic-path";
+import {
+    splitNoteIntoFrontmatterAndContent,
+    splitTextIntoLineArray,
+    TextDirection,
+} from "src/utils/strings";
 
 export class NoteQuestionParser {
     settings: SRSettings;
@@ -63,7 +68,7 @@ export class NoteQuestionParser {
 
             // The following analysis can require fair computation.
             // There is no point doing it if there aren't any topic paths
-            [this.frontmatterText, this.contentText] = extractFrontmatter(noteText);
+            [this.frontmatterText, this.contentText] = splitNoteIntoFrontmatterAndContent(noteText);
 
             // Create the question list
             let textDirection: TextDirection = noteFile.getTextDirection();
@@ -116,8 +121,11 @@ export class NoteQuestionParser {
             );
 
             // And if the card has been reviewed, then scheduling info as well
-            let cardScheduleInfoList: CardScheduleInfo[] =
-                NoteCardScheduleParser.createCardScheduleInfoList(question.questionText.original);
+            let cardScheduleInfoList: RepItemScheduleInfo[] =
+                DataStore.getInstance().questionCreateSchedule(
+                    question.questionText.original,
+                    null,
+                );
 
             // we have some extra scheduling dates to delete
             const correctLength = cardFrontBackList.length;
@@ -168,7 +176,7 @@ export class NoteQuestionParser {
 
     private createCardList(
         cardFrontBackList: CardFrontBack[],
-        cardScheduleInfoList: CardScheduleInfo[],
+        cardScheduleInfoList: RepItemScheduleInfo[],
     ): Card[] {
         const siblings: Card[] = [];
 
@@ -177,15 +185,15 @@ export class NoteQuestionParser {
             const { front, back } = cardFrontBackList[i];
 
             const hasScheduleInfo: boolean = i < cardScheduleInfoList.length;
-            const schedule: CardScheduleInfo = cardScheduleInfoList[i];
+            const schedule: RepItemScheduleInfo = cardScheduleInfoList[i];
 
             const cardObj: Card = new Card({
                 front,
                 back,
                 cardIdx: i,
             });
-            cardObj.scheduleInfo =
-                hasScheduleInfo && !schedule.isDummyScheduleForNewCard() ? schedule : null;
+
+            cardObj.scheduleInfo = hasScheduleInfo ? schedule : null;
 
             siblings.push(cardObj);
         }
@@ -311,7 +319,7 @@ export class NoteQuestionParser {
         return new TopicPathList(list, lineNum);
     }
 
-    private createTopicPathList_FromSingleTag(tagCache: TagCache): TopicPathList {
+    private createTopicPathListFromSingleTag(tagCache: TagCache): TopicPathList {
         const list: TopicPath[] = [TopicPath.getTopicPathFromTag(tagCache.tag)];
         return new TopicPathList(list, tagCache.position.start.line);
     }
@@ -351,12 +359,9 @@ export class NoteQuestionParser {
                 // if nothing matched, then use the first one
                 // This could occur if the only topic tags present are question specific
                 if (!result && this.flashcardTagList.length > 0) {
-                    result = this.createTopicPathList_FromSingleTag(this.flashcardTagList[0]);
+                    result = this.createTopicPathListFromSingleTag(this.flashcardTagList[0]);
                 }
             }
-        }
-        if (!result && this.settings.trackedNoteToDecks && this.folderTopicPath) {
-            result = new TopicPathList([this.folderTopicPath]);
         }
         return result;
     }

@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "--리뷰: ${dueNotesCount} 노트, ${dueFlashcardsCount} 카드 남았습니다.",
     SYNC_TIME_TAKEN: "동기화에 ${t}밀리초 걸렸습니다",
     NOTE_IN_IGNORED_FOLDER: "노트가 무시된 폴더 아래에 저장되어 있습니다. (설정을 확인해주세요)",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE: "리뷰를 하기위해 노트에 적절히 태그해주세요. (설정을 확인해주세요)",
     RESPONSE_RECEIVED: "요청이 완료되었습니다",
     NO_DECK_EXISTS: "${deckName}이라는 이름의 덱이 존재하지 않습니다.",
@@ -57,32 +56,29 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition - 설정",
+    SETTINGS_HEADER: "Spaced Repetition",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
     GROUP_DATA_STORAGE: "Storage of Scheduling Data",
+    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: '더 많은 정보를 원하시면, <a href="${wiki_url}">wiki</a>를 확인해주세요.',
+    CHECK_WIKI: '더 많은 정보를 원하시면, <a href="${wikiUrl}">wiki</a>를 확인해주세요.',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "무시할 폴더들",
-    FOLDERS_TO_IGNORE_DESC: `폴더 경로를 빈 줄로 구분해서 입력해주세요. 'Templates Meta/Scripts' 와 같이 입력하는 것은 유효하지 않습니다.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "플래시카드",
     FLASHCARD_EASY_LABEL: "Easy Button Text",
     FLASHCARD_GOOD_LABEL: "Good Button Text",
@@ -90,6 +86,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     FLASHCARD_EASY_DESC: 'Customize the label for the "Easy" Button',
     FLASHCARD_GOOD_DESC: 'Customize the label for the "Good" Button',
     FLASHCARD_HARD_DESC: 'Customize the label for the "Hard" Button',
+    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
+    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "플래시카드 태그",
     FLASHCARD_TAGS_DESC:
         "태그를 공백 또는 빈 줄로 구분해서 입력해주세요. 예) '#flashcards #deck2 #deck3'",
@@ -107,6 +105,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     SHOW_CARD_CONTEXT: "카드의 문맥(context)을 표시하시겠습니까?",
     SHOW_CARD_CONTEXT_DESC:
         "카드에서 'Title > Heading 1 > Subheading > ... > Subheading' 의 표시를 할지 설정합니다.",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "플래시카드 높이 비율",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "모바일 버전 혹은 매우 큰 이미지가 있는 경우 100%로 설정해야 합니다.",
@@ -126,9 +127,18 @@ Note that this setting is common to both Flashcards and Notes.`,
         "Randomly (once all cards in previous deck reviewed)",
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Random card from random deck",
     DISABLE_CLOZE_CARDS: "빈 칸 채우기 카드를 비활성화하시겠습니까?",
-    CONVERT_HIGHLIGHTS_TO_CLOZES: "==hightlights== 를 빈 칸 채우기로 전환하시겠습니까?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES: "==highlights== 를 빈 칸 채우기로 전환하시겠습니까?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        '"빈 칸 채우기 패턴" 에서 <code>${defaultPattern}</code> 를 추가/제거하시겠습니까?',
     CONVERT_BOLD_TEXT_TO_CLOZES: "**bolded text** 를 빈 칸 채우기로 전환하시겠습니까?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        '"빈 칸 채우기 패턴" 에서 <code>${defaultPattern}</code> 를 추가/제거하시겠습니까?',
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "{{curly brackets}} 를 빈 칸 채우기로 전환하시겠습니까?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        '"빈 칸 채우기 패턴" 에서 <code>${defaultPattern}</code> 를 추가/제거하시겠습니까?',
+    CLOZE_PATTERNS: "빈 칸 채우기 패턴",
+    CLOZE_PATTERNS_DESC:
+        '빈 칸 채우기 패턴을 입력해주세요. 줄바꿈으로 구분합니다. Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "인라인 플래시카드 구분자",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "주의: 이 옵션을 수정한 후에는 이미 작성된 플래시카드를 수동으로 수정해야 함을 주의하십시오.",
@@ -137,6 +147,7 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTILINE_REVERSED_CARDS_SEPARATOR: "여러 줄 반전 플래시카드 구분자",
     MULTILINE_CARDS_END_MARKER: "클로즈와 다중 행 플래시카드의 끝을 나타내는 문자",
     NOTES: "노트",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Enable note review pane on startup",
     TAGS_TO_REVIEW: "리뷰에 사용할 태그",
     TAGS_TO_REVIEW_DESC:
@@ -144,23 +155,28 @@ Note that this setting is common to both Flashcards and Notes.`,
     OPEN_RANDOM_NOTE: "리뷰를 위해 랜덤 노트를 엽니다.",
     OPEN_RANDOM_NOTE_DESC: "이 옵션이 꺼져있으면, 노트는 중요도(페이지 랭크)에 따라 정렬됩니다.",
     AUTO_NEXT_NOTE: "리뷰 후에 다음 노트를 자동으로 엽니다.",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "파일 메뉴에서의 리뷰 옵션을 비활성화 합니다. 예) 리뷰: Easy Good Hard",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "이 옵션을 비활성화 한 후, 명령 단축키를 이용해 리뷰하실 수 있습니다. 이 옵션을 변경한 후에 옵시디언을 새로고침 하십시오.",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "파일 메뉴에서 검토 옵션을 활성화하세요 (예: 검토: 쉬움, 좋음, 어려움)",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "파일 메뉴에서 검토 옵션을 비활성화하면 플러그인 명령을 사용해 노트를 검토할 수 있으며, 정의된 경우에는 관련된 단축키도 사용할 수 있습니다.",
     MAX_N_DAYS_REVIEW_QUEUE: "오른쪽 패널에 표시할 최대 일수",
     MIN_ONE_DAY: "적어도 1이상이어야 합니다.",
     VALID_NUMBER_WARNING: "유효한 숫자를 입력해주세요.",
-    UI_PREFERENCES: "사용자 인터페이스 기본 설정",
-    OPEN_AS_TAB: "탭 모드",
-    OPEN_AS_TAB_DESC:
-        "이 옵션을 활성화하면 복습 인터페이스가 탭으로 열립니다. 비활성화하면 모달 창으로 열립니다.",
+    UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
+    SHOW_STATUS_BAR: "Show status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
+    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "덱 트리는 처음에 확장된 것으로 표시되어야 합니다.",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "같은 카드에 중첩된 덱을 접으려면 이 옵션을 끄십시오. 같은 파일에 여러 덱에 속한 카드가 있는 경우 유용합니다.",
     ALGORITHM: "알고리즘",
     CHECK_ALGORITHM_WIKI:
-        '더 많은 정보를 원하시면, <a href="${algo_url}">algorithm implementation</a>을 확인해주세요.',
+        '더 많은 정보를 원하시면, <a href="${algoUrl}">algorithm details</a>을 확인해주세요.',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "기본 ease",
     BASE_EASE_DESC: "최솟값 = 130, 적정치는 대략 250입니다.",
     BASE_EASE_MIN_WARNING: "기본 ease는 적어도 130 이어야 합니다.",
@@ -170,6 +186,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     EASY_BONUS_DESC:
         "쉬움(Easy) 보너스는 플래시카드/노트에서 좋음(Good)과 쉬움(Easy) 사이의 간격 차이를 설정할 수 있습니다. (최소 = 100%)",
     EASY_BONUS_MIN_WARNING: "쉬움(Easy) 보너스는 적어도 100이어야 합니다.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maximum interval in days",
     MAX_INTERVAL_DESC: "간격의 상한선을 둘 수 있습니다. (기본값 = 100년)",
     MAX_INTERVAL_MIN_WARNING: "최대 간격은 적어도 1일이어야 합니다.",
@@ -183,9 +203,12 @@ Note that this setting is common to both Flashcards and Notes.`,
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "로깅",
-    DISPLAY_DEBUG_INFO: "디버깅 정보를 개발자 콘솔에 표시하시겠습니까",
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO: "디버깅 정보를 개발자 콘솔에 표시하시겠습니까",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
@@ -253,12 +276,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     INTERVALS_SUMMARY: "평균 간격: ${avg}, 가장 긴 간격: ${longest}",
     EASES: "Eases",
     EASES_SUMMARY: "Average ease: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "카드 타입",
     CARD_TYPES_DESC: "여기에는 묻어둔 카드도 포함됩니다.",
     CARD_TYPE_NEW: "New",
     CARD_TYPE_YOUNG: "Young",
     CARD_TYPE_MATURE: "Mature",
     CARD_TYPES_SUMMARY: "전체 카드 수: ${totalCardsCount}",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
     REVIEWED_TODAY: "Reviewed today",
     REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
     NEW_LEARNED: "New Learned",

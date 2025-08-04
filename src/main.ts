@@ -9,7 +9,7 @@ import {
 } from "obsidian";
 import * as graph from "pagerank.js";
 
-import { DEFAULT_SETTINGS, SRSettings, SRSettingTab, upgradeSettings } from "src/settings";
+import { DEFAULT_SETTINGS, SettingsUtil, SRSettings, upgradeSettings } from "src/settings";
 import { FlashcardModal } from "src/gui/FlashcardModal";
 import { StatsModal } from "src/gui/StatsModal";
 import { REVIEW_QUEUE_VIEW_TYPE, ReviewQueueListView } from "src/gui/Sidebar";
@@ -43,8 +43,7 @@ import { NoteEaseList } from "./NoteEaseList";
 import { QuestionPostponementList } from "./QuestionPostponementList";
 import { TextDirection } from "./util/TextDirection";
 import { convertToStringOrEmpty, isEqualOrSubPath } from "./util/utils";
-import { generateParser } from "./generateParser";
-import { setDebugParser } from "./parser";
+import { setDebugParser } from "src/parser";
 
 // https://github.com/martin-jw/obsidian-recall
 import { DataStore } from "./dataStore/data";
@@ -70,6 +69,7 @@ import { MixQueSet } from "./dataStore/mixQueSet";
 import { Iadapter } from "./dataStore/adapter";
 import TabViewManager from "src/gui/TabViewManager";
 import { TabView } from "src/gui/TabView";
+import { SRSettingTab } from "src/gui/settings";
 
 interface PluginData {
     settings: SRSettings;
@@ -135,8 +135,6 @@ export default class SRPlugin extends Plugin {
         return SRPlugin._instance;
     }
 
-    private debouncedGenerateParserTimeout: number | null = null;
-
     async onload(): Promise<void> {
         // Closes all still open tab views when the plugin is loaded, because it causes bugs / empty windows otherwise
         this.tabViewManager = new TabViewManager(this);
@@ -179,7 +177,7 @@ export default class SRPlugin extends Plugin {
         MixQueSet.create(settings.mixDue, settings.mixNew, settings.mixCard, settings.mixNote);
         this.commands = new Commands(this);
         this.commands.addCommands();
-        if (this.data.settings.showDebugMessages) {
+        if (this.data.settings.showSchedulingDebugMessages) {
             this.commands.addDebugCommands();
         }
 
@@ -236,7 +234,7 @@ export default class SRPlugin extends Plugin {
         this.addRibbonIcon("SpacedRepIcon", t("REVIEW_CARDS"), async () => {
             if (!this.syncLock) {
                 await this.sync();
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review);
                 } else {
                     this.openFlashcardModal(
@@ -315,7 +313,7 @@ export default class SRPlugin extends Plugin {
 
                 await this.sync();
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review);
                 } else {
                     this.openFlashcardModal(
@@ -332,7 +330,7 @@ export default class SRPlugin extends Plugin {
             name: t("CRAM_ALL_CARDS"),
             callback: async () => {
                 await this.sync();
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Cram);
                 } else {
                     this.openFlashcardModal(
@@ -353,7 +351,7 @@ export default class SRPlugin extends Plugin {
                     return;
                 }
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Review, openFile);
                 } else {
                     this.openFlashcardModalForSingleNote(openFile, FlashcardReviewMode.Review);
@@ -370,7 +368,7 @@ export default class SRPlugin extends Plugin {
                     return;
                 }
 
-                if (this.data.settings.openViewAsTab) {
+                if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Cram, openFile);
                 } else {
                     this.openFlashcardModalForSingleNote(openFile, FlashcardReviewMode.Cram);
@@ -549,11 +547,11 @@ export default class SRPlugin extends Plugin {
         this.cardStats = calc.calculate(this.deckTree);
         setDueDates(this.cardStats.delayedDays.dict, this.cardStats.delayedDays.dict);
 
-        if (this.data.settings.showDebugMessages) {
+        if (this.data.settings.showSchedulingDebugMessages) {
             this.showSyncInfo();
         }
 
-        if (this.data.settings.showDebugMessages) {
+        if (this.data.settings.showSchedulingDebugMessages) {
             console.log(
                 "SR: " +
                     t("SYNC_TIME_TAKEN", {
@@ -721,22 +719,18 @@ export default class SRPlugin extends Plugin {
 
         const tags = getAllTags(fileCachedData) || [];
         let shouldIgnore = true;
-        if (
-            this.data.settings.noteFoldersToIgnore.some((folder) =>
-                isEqualOrSubPath(note.path, folder),
-            )
-        ) {
+        if (SettingsUtil.isPathInNoteIgnoreFolder(this.data.settings, note.path)) {
             new Notice(t("NOTE_IN_IGNORED_FOLDER"));
             return false;
         }
-        if (
-            this.data.settings.tagsToIgnore.some((igntag) =>
-                tags.some((notetag) => notetag.startsWith(igntag)),
-            )
-        ) {
-            new Notice(t("NOTE_IN_IGNORED_TAGS"));
-            return false;
-        }
+        // if (
+        //     this.data.settings.tagsToIgnore.some((igntag) =>
+        //         tags.some((notetag) => notetag.startsWith(igntag)),
+        //     )
+        // ) {
+        //     new Notice(t("NOTE_IN_IGNORED_TAGS"));
+        //     return false;
+        // }
 
         for (const tag of tags) {
             if (
@@ -1020,32 +1014,11 @@ export default class SRPlugin extends Plugin {
         this.data.settings = Object.assign({}, DEFAULT_SETTINGS, this.data.settings);
         this.store = new DataStore(this.data.settings, this.manifest.dir);
         await this.store.load();
-        setDebugParser(this.data.settings.showPaserDebugMessages);
+        setDebugParser(this.data.settings.showParserDebugMessages);
     }
 
     async savePluginData(): Promise<void> {
         await this.saveData(this.data);
-    }
-
-    async debouncedGenerateParser(timeout_ms = 250) {
-        if (this.debouncedGenerateParserTimeout) {
-            clearTimeout(this.debouncedGenerateParserTimeout);
-        }
-
-        this.debouncedGenerateParserTimeout = window.setTimeout(async () => {
-            const parserOptions = {
-                singleLineCardSeparator: this.data.settings.singleLineCardSeparator,
-                singleLineReversedCardSeparator: this.data.settings.singleLineReversedCardSeparator,
-                multilineCardSeparator: this.data.settings.multilineCardSeparator,
-                multilineReversedCardSeparator: this.data.settings.multilineReversedCardSeparator,
-                multilineCardEndMarker: this.data.settings.multilineCardEndMarker,
-                convertHighlightsToClozes: this.data.settings.convertHighlightsToClozes,
-                convertBoldTextToClozes: this.data.settings.convertBoldTextToClozes,
-                convertCurlyBracketsToClozes: this.data.settings.convertCurlyBracketsToClozes,
-            };
-            generateParser(parserOptions);
-            this.debouncedGenerateParserTimeout = null;
-        }, timeout_ms);
     }
 
     private getActiveLeaf(type: string): WorkspaceLeaf | null {

@@ -54,13 +54,13 @@ $$\\huge F_g=\\frac {G m_1 m_2}{d^2}$$
     });
 
     test("Original and search strings has double dollar signs at the end", async () => {
-        const originalStr: string = `Some stuff at the start $$`;
+        const originalStr: string = "Some stuff at the start $$";
 
-        const searchStr: string = `start $$`;
+        const searchStr: string = "start $$";
 
-        const replacementStr: string = `start $$ and end`;
+        const replacementStr: string = "start $$ and end";
 
-        const expectedStr: string = `Some stuff at the start $$ and end`;
+        const expectedStr: string = "Some stuff at the start $$ and end";
 
         const actual: string = literalStringReplace(originalStr, searchStr, replacementStr);
         expect(actual).toEqual(expectedStr);
@@ -162,7 +162,7 @@ tags:
     });
 
     test("With frontmatter (and content)", () => {
-        let frontmatter: string = `---
+        const frontmatter: string = `---
 sr-due: 2024-01-17
 sr-interval: 16
 sr-ease: 278

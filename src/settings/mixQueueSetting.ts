@@ -1,8 +1,9 @@
 import { Setting } from "obsidian";
 import { MixQueSet } from "src/dataStore/mixQueSet";
+import { applySettingsUpdate } from "src/gui/settings";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { DEFAULT_SETTINGS, applySettingsUpdate } from "src/settings";
+import { DEFAULT_SETTINGS } from "src/settings";
 
 export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
     const settings = plugin.data.settings;

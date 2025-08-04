@@ -6,27 +6,27 @@ This is a modified version of [obsidian-spaced-repetition](https://github.com/st
 
 ## Features
 
--   [@st3v3nmw's ReadMe](https://github.com/st3v3nmw/obsidian-spaced-repetition#readme)
--   [中文使用手册](./docs/README_ZH.md)
+- [@st3v3nmw's ReadMe](https://github.com/st3v3nmw/obsidian-spaced-repetition#readme)
+- [中文使用手册](./docs/README_ZH.md)
 
--   merge [recall plugin](https://github.com/martin-jw/obsidian-recall) to use seperate file
-    -   setting where to save schedule info by Data Location
-        -   save on note file, just as used do.
-        -   save on seperate tracked_files.json.
-    -   setting convert tracked note to decks
-    -   switch Algorithm(only work on saving on seperate tracked_files.json.): Default, anki, [Fsrs](https://github.com/open-spaced-repetition/ts-fsrs)
-    -   file menu to tracknote/untracknote
--   show floatbar for reviewing response when reviewing note by click statusbar or review command or sidebar, and can set whether showing the interval or not;
--   Reviewing a Notes directly [#635];
--   when using fsrs, output `ob-revlog.csv`, to optimize the algorithm parameters using [optimizer](https://github.com/open-spaced-repetition/fsrs-optimizer) for better review;
--   Statistics: add note view statistics,and today review statistics;
--   Postpone notes/cards;
--   postpone to review after x days;
--   reschedule all scheduled items;
--   support multi-clozes;
--   setting `burySiblingCards` split into `burySiblingCards`(origin) and `burySiblingCardsByNoteReview`, and multi-clozes will not be buried;
--   Setting: Card index uses BlockID, which appends BlockID (e.g. `^blkid1`) to the card text, **will modify the original notes file**. Off by default, but card index may not be accurate enough;
--   Setting: Mix ondue and new notes queue when reviewing(default: 3 ondue notes, then 2 new notes);
+- merge [recall plugin](https://github.com/martin-jw/obsidian-recall) to use seperate file
+    - setting where to save schedule info by Data Location
+        - save on note file, just as used do.
+        - save on seperate tracked_files.json.
+    - setting convert tracked note to decks
+    - switch Algorithm(only work on saving on seperate tracked_files.json.): Default, anki, [Fsrs](https://github.com/open-spaced-repetition/ts-fsrs)
+    - file menu to tracknote/untracknote
+- show floatbar for reviewing response when reviewing note by click statusbar or review command or sidebar, and can set whether showing the interval or not;
+- Reviewing a Notes directly [#635];
+- when using fsrs, output `ob-revlog.csv`, to optimize the algorithm parameters using [optimizer](https://github.com/open-spaced-repetition/fsrs-optimizer) for better review;
+- Statistics: add note view statistics,and today review statistics;
+- Postpone notes/cards;
+- postpone to review after x days;
+- reschedule all scheduled items;
+- support multi-clozes;
+- setting `burySiblingCards` split into `burySiblingCards`(origin) and `burySiblingCardsByNoteReview`, and multi-clozes will not be buried;
+- Setting: Card index uses BlockID, which appends BlockID (e.g. `^blkid1`) to the card text, **will modify the original notes file**. Off by default, but card index may not be accurate enough;
+- Setting: Mix ondue and new notes queue when reviewing(default: 3 ondue notes, then 2 new notes);
 
 ## Maintainers Wanted
 
@@ -57,15 +57,13 @@ I develop this plugin as a hobby, spending my free time doing this. If you find 
 
 or buy original plugin author(@st3v3nmw) a coffee...
 
-## Supported By
-
 <a href='https://ko-fi.com/M4M44DEN6' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ---
 
 Thank you to everyone who has created a plugin that inspired me and I took code from.
 
--   first, thanks to [@st3v3nmw's obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) and [@martin-jw recall plugin](https://github.com/martin-jw/obsidian-recall)
--   floatbar(thanks to [@chetachi's cMenu](https://github.com/chetachiezikeuzor/cMenu-Plugin))
--   [Fsrs Algorithm](https://github.com/open-spaced-repetition)
--   ReleaseNotes(thanks to [@Zsolt Viczian Excalidraw](https://zsolt.blog))
+- first, thanks to [@st3v3nmw's obsidian-spaced-repetition](https://github.com/st3v3nmw/obsidian-spaced-repetition) and [@martin-jw recall plugin](https://github.com/martin-jw/obsidian-recall)
+- floatbar(thanks to [@chetachi's cMenu](https://github.com/chetachiezikeuzor/cMenu-Plugin))
+- [Fsrs Algorithm](https://github.com/open-spaced-repetition)
+- ReleaseNotes(thanks to [@Zsolt Viczian Excalidraw](https://zsolt.blog))

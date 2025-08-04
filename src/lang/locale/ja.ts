@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "レビュー: ${dueNotesCount}ノート, ${dueFlashcardsCount}カードが期日",
     SYNC_TIME_TAKEN: "同期に${t}msかかりました。",
     NOTE_IN_IGNORED_FOLDER: "ノートが無視するフォルダに保存されています(設定を確認してください)。",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE:
         "レビューを行うにはノートに対して正しくタグ付けしてください(設定を確認してください)。",
     RESPONSE_RECEIVED: "答えを受け取りました。",
@@ -58,32 +57,29 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition - 設定",
+    SETTINGS_HEADER: "Spaced Repetition",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
     GROUP_DATA_STORAGE: "Storage of Scheduling Data",
+    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: '詳細については<a href="${wiki_url}">wiki</a>を確認してください。',
+    CHECK_WIKI: '詳細については<a href="${wikiUrl}">wiki</a>を確認してください。',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "無視するフォルダ",
-    FOLDERS_TO_IGNORE_DESC: `フォルダパスを改行で区切って入力してください。"Templates Meta/Scripts" のようなスペースによる区切りでの書き方は無効です。.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "フラッシュカード",
     FLASHCARD_EASY_LABEL: "Easy Button Text",
     FLASHCARD_GOOD_LABEL: "Good Button Text",
@@ -91,6 +87,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     FLASHCARD_EASY_DESC: 'Customize the label for the "Easy" Button',
     FLASHCARD_GOOD_DESC: 'Customize the label for the "Good" Button',
     FLASHCARD_HARD_DESC: 'Customize the label for the "Hard" Button',
+    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
+    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "フラッシュカードに使用するタグ",
     FLASHCARD_TAGS_DESC:
         'タグをスペースまたは改行で区切って入力してください。例: "#flashcards #deck2 #deck3"',
@@ -109,6 +107,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     SHOW_CARD_CONTEXT: "カードにコンテキストを表示しますか？",
     SHOW_CARD_CONTEXT_DESC:
         "｢タイトル > 見出し 1 > 副見出し > ... > 副見出し｣の表示を行うかどうかを決めます。",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "フラッシュカードの縦サイズのパーセンテージ",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "モバイル版、または非常に大きなサイズの画像がある場合には100%にする必要があります。",
@@ -129,8 +130,17 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Random card from random deck",
     DISABLE_CLOZE_CARDS: "穴埋めカードを無効化しますか？",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "==ハイライト==を穴埋めとして使用しますか？",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
     CONVERT_BOLD_TEXT_TO_CLOZES: "**ボールド体**を穴埋めとして使用しますか？",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "{{中括弧}}を穴埋めとして使用しますか？",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        "このオプションを有効化すると、「穴埋めパターン」に${defaultPattern}が追加されます。",
+    CLOZE_PATTERNS: "穴埋めパターン",
+    CLOZE_PATTERNS_DESC:
+        '改行で区切って穴埋めパターンを入力してください。 Check the <a href="${docsUrl}">wiki</a> for guidance.',
     INLINE_CARDS_SEPARATOR: "インラインフラッシュカードに使用するセパレーター",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "このオプションを変更する場合には、作成済みのフラッシュカードを手動で編集し直す必要があることに注意してください。",
@@ -139,6 +149,7 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTILINE_REVERSED_CARDS_SEPARATOR: "複数行の表裏反転フラッシュカードに使用するセパレーター",
     MULTILINE_CARDS_END_MARKER: "クローズと複数行フラッシュカードの終わりを示す文字",
     NOTES: "ノート",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Enable note review pane on startup",
     TAGS_TO_REVIEW: "レビューに使用するタグ",
     TAGS_TO_REVIEW_DESC:
@@ -147,23 +158,28 @@ Note that this setting is common to both Flashcards and Notes.`,
     OPEN_RANDOM_NOTE_DESC:
         "このオプションが無効化されている状態では、ノートは重要度(ページランク)による順番で表示されます。",
     AUTO_NEXT_NOTE: "レビュー後に次のノートを自動的に開く",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "ファイルメニューでのレビューオプションを無効化(｢レビュー: Easy｣等の項目を非表示にする)",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "無効化した後、コマンドホットキーを使ってレビューすることが可能になります。このオプションを変更した場合にはObsidianをリロードしてください。",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "ファイルメニューでレビューオプションを有効にしてください（例: Easy, Good, Hard）",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "ファイルメニューでレビューオプションを無効にした場合、プラグインコマンドや、設定している場合は対応するホットキーを使用してメモをレビューできます。",
     MAX_N_DAYS_REVIEW_QUEUE: "右パネルに表示する最大の日数",
     MIN_ONE_DAY: "日数には1以上の数字を指定してください。",
     VALID_NUMBER_WARNING: "有効な数字を入力してください。",
-    UI_PREFERENCES: "ユーザー インターフェイスの設定",
-    OPEN_AS_TAB: "タブモード",
-    OPEN_AS_TAB_DESC:
-        "このオプションを有効にすると、復習画面がタブとして開きます。無効にすると、モーダルウィンドウとして開きます。",
+    UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
+    SHOW_STATUS_BAR: "Show status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
+    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "デッキ ツリーは最初は展開して表示する必要があります",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "これをオフにすると、同じカード内のネストされたデッキが折りたたまれます。同じファイルに多くのデッキに属するカードがある場合に便利です。",
     ALGORITHM: "アルゴリズム",
     CHECK_ALGORITHM_WIKI:
-        '詳細については<a href="${algo_url}">アルゴリズムの実装</a>を確認してください。',
+        '詳細については<a href="${algoUrl}">アルゴリズムの実装</a>を確認してください。',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "ベースの易しさ",
     BASE_EASE_DESC: "最小値は130ですが、 適正値はおおよそ250です。",
     BASE_EASE_MIN_WARNING: "ベースの易しさには130以上の数字を指定してください。",
@@ -173,6 +189,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     EASY_BONUS_DESC:
         "Easyボーナスによってフラッシュカード/ノートにおける間隔の差分を設定できます(最小値 = 100%)。",
     EASY_BONUS_MIN_WARNING: "Easyボーナスには100以上の数字を指定してください。",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maximum interval in days",
     MAX_INTERVAL_DESC: "間隔に上限値を設定することができます(デフォルト値 = 100年)。",
     MAX_INTERVAL_MIN_WARNING: "間隔の最大値には1以上の数字を指定してください。",
@@ -186,9 +206,12 @@ Note that this setting is common to both Flashcards and Notes.`,
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "ログ管理",
-    DISPLAY_DEBUG_INFO: "デベロッパーコンソールにてデバッグ情報を表示しますか",
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO: "デベロッパーコンソールにてデバッグ情報を表示しますか",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
@@ -256,12 +279,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     INTERVALS_SUMMARY: "間隔の平均値: ${avg}, 最長の間隔: ${longest}",
     EASES: "易しさ",
     EASES_SUMMARY: "易しさの平均値: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "カードタイプ",
     CARD_TYPES_DESC: "延期のカードがある場合にはこれに含まれます",
     CARD_TYPE_NEW: "新規",
     CARD_TYPE_YOUNG: "復習(初期)",
     CARD_TYPE_MATURE: "復習(後期)",
     CARD_TYPES_SUMMARY: "カードの合計: ${totalCardsCount}枚",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
     REVIEWED_TODAY: "Reviewed today",
     REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
     NEW_LEARNED: "New Learned",

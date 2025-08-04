@@ -5,5 +5,5 @@ node_modules
 .pnp.cjs
 .pnp.loader.mjs
 pnpm-lock.yaml
-tests/e2e/vault/
-docs
+tests/vaults/
+docs/user-doco-vault/

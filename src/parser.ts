@@ -1,7 +1,6 @@
-import { CardType } from "./Question";
+import { ClozeCrafter } from "clozecraft";
 
-import { Parser } from "peggy";
-import { generateParser } from "./generateParser";
+import { CardType } from "src/Question";
 
 export let debugParser = false;
 
@@ -11,35 +10,7 @@ export interface ParserOptions {
     multilineCardSeparator: string;
     multilineReversedCardSeparator: string;
     multilineCardEndMarker: string;
-    convertHighlightsToClozes: boolean;
-    convertBoldTextToClozes: boolean;
-    convertCurlyBracketsToClozes: boolean;
-}
-
-export function areParserOptionsEqual(options1: ParserOptions, options2: ParserOptions): boolean {
-    return (
-        options1.singleLineCardSeparator === options2.singleLineCardSeparator &&
-        options1.singleLineReversedCardSeparator === options2.singleLineReversedCardSeparator &&
-        options1.multilineCardSeparator === options2.multilineCardSeparator &&
-        options1.multilineReversedCardSeparator === options2.multilineReversedCardSeparator &&
-        options1.multilineCardEndMarker === options2.multilineCardEndMarker &&
-        options1.convertHighlightsToClozes === options2.convertHighlightsToClozes &&
-        options1.convertBoldTextToClozes === options2.convertBoldTextToClozes &&
-        options1.convertCurlyBracketsToClozes === options2.convertCurlyBracketsToClozes
-    );
-}
-
-export function copyParserOptions(src: ParserOptions): ParserOptions {
-    return {
-        singleLineCardSeparator: src.singleLineCardSeparator,
-        singleLineReversedCardSeparator: src.singleLineReversedCardSeparator,
-        multilineCardSeparator: src.multilineCardSeparator,
-        multilineReversedCardSeparator: src.multilineReversedCardSeparator,
-        multilineCardEndMarker: src.multilineCardEndMarker,
-        convertHighlightsToClozes: src.convertHighlightsToClozes,
-        convertBoldTextToClozes: src.convertBoldTextToClozes,
-        convertCurlyBracketsToClozes: src.convertCurlyBracketsToClozes,
-    };
+    clozePatterns: string[];
 }
 
 export function setDebugParser(value: boolean) {
@@ -56,7 +27,7 @@ export class ParsedQuestionInfo {
 
     constructor(cardType: CardType, text: string, firstLineNum: number, lastLineNum: number) {
         this.cardType = cardType;
-        this.text = text; // text.replace(/\s*$/gm, ""); // reproduce the same old behavior as when adding new lines with trimEnd. It is not clear why we need it in real life. However, it is needed to pass the tests.
+        this.text = text;
         this.firstLineNum = firstLineNum;
         this.lastLineNum = lastLineNum;
     }
@@ -66,56 +37,170 @@ export class ParsedQuestionInfo {
     }
 }
 
+function markerInsideCodeBlock(text: string, marker: string, markerIndex: number): boolean {
+    let goingBack = markerIndex - 1,
+        goingForward = markerIndex + marker.length;
+    let backTicksBefore = 0,
+        backTicksAfter = 0;
+
+    while (goingBack >= 0) {
+        if (text[goingBack] === "`") backTicksBefore++;
+        goingBack--;
+    }
+
+    while (goingForward < text.length) {
+        if (text[goingForward] === "`") backTicksAfter++;
+        goingForward++;
+    }
+
+    // If there's an odd number of backticks before and after,
+    //  the marker is inside an inline code block
+    return backTicksBefore % 2 === 1 && backTicksAfter % 2 === 1;
+}
+
+function hasInlineMarker(text: string, marker: string): boolean {
+    // No marker provided
+    if (marker.length == 0) return false;
+
+    // Check if the marker is in the text
+    const markerIdx = text.indexOf(marker);
+    if (markerIdx === -1) return false;
+
+    // Check if it's inside an inline code block
+    return !markerInsideCodeBlock(text, marker, markerIdx);
+}
+
 /**
  * Returns flashcards found in `text`
  *
  * It is best that the text does not contain frontmatter, see extractFrontmatter for reasoning
  *
- * EXCEPTIONS: The underlying peggy parser can throw an exception if the input it receives does
- * not conform to the grammar it was built with. However, the grammar used in generating this
- * parser, see generateParser(), intentionally matches all input text and therefore
- * this function should not throw an exception.
- *
  * @param text - The text to extract flashcards from
- * @param options - Plugin's settings
- * @returns An array of [CardType, card text, line number] tuples
+ * @param ParserOptions - Parser options
+ * @returns An array of parsed question information
  */
-export function parseEx(text: string, options: ParserOptions): ParsedQuestionInfo[] {
+export function parse(text: string, options: ParserOptions): ParsedQuestionInfo[] {
     if (debugParser) {
         console.log("Text to parse:\n<<<" + text + ">>>");
     }
 
-    let cards: ParsedQuestionInfo[] = [];
-    try {
-        if (!options) throw Error("No parser options provided.");
+    // Sort inline separators by length, longest first
+    const inlineSeparators = [
+        { separator: options.singleLineCardSeparator, type: CardType.SingleLineBasic },
+        { separator: options.singleLineReversedCardSeparator, type: CardType.SingleLineReversed },
+    ];
+    inlineSeparators.sort((a, b) => b.separator.length - a.separator.length);
 
-        const parser: Parser = generateParser(options);
+    const cards: ParsedQuestionInfo[] = [];
+    let cardText = "";
+    let cardType: CardType | null = null;
+    let firstLineNo = 0,
+        lastLineNo = 0;
 
-        // Use this function when you call the parse method
-        //
-        // The few extra lines empty lines appended to the end of the text "\n\n\n"
-        // is a trick to avoid unnecessarily complex grammar rules for the parer,
-        // which differen between the case when the last line ends with "\n" or not.
-        //
-        // Prusamably a single "\n" would be sufficient, but a few more do not bother.
-        cards = parser.parse(text + "\n\n\n", {
-            CardType,
-            createParsedQuestionInfo: (
-                cardType: CardType,
-                text: string,
-                firstLineNum: number,
-                lastLineNum: number,
-            ) => {
-                return new ParsedQuestionInfo(cardType, text, firstLineNum, lastLineNum);
-            },
-        });
-    } catch (error) {
-        console.error("Unexpected error:", error);
+    const clozecrafter = new ClozeCrafter(options.clozePatterns);
+    const lines: string[] = text.replaceAll("\r\n", "\n").split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        const currentLine = lines[i],
+            currentTrimmed = lines[i].trim();
+
+        // Skip everything in HTML comments
+        if (currentLine.startsWith("<!--") && !currentLine.startsWith("<!--SR:")) {
+            while (i + 1 < lines.length && !currentLine.includes("-->")) i++;
+            i++;
+            continue;
+        }
+
+        // Have we reached the end of a card?
+        const isEmptyLine = currentTrimmed.length == 0;
+        const hasMultilineCardEndMarker =
+            options.multilineCardEndMarker && currentTrimmed == options.multilineCardEndMarker;
+        if (
+            // We've probably reached the end of a card
+            (isEmptyLine && !options.multilineCardEndMarker) ||
+            // Empty line & we're not picking up any card
+            (isEmptyLine && cardType == null) ||
+            // We've reached the end of a multi line card &
+            //  we're using custom end markers
+            hasMultilineCardEndMarker
+        ) {
+            if (cardType) {
+                // Create a new card
+                lastLineNo = i - 1;
+                cards.push(
+                    new ParsedQuestionInfo(cardType, cardText.trimEnd(), firstLineNo, lastLineNo),
+                );
+                cardType = null;
+            }
+
+            cardText = "";
+            firstLineNo = i + 1;
+            continue;
+        }
+
+        // Update card text
+        if (cardText.length > 0) {
+            cardText += "\n";
+        }
+        cardText += currentLine.trimEnd();
+
+        // Pick up inline cards
+        for (const { separator, type } of inlineSeparators) {
+            if (hasInlineMarker(currentLine, separator)) {
+                cardType = type;
+                break;
+            }
+        }
+
+        if (cardType == CardType.SingleLineBasic || cardType == CardType.SingleLineReversed) {
+            cardText = currentLine;
+            firstLineNo = i;
+
+            // Pick up scheduling information if present
+            if (i + 1 < lines.length && lines[i + 1].startsWith("<!--SR:")) {
+                cardText += "\n" + lines[i + 1];
+                i++;
+            }
+
+            lastLineNo = i;
+            cards.push(new ParsedQuestionInfo(cardType, cardText, firstLineNo, lastLineNo));
+
+            cardType = null;
+            cardText = "";
+        } else if (currentTrimmed === options.multilineCardSeparator) {
+            // Ignore card if the front of the card is empty
+            if (cardText.length > 1) {
+                // Pick up multiline basic cards
+                cardType = CardType.MultiLineBasic;
+            }
+        } else if (currentTrimmed === options.multilineReversedCardSeparator) {
+            // Ignore card if the front of the card is empty
+            if (cardText.length > 1) {
+                // Pick up multiline basic cards
+                cardType = CardType.MultiLineReversed;
+            }
+        } else if (currentLine.startsWith("```") || currentLine.startsWith("~~~")) {
+            // Pick up codeblocks
+            const codeBlockClose = currentLine.match(/`+|~+/)[0];
+            while (i + 1 < lines.length && !lines[i + 1].startsWith(codeBlockClose)) {
+                i++;
+                cardText += "\n" + lines[i];
+            }
+            cardText += "\n" + codeBlockClose;
+            i++;
+        } else if (cardType === null && clozecrafter.isClozeNote(currentLine)) {
+            // Pick up cloze cards
+            cardType = CardType.Cloze;
+        }
+    }
+
+    // Do we have a card left in the queue?
+    if (cardType && cardText) {
+        lastLineNo = lines.length - 1;
+        cards.push(new ParsedQuestionInfo(cardType, cardText.trimEnd(), firstLineNo, lastLineNo));
     }
 
     if (debugParser) {
-        console.log("Parsed cards:");
-        console.log(cards);
+        console.log("Parsed cards:\n", cards);
     }
 
     return cards;

@@ -11,10 +11,11 @@ import { TextDirection } from "src/util/TextDirection";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 import { Card } from "src/Card";
 
-let parserWithDefaultSettings: NoteQuestionParser = createTest_NoteQuestionParser(DEFAULT_SETTINGS);
-let settings_ConvertFoldersToDecks: SRSettings = { ...DEFAULT_SETTINGS };
+const parserWithDefaultSettings: NoteQuestionParser =
+    createTest_NoteQuestionParser(DEFAULT_SETTINGS);
+const settings_ConvertFoldersToDecks: SRSettings = { ...DEFAULT_SETTINGS };
 settings_ConvertFoldersToDecks.convertFoldersToDecks = true;
-let parser_ConvertFoldersToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
+const parser_ConvertFoldersToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
     settings_ConvertFoldersToDecks,
 );
 
@@ -24,9 +25,9 @@ beforeAll(() => {
 
 describe("No flashcard questions", () => {
     test("No questions in the text", async () => {
-        let noteText: string = "An interesting note, but no questions";
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteText: string = "An interesting note, but no questions";
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
         expect(
             await parserWithDefaultSettings.createQuestionList(
@@ -39,9 +40,9 @@ describe("No flashcard questions", () => {
     });
 
     test("A question in the text, but no flashcard tag", async () => {
-        let noteText: string = "A::B";
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteText: string = "A::B";
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
         expect(
             await parserWithDefaultSettings.createQuestionList(
@@ -56,22 +57,22 @@ describe("No flashcard questions", () => {
 
 describe("Single question in the text (without block identifier)", () => {
     test("SingleLineBasic: No schedule info", async () => {
-        let noteText: string = `#flashcards
+        const noteText: string = `#flashcards
 A::B
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: null as CardScheduleInfo,
         };
-        let expected = [
+        const expected = [
             {
                 questionType: CardType.SingleLineBasic,
                 topicPathList: TopicPathList.fromPsv("#flashcards", 0),
                 questionText: {
-                    original: `A::B`,
+                    original: "A::B",
                     actualQuestion: "A::B",
                 },
 
@@ -91,15 +92,15 @@ A::B
     });
 
     test("SingleLineBasic: With schedule info", async () => {
-        let noteText: string = `#flashcards/test
+        const noteText: string = `#flashcards/test
 A::B
 <!--SR:!2023-09-03,1,230-->
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let delayDays = 3 - 6;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const delayDays = 3 - 6;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: CardScheduleInfo.fromDueDateStr(
                 "2023-09-03",
@@ -108,7 +109,7 @@ A::B
                 delayDays * TICKS_PER_DAY,
             ),
         };
-        let expected = [
+        const expected = [
             {
                 questionType: CardType.SingleLineBasic,
                 topicPathList: TopicPathList.fromPsv("#flashcards/test", 0),
@@ -135,18 +136,18 @@ A::B
     });
 
     test("SingleLineBasic: Multiple topics", async () => {
-        let noteText: string = `#flashcards/science #flashcards/poetry
+        const noteText: string = `#flashcards/science #flashcards/poetry
 A::B
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let expected = [
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const expected = [
             {
                 questionType: CardType.SingleLineBasic,
                 topicPathList: TopicPathList.fromPsv("#flashcards/science|#flashcards/poetry", 0),
                 questionText: {
-                    original: `A::B`,
+                    original: "A::B",
                     actualQuestion: "A::B",
                 },
             },
@@ -163,7 +164,7 @@ A::B
 
     // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/908
     test("SingleLineBasic: Multiple tags in note (including non-flashcard ones)", async () => {
-        let noteText: string = `---
+        const noteText: string = `---
 created: 2024-03-11 10:41
 tags:
   - flashcards
@@ -175,10 +176,10 @@ tags:
 ?
 In computer-science, a *heap* is a tree-based data-structure, that satisfies the *heap property*. A heap is a complete *binary-tree*!
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let expected = [
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const expected = [
             {
                 questionType: CardType.MultiLineBasic,
                 // Explicitly checking that #data-structure and #2024/03-11 are not included
@@ -198,17 +199,17 @@ In computer-science, a *heap* is a tree-based data-structure, that satisfies the
 
 describe("Single question in the text (with block identifier)", () => {
     test("SingleLineBasic: No schedule info", async () => {
-        let noteText: string = `#flashcards
+        const noteText: string = `#flashcards
 A::B ^d7cee0
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: null as CardScheduleInfo,
         };
-        let expected = [
+        const expected = [
             {
                 topicPathList: {
                     list: [TopicPath.getTopicPathFromTag("#flashcards")],
@@ -219,7 +220,7 @@ A::B ^d7cee0
                     firstLineNum: 1,
                 },
                 questionText: {
-                    original: `A::B ^d7cee0`,
+                    original: "A::B ^d7cee0",
                     actualQuestion: "A::B",
                     obsidianBlockId: "^d7cee0",
                 },
@@ -240,15 +241,15 @@ A::B ^d7cee0
     });
 
     test("SingleLineBasic: With schedule info (next line)", async () => {
-        let noteText: string = `#flashcards/test
+        const noteText: string = `#flashcards/test
 A::B ^d7cee0
 <!--SR:!2023-09-03,1,230-->
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let delayDays = 3 - 6;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const delayDays = 3 - 6;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: CardScheduleInfo.fromDueDateStr(
                 "2023-09-03",
@@ -257,7 +258,7 @@ A::B ^d7cee0
                 delayDays * TICKS_PER_DAY,
             ),
         };
-        let expected = [
+        const expected = [
             {
                 topicPathList: {
                     list: [TopicPath.getTopicPathFromTag("#flashcards/test")],
@@ -290,14 +291,14 @@ A::B ^d7cee0
     });
 
     test("SingleLineBasic: With schedule info (same line)", async () => {
-        let noteText: string = `#flashcards/test
+        const noteText: string = `#flashcards/test
 A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let delayDays = 3 - 6;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const delayDays = 3 - 6;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: CardScheduleInfo.fromDueDateStr(
                 "2023-09-03",
@@ -306,7 +307,7 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
                 delayDays * TICKS_PER_DAY,
             ),
         };
-        let expected = [
+        const expected = [
             {
                 topicPathList: {
                     list: [TopicPath.getTopicPathFromTag("#flashcards/test")],
@@ -317,7 +318,7 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
                     firstLineNum: 1,
                 },
                 questionText: {
-                    original: `A::B <!--SR:!2023-09-03,1,230--> ^d7cee0`,
+                    original: "A::B <!--SR:!2023-09-03,1,230--> ^d7cee0",
                     actualQuestion: "A::B",
                     textHash: "1c6b0b01215dc4",
                     obsidianBlockId: "^d7cee0",
@@ -338,14 +339,14 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
     });
 
     test("SingleLineBasic: With topic tag and schedule info (same line)", async () => {
-        let noteText: string = `
+        const noteText: string = `
 #flashcards/test A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let delayDays = 3 - 6;
-        let card1 = {
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const delayDays = 3 - 6;
+        const card1 = {
             cardIdx: 0,
             scheduleInfo: CardScheduleInfo.fromDueDateStr(
                 "2023-09-03",
@@ -354,7 +355,7 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
                 delayDays * TICKS_PER_DAY,
             ),
         };
-        let expected = [
+        const expected = [
             {
                 topicPathList: {
                     list: [TopicPath.getTopicPathFromTag("#flashcards/test")],
@@ -365,7 +366,7 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
                     firstLineNum: 1,
                 },
                 questionText: {
-                    original: `#flashcards/test A::B <!--SR:!2023-09-03,1,230--> ^d7cee0`,
+                    original: "#flashcards/test A::B <!--SR:!2023-09-03,1,230--> ^d7cee0",
                     actualQuestion: "A::B",
                     obsidianBlockId: "^d7cee0",
                 },
@@ -387,13 +388,13 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
 
 describe("Multiple questions in the text", () => {
     test("SingleLineBasic: No schedule info", async () => {
-        let noteText: string = `#flashcards/test
+        const noteText: string = `#flashcards/test
 Q1::A1
 Q2::A2
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -403,15 +404,15 @@ Q2::A2
     });
 
     test("SingleLineBasic: Note topic applies to all questions when not overriden", async () => {
-        let noteText: string = `
+        const noteText: string = `
 Q1::A1
 Q2::A2
 Q3::A3
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
-        let questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
+        const folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
+        const questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -424,20 +425,20 @@ Q3::A3
     });
 
     test("SingleLineBasic: Note topic applies to all questions when trackedNoteToDecks", async () => {
-        let noteText: string = `
+        const noteText: string = `
 Q1::A1
 Q2::A2
 Q3::A3
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
-        let settings_trackedNoteToDecks: SRSettings = { ...DEFAULT_SETTINGS };
+        const folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
+        const settings_trackedNoteToDecks: SRSettings = { ...DEFAULT_SETTINGS };
         settings_trackedNoteToDecks.trackedNoteToDecks = true;
-        let parser_trackedNoteToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
+        const parser_trackedNoteToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
             settings_trackedNoteToDecks,
         );
-        let questionList: Question[] = await parser_trackedNoteToDecks.createQuestionList(
+        const questionList: Question[] = await parser_trackedNoteToDecks.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -450,7 +451,7 @@ Q3::A3
     });
 
     test("SingleLineBasic: Tags within frontmatter applies to all questions when not overriden", async () => {
-        let noteText: string = `---
+        const noteText: string = `---
 sr-due: 2024-01-17
 sr-interval: 16
 sr-ease: 278
@@ -461,10 +462,10 @@ Q1::A1
 Q2::A2
 Q3::A3
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -478,7 +479,7 @@ Q3::A3
 
     test("MultiLine: Space before multi line separator", async () => {
         // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/853
-        let noteText: string = `
+        const noteText: string = `
 #flashcards/test/b853 
 
 Question::Answer
@@ -492,8 +493,8 @@ Multiline question2
 Multiline answer2
  
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
-        let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             TopicPath.emptyPath,
@@ -527,20 +528,20 @@ Multiline answer2
 
 describe("Handling tags within note", () => {
     describe("Settings mode: Convert folder path to tag", () => {
-        let settings: SRSettings = { ...DEFAULT_SETTINGS };
+        const settings: SRSettings = { ...DEFAULT_SETTINGS };
         settings.convertFoldersToDecks = true;
-        let parser2: NoteQuestionParser = createTest_NoteQuestionParser(settings);
+        const parser2: NoteQuestionParser = createTest_NoteQuestionParser(settings);
 
         test("Folder path applies to all questions within note", async () => {
-            let noteText: string = `
+            const noteText: string = `
     Q1::A1
     Q2::A2
     Q3::A3
     `;
 
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
-            let folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
-            let questionList: Question[] = await parser2.createQuestionList(
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
+            const questionList: Question[] = await parser2.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -552,13 +553,13 @@ describe("Handling tags within note", () => {
         });
 
         test("Topic tag within note is ignored (outside all questions)", async () => {
-            let noteText: string = `#flashcards/test
+            const noteText: string = `#flashcards/test
 Q1::A1
     `;
 
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
-            let folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
-            let questionList: Question[] = await parser2.createQuestionList(
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
+            const questionList: Question[] = await parser2.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -572,13 +573,13 @@ Q1::A1
         // It could be argued that topic tags within a question should override the folder based topic
         test("Topic tag within note is ignored (within specific question)", async () => {
             // The tag "#flashcards/test" specifies a different topic than the folderTopicPath below
-            let noteText: string = `
+            const noteText: string = `
 #flashcards/test Q1::A1
     `;
 
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
-            let folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
-            let questionList: Question[] = await parser2.createQuestionList(
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const folderTopicPath: TopicPath = new TopicPath(["folder", "subfolder"]);
+            const questionList: Question[] = await parser2.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -593,16 +594,16 @@ Q1::A1
         expect(parserWithDefaultSettings.settings.convertFoldersToDecks).toEqual(false);
 
         test("Topic tag before first question applies to all questions", async () => {
-            let noteText: string = `#flashcards/test
+            const noteText: string = `#flashcards/test
     Q1::A1
     Q2::A2
     Q3::A3
     `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let expectedPath: string = "#flashcards/test";
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+            const expectedPath: string = "#flashcards/test";
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -616,7 +617,7 @@ Q1::A1
 
         // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/915#issuecomment-2017508391
         test("Topic tag on first line after frontmatter", async () => {
-            let noteText: string = `---
+            const noteText: string = `---
 created: 2023-10-26T07:34
 ---
 #flashcards/English 
@@ -625,18 +626,18 @@ created: 2023-10-26T07:34
 
 Stop trying ==to milk the crowd== for sympathy. // доить толпу
 `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let expectedPath: string = "#flashcards/English";
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let expected = [
+            const expectedPath: string = "#flashcards/English";
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const expected = [
                 {
                     questionType: CardType.Cloze,
                     topicPathList: TopicPathList.fromPsv("#flashcards/English", 3), // #flashcards/English is on the 4th line, line number 3
                     cards: [
                         new Card({
-                            front: "Stop trying <span style='color:#2196f3'>[............]</span> for sympathy. // доить толпу",
-                            back: `Stop trying <span style='color:#2196f3'>to milk the crowd</span> for sympathy. // доить толпу`,
+                            front: "Stop trying <span style='color:#2196f3'>[...]</span> for sympathy. // доить толпу",
+                            back: "Stop trying <span style='color:#2196f3'>to milk the crowd</span> for sympathy. // доить толпу",
                         }),
                     ],
                 },
@@ -652,15 +653,15 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
         });
 
         test("Topic tag within question overrides the note topic, for that topic only", async () => {
-            let noteText: string = `#flashcards/test
+            const noteText: string = `#flashcards/test
     Q1::A1
     #flashcards/examination Q2::A2
     Q3::This has the "flashcards/test" topic, not "flashcards/examination"
     `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -673,17 +674,17 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
         });
 
         test("First topic tag within note (outside questions) is used as the note's topic tag, even if it appears after the first question", async () => {
-            let noteText: string = `
+            const noteText: string = `
     Q1::A1 This has the "flashcards/test" topic, even though the first topic tag is after this line in the file
     #flashcards/test
     Q2::A2
     Q3::A3
     `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let expectedPath: TopicPath = new TopicPath(["flashcards", "test"]);
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+            const expectedPath: TopicPath = new TopicPath(["flashcards", "test"]);
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -695,17 +696,17 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
         });
 
         test("The last topic tag within note prior to the question is used as the note's topic tag", async () => {
-            let noteText: string = `
+            const noteText: string = `
     Q1::A1
     #flashcards/test
     Q2::A2
     #flashcards/examination
     Q3::This has the "flashcards/examination" topic, not "flashcards/test"
     `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -722,14 +723,14 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
         expect(parserWithDefaultSettings.settings.convertFoldersToDecks).toEqual(false);
 
         test("Leading white space before topic tag", async () => {
-            let noteText: string = `
+            const noteText: string = `
             #flashcards/science Q5::A5 <!--SR:!2023-09-02,4,270-->
     `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let expectedPath: TopicPath = new TopicPath(["flashcards", "science"]);
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
+            const expectedPath: TopicPath = new TopicPath(["flashcards", "science"]);
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
                 TextDirection.Ltr,
                 folderTopicPath,
@@ -743,7 +744,7 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
 
         // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/915#issuecomment-2016580471
         test("Topic tag at end of line question line (no other tags present)", async () => {
-            let noteText: string = `---
+            const noteText: string = `---
 Title: "The Taliban at war: 2001-2018"
 Authors: "Antonio Giustozzi"
 Year: 2019
@@ -757,10 +758,10 @@ Zotero Link: zotero://select/items/@Talibanwar20012018
 
 What year was the Taliban Emirate founded?::1996 #flashcards
 `;
-            let noteFile: ISRFile = new UnitTestSRFile(noteText);
+            const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            let folderTopicPath: TopicPath = TopicPath.emptyPath;
-            let expected = [
+            const folderTopicPath: TopicPath = TopicPath.emptyPath;
+            const expected = [
                 {
                     questionType: CardType.SingleLineBasic,
                     topicPathList: TopicPathList.fromPsv("#flashcards", 12),
@@ -788,7 +789,7 @@ describe("Questions immediately after closing line of frontmatter", () => {
     // The frontmatter should be discarded
     // (only the specified question text should be used)
     test("Multi-line with question", async () => {
-        let noteText: string = `---
+        const noteText: string = `---
 created: 2024-03-11 10:41
 tags:
   - flashcards
@@ -798,17 +799,17 @@ tags:
 ?
 In computer-science, a *heap* is a tree-based data-structure, that satisfies the *heap property*. A heap is a complete *binary-tree*!
 `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let expected = [
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const expected = [
             {
                 questionType: CardType.MultiLineBasic,
                 // Explicitly checking that #data-structure is not included
                 topicPathList: TopicPathList.fromPsv("#flashcards", frontmatterTagPseudoLineNum),
                 cards: [
                     new Card({
-                        front: `**What is a Heap?**`,
+                        front: "**What is a Heap?**",
                         back: "In computer-science, a *heap* is a tree-based data-structure, that satisfies the *heap property*. A heap is a complete *binary-tree*!",
                     }),
                 ],
@@ -825,7 +826,7 @@ In computer-science, a *heap* is a tree-based data-structure, that satisfies the
     });
 
     test("Multi-line without question is ignored", async () => {
-        let noteText: string = `---
+        const noteText: string = `---
 created: 2024-03-11 10:41
 tags:
   - flashcards
@@ -838,10 +839,10 @@ Q2
 ?
 A2
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let expected = [
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const expected = [
             {
                 questionType: CardType.MultiLineBasic,
                 // Explicitly checking that #data-structure is not included
@@ -867,7 +868,7 @@ A2
     });
 
     test("single-line question", async () => {
-        let noteText: string = `---
+        const noteText: string = `---
 created: 2024-03-11 10:41
 tags:
   - flashcards
@@ -876,10 +877,10 @@ tags:
 In computer-science, a *heap* is::a tree-based data-structure
 A::B
     `;
-        let noteFile: ISRFile = new UnitTestSRFile(noteText);
+        const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-        let folderTopicPath: TopicPath = TopicPath.emptyPath;
-        let expected = [
+        const folderTopicPath: TopicPath = TopicPath.emptyPath;
+        const expected = [
             {
                 questionType: CardType.SingleLineBasic,
                 topicPathList: TopicPathList.fromPsv("#flashcards", frontmatterTagPseudoLineNum),
@@ -914,17 +915,17 @@ A::B
 
 function checkQuestion1(question: Question) {
     expect(question.cards.length).toEqual(1);
-    let card1 = {
+    const card1 = {
         cardIdx: 0,
         isDue: false,
         front: "Q1",
         back: "A1",
         scheduleInfo: null as CardScheduleInfo,
     };
-    let expected = {
+    const expected = {
         questionType: CardType.SingleLineBasic,
         topicPath: TopicPath.emptyPath,
-        questionTextOriginal: `Q1::A1`,
+        questionTextOriginal: "Q1::A1",
         questionTextCleaned: "Q1::A1",
         lineNo: 1,
         hasEditLaterTag: false,
@@ -938,17 +939,17 @@ function checkQuestion1(question: Question) {
 
 function checkQuestion2(question: Question) {
     expect(question.cards.length).toEqual(1);
-    let card1 = {
+    const card1 = {
         cardIdx: 0,
         isDue: false,
         front: "Q2",
         back: "A2",
         scheduleInfo: null as CardScheduleInfo,
     };
-    let expected = {
+    const expected = {
         questionType: CardType.SingleLineBasic,
         topicPath: TopicPath.emptyPath,
-        questionTextOriginal: `Q2::A2`,
+        questionTextOriginal: "Q2::A2",
         questionTextCleaned: "Q2::A2",
         lineNo: 2,
         hasEditLaterTag: false,

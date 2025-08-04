@@ -38,7 +38,6 @@ export default {
     STATUS_BAR: "Przeglądaj: ${dueNotesCount} notatek, ${dueFlashcardsCount} fiszek z terminem",
     SYNC_TIME_TAKEN: "Synchronizacja zajęła ${t}ms",
     NOTE_IN_IGNORED_FOLDER: "Notatka jest zapisana w folderze zignorowanym (sprawdź ustawienia).",
-    NOTE_IN_IGNORED_TAGS: "Note is saved with ignored tag (check settings).",
     PLEASE_TAG_NOTE: "Proszę odpowiednio otagować notatkę do przeglądu (w ustawieniach).",
     RESPONSE_RECEIVED: "Otrzymano odpowiedź.",
     NO_DECK_EXISTS: "Nie istnieje talia o nazwie ${deckName}",
@@ -57,32 +56,29 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition - Ustawienia",
+    SETTINGS_HEADER: "Spaced Repetition",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
     GROUP_DATA_STORAGE: "Storage of Scheduling Data",
+    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: 'Aby uzyskać więcej informacji, sprawdź <a href="${wiki_url}">wiki</a>.',
+    CHECK_WIKI: 'Aby uzyskać więcej informacji, sprawdź <a href="${wikiUrl}">wiki</a>.',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussions_url}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report.',
+        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
-        'Project source code available on <a href="${github_project_url}">GitHub</a>',
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        'Information on <a href="${code_contribution_url}">code contributions</a>',
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
     TRANSLATION_CONTRIBUTION_INFO:
-        'Information on <a href="${translation_contribution_url}">translating the plugin</a> to your language',
-    PROJECT_CONTRIBUTIONS:
-        'Raise an issue <a href="${issues_url}">here</a> if you have a feature request or a bug-report',
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "Foldery do zignorowania",
-    FOLDERS_TO_IGNORE_DESC: `Wprowadź ścieżki folderów oddzielone nowymi liniami, np. Szablony Meta/Scripts.
-Note that this setting is common to both Flashcards and Notes.`,
-    TAGS_TO_IGNORE: "Tags to ignore",
-    TAGS_TO_IGNORE_DESC: `Enter tags separated by newlines i.e. #excalidraw.
-Note that this setting is common to both Flashcards and Notes.`,
+    FOLDERS_TO_IGNORE_DESC:
+        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "Fiszki",
     FLASHCARD_EASY_LABEL: "Tekst przycisku Łatwe",
     FLASHCARD_GOOD_LABEL: "Tekst przycisku Średnio trudne",
@@ -90,6 +86,8 @@ Note that this setting is common to both Flashcards and Notes.`,
     FLASHCARD_EASY_DESC: 'Dostosuj etykietę dla przycisku "Łatwe"',
     FLASHCARD_GOOD_DESC: 'Dostosuj etykietę dla przycisku "Średnio trudne"',
     FLASHCARD_HARD_DESC: 'Dostosuj etykietę dla przycisku "Trudne"',
+    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
+    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "Tagi fiszek",
     FLASHCARD_TAGS_DESC:
         "Wprowadź tagi oddzielone spacją lub nowymi liniami, np. #fiszki #talia2 #talia3.",
@@ -106,6 +104,9 @@ Note that this setting is common to both Flashcards and Notes.`,
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Czy pokazywać kontekst na kartach?",
     SHOW_CARD_CONTEXT_DESC: "np. Tytuł > Nagłówek 1 > Podnagłówek > ... > Podnagłówek",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
+        "Useful to know how far in the future your cards are being pushed.",
     CARD_MODAL_HEIGHT_PERCENT: "Procentowa wysokość fiszki",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "Powinno być ustawione na 100% na urządzeniach mobilnych lub gdy masz bardzo duże obrazy",
@@ -129,8 +130,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Losowa karta z losowej talii",
     DISABLE_CLOZE_CARDS: "Wyłączyć karty zamaskowane?",
     CONVERT_HIGHLIGHTS_TO_CLOZES: "Konwertować ==podświetlenia== na karty zamaskowane?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
     CONVERT_BOLD_TEXT_TO_CLOZES: "Konwertować pogrubiony tekst na karty zamaskowane?",
+    CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES: "Konwertować {{klamry}} na karty zamaskowane?",
+    CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
+        'Dodaj/usuń <code>${defaultPattern}</code> z "Wzory kart zamaskowanych"',
+    CLOZE_PATTERNS: "Wzory kart zamaskowanych",
+    CLOZE_PATTERNS_DESC: "Wprowadź wzory kart zamaskowanych oddzielone nowymi liniami",
     INLINE_CARDS_SEPARATOR: "Separator dla kart zamaskowanych w linii",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Pamiętaj, że po zmianie tego musisz ręcznie edytować wszystkie karty zamaskowane, które już masz.",
@@ -140,6 +149,7 @@ Note that this setting is common to both Flashcards and Notes.`,
         "Separator dla kart zamaskowanych odwróconych wieloliniowych",
     MULTILINE_CARDS_END_MARKER: "Caracteres que denotam o fim de clozes e flashcards multilineares",
     NOTES: "Notatki",
+    NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Włączyć panel przeglądu notatek przy starcie",
     TAGS_TO_REVIEW: "Tagi do przeglądu",
     TAGS_TO_REVIEW_DESC:
@@ -148,23 +158,28 @@ Note that this setting is common to both Flashcards and Notes.`,
     OPEN_RANDOM_NOTE_DESC:
         "Po wyłączeniu tej opcji notatki są uporządkowane według istotności (PageRank).",
     AUTO_NEXT_NOTE: "Automatycznie otwierać następną notatkę po przeglądzie",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Wyłączyć opcje przeglądu w menu pliku, tj. Przegląd: Łatwe Dobrze Trudne",
-    DISABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "Po wyłączeniu możesz przeglądać za pomocą skrótów klawiszowych. Po zmianie tej opcji konieczne jest ponowne załadowanie Obsidian.",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS:
+        "Wyłączyć opcje przeglądu w menu pliku, tj. Przeglądaj: Łatwe Dobrze Trudne",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "Jeśli wyłączysz opcje przeglądu w menu Plik, możesz przeglądać swoje notatki za pomocą poleceń wtyczki i, jeśli je zdefiniowałeś, przypisanych skrótów klawiszowych.",
     MAX_N_DAYS_REVIEW_QUEUE: "Maksymalna liczba dni do wyświetlenia w panelu prawym",
     MIN_ONE_DAY: "Liczba dni musi wynosić co najmniej 1.",
     VALID_NUMBER_WARNING: "Podaj prawidłową liczbę.",
-    UI_PREFERENCES: "Preferencje interfejsu użytkownika",
-    OPEN_AS_TAB: "Tryb karty",
-    OPEN_AS_TAB_DESC:
-        "Jeśli ta opcja jest włączona, interfejs przeglądu otworzy się jako karta. Jeśli wyłączona, otworzy się jako okno modalne.",
+    UI: "User Interface",
+    OPEN_IN_TAB: "Open in new tab",
+    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
+    SHOW_STATUS_BAR: "Show status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
+    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Podtalie powinny być początkowo wyświetlane rozszerzone",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Wyłącz to, aby zwinąć zagnieżdżone talie w tej samej karcie. Przydatne, jeśli karty należą do wielu talii w tym samym pliku.",
     ALGORITHM: "Algorytm",
     CHECK_ALGORITHM_WIKI:
-        'Aby uzyskać więcej informacji, sprawdź <a href="${algo_url}">implementację algorytmu</a>.',
+        'Aby uzyskać więcej informacji, sprawdź <a href="${algoUrl}">implementację algorytmu</a>.',
+    SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "Podstawowa łatwość",
     BASE_EASE_DESC: "minimum = 130, preferowana wartość to około 250.",
     BASE_EASE_MIN_WARNING: "Podstawowa łatwość musi wynosić co najmniej 130.",
@@ -174,6 +189,10 @@ Note that this setting is common to both Flashcards and Notes.`,
     EASY_BONUS_DESC:
         "Bonus za łatwe pozwala ustawić różnicę w interwałach między odpowiedziami Średnio trudne i Łatwe na fiszce/notatce (minimum = 100%).",
     EASY_BONUS_MIN_WARNING: "Bonus za łatwe musi wynosić co najmniej 100.",
+    LOAD_BALANCE: "Enable load balancer",
+    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
+        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
+        It's turned off for small intervals.`,
     MAX_INTERVAL: "Maksymalny interwał w dniach",
     MAX_INTERVAL_DESC: "Pozwala na ustawienie górnego limitu interwału (domyślnie = 100 lat).",
     MAX_INTERVAL_MIN_WARNING: "Maksymalny interwał musi wynosić co najmniej 1 dzień.",
@@ -187,9 +206,12 @@ Note that this setting is common to both Flashcards and Notes.`,
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Logowanie",
-    DISPLAY_DEBUG_INFO: "Wyświetl informacje debugowania w konsoli deweloperskiej", // sidebar.ts
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO: "Wyświetl informacje debugowania w konsoli deweloperskiej",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    HELP: "Help",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
@@ -259,12 +281,16 @@ Note that this setting is common to both Flashcards and Notes.`,
     INTERVALS_SUMMARY: "Średni interwał: ${avg}, Najdłuższy interwał: ${longest}",
     EASES: "Łatwości",
     EASES_SUMMARY: "Średnia łatwość: ${avgEase}",
+    EASE: "Ease",
     CARD_TYPES: "Typy kart",
     CARD_TYPES_DESC: "Obejmuje także ukryte karty, jeśli takie są",
     CARD_TYPE_NEW: "Nowe",
     CARD_TYPE_YOUNG: "Młode",
     CARD_TYPE_MATURE: "Stare",
     CARD_TYPES_SUMMARY: "Łączna liczba kart: ${totalCardsCount}",
+    SEARCH: "Search",
+    PREVIOUS: "Previous",
+    NEXT: "Next",
     REVIEWED_TODAY: "Reviewed today",
     REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
     NEW_LEARNED: "New Learned",

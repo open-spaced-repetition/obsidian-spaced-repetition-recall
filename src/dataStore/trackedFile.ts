@@ -1,7 +1,7 @@
 import { SRSettings } from "src/settings";
 import { BlockUtils } from "src/util/utils_recall";
 import { CardType } from "src/Question";
-import { parseEx, ParsedQuestionInfo } from "src/parser";
+import { parse, ParsedQuestionInfo } from "src/parser";
 import { RPITEMTYPE } from "./repetitionItem";
 import { DEFAULT_DECKNAME } from "src/constants";
 import { Tags } from "src/tags";
@@ -188,12 +188,10 @@ export class TrackedFile implements ITrackedFile {
             multilineCardSeparator: settings.multilineCardSeparator,
             multilineReversedCardSeparator: settings.multilineReversedCardSeparator,
             multilineCardEndMarker: settings.multilineCardEndMarker,
-            convertHighlightsToClozes: settings.convertHighlightsToClozes,
-            convertBoldTextToClozes: settings.convertBoldTextToClozes,
-            convertCurlyBracketsToClozes: settings.convertCurlyBracketsToClozes,
+            clozePatterns: settings.clozePatterns,
         };
 
-        const parsedCards: ParsedQuestionInfo[] = parseEx(fileText, parserOptions);
+        const parsedCards: ParsedQuestionInfo[] = parse(fileText, parserOptions);
         if (!this.hasCards && parsedCards.length === 0) {
             return false;
         }
