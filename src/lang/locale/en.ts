@@ -203,9 +203,12 @@ export default {
     SWITCH_SHORT_TERM_DESC:
         "When disabled, this allow user to skip the short-term scheduler and directly switch to the long-term scheduler.",
     LOGGING: "Logging",
-    DISPLAY_DEBUG_INFO: "Display debugging information on the developer console",
-    DISPLAY_PARSER_DEBUG_INFO:
-        "Display debugging information for the parser on the developer console",
+    DISPLAY_SCHEDULING_DEBUG_INFO:
+        "Show the scheduler's debugging information on the developer console",
+    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
+    SCHEDULING: "Scheduling",
+    EXPERIMENTAL: "Experimental",
+    STORE_IN_NOTES: "In the notes",
 
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",

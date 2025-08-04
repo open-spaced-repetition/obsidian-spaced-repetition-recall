@@ -53,7 +53,7 @@ export default {
     PLEASE_TAG_NOTE: "Пожалуйста, добавьте правильный тег к заметке для повторения (проверьте настройки).",
     RESPONSE_RECEIVED: "Ответ получен",
     NO_DECK_EXISTS: "Колода ${deckName} не существует",
-    ALL_CAUGHT_UP: "Отлично! Вы справились со всеми повторениями!\\nВремя изучить что-то новое:D",
+    ALL_CAUGHT_UP: "Отлично! Вы справились со всеми повторениями!\nВремя изучить что-то новое:D",
 
     // scheduling.ts
     DAYS_STR_IVL: "${interval} дней",
@@ -198,6 +198,7 @@ export default {
     OPEN_AS_TAB: "Режим вкладки",
     OPEN_AS_TAB_DESC:
         "Если включено, интерфейс повторения откроется во вкладке, если отключено — в модальном окне.",
+
     INITIALLY_EXPAND_SUBDECKS_IN_TREE:
         "Дерево колод должно изначально отображаться развёрнутым",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
