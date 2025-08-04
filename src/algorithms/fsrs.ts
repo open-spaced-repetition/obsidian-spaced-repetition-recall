@@ -434,7 +434,8 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                         });
                     });
             })
-            .settingEl.querySelector(".setting-item-description").innerHTML = t("FSRS_W_PARAM_DESC");
+            .settingEl.querySelector(".setting-item-description").innerHTML =
+            t("FSRS_W_PARAM_DESC");
 
         new Setting(containerEl)
             .setName(t("FUZZING"))

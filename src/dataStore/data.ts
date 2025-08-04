@@ -265,10 +265,10 @@ export class DataStore {
         return id < 0
             ? null
             : this.data.items.find((item: RepetitionItem, _idx) => {
-                if (item != null && item.ID === id) {
-                    return true;
-                }
-            });
+                  if (item != null && item.ID === id) {
+                      return true;
+                  }
+              });
     }
 
     getFileByIndex(idx: number): TrackedFile {
@@ -395,7 +395,10 @@ export class DataStore {
             }
         });
         if (firstCalled) {
-            const msg = t("DATA_FOLDER_UNTRACKED", { folderPath: folder.path, totalRemoved: totalRemoved });
+            const msg = t("DATA_FOLDER_UNTRACKED", {
+                folderPath: folder.path,
+                totalRemoved: totalRemoved,
+            });
             MiscUtils.notice(msg);
             console.log(msg);
         }
@@ -441,7 +444,9 @@ export class DataStore {
             }
         });
 
-        MiscUtils.notice(t("DATA_ADDED_REMOVED_ITEMS", { totalAdded: totalAdded, totalRemoved: totalRemoved }));
+        MiscUtils.notice(
+            t("DATA_ADDED_REMOVED_ITEMS", { totalAdded: totalAdded, totalRemoved: totalRemoved }),
+        );
     }
 
     /**
@@ -650,7 +655,9 @@ export class DataStore {
         // this.save();     // will be used when plugin.sync_Algo(), which shouldn't
 
         if (notice) {
-            MiscUtils.notice(t("DATA_ADDED_REMOVED_ITEMS_SHORT", { added: added, removed: removed }));
+            MiscUtils.notice(
+                t("DATA_ADDED_REMOVED_ITEMS_SHORT", { added: added, removed: removed }),
+            );
         }
         return { added, removed };
     }
@@ -712,7 +719,7 @@ export class DataStore {
             filePath: trackedFile.path,
             lineNo: cardinfo.lineNo,
             added: added,
-            removed: removed
+            removed: removed,
         });
         console.debug(msg);
         if (notice) {
@@ -852,10 +859,10 @@ export class DataStore {
 
         console.log(
             "removed " +
-            removedtkfiles +
-            " nullTrackedfile(s), removed " +
-            removedItems +
-            " nullitem(s).",
+                removedtkfiles +
+                " nullTrackedfile(s), removed " +
+                removedItems +
+                " nullitem(s).",
         );
         return;
     }
