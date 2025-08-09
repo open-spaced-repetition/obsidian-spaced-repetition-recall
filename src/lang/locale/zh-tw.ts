@@ -277,15 +277,19 @@ export default {
 
     // cardBlockIDSetting.ts
     CARD_BLOCK_ID: "卡片區塊ID",
-    CARD_BLOCK_ID_DESC: "使用卡片區塊ID而不是行號和文本哈希。<br><b>如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。</b>",
-    CARD_BLOCK_ID_CONFIRM: "**如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。**\n\n建議：在設置為True之前備份您的庫。或在沙盒庫中試用。\n\n設置打開後，就會在所有卡片後添加blockid，就算再關閉添加的blockid也依然保留在筆記中，不會被刪除。\n\n建議**先備份**筆記庫，或在沙盒庫中試用。",
+    CARD_BLOCK_ID_DESC:
+        "使用卡片區塊ID而不是行號和文本哈希。<br><b>如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。</b>",
+    CARD_BLOCK_ID_CONFIRM:
+        "**如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。**\n\n建議：在設置為True之前備份您的庫。或在沙盒庫中試用。\n\n設置打開後，就會在所有卡片後添加blockid，就算再關閉添加的blockid也依然保留在筆記中，不會被刪除。\n\n建議**先備份**筆記庫，或在沙盒庫中試用。",
 
     // mixQueueSetting.ts
     MIX_QUEUE: "混合隊列",
-    MIX_QUEUE_DESC: "復習時混合到期和新筆記。**第一個**滑塊為總數，第二個滑塊為到期數。新筆記數 = (總數 - 到期數)。",
+    MIX_QUEUE_DESC:
+        "復習時混合到期和新筆記。**第一個**滑塊為總數，第二個滑塊為到期數。新筆記數 = (總數 - 到期數)。",
 
     // trackSetting.ts
-    UNTRACK_WITH_REVIEWTAG_DESC: "在刪除筆記中復習標籤時，即同步untrack操作，以後不再復習該筆記<br><b>true</b>: 同步untrack操作；<br><b>false</b>：刪除復習標籤後，需再次untrack，才不再復習該筆記。（同之前版本）",
+    UNTRACK_WITH_REVIEWTAG_DESC:
+        "在刪除筆記中復習標籤時，即同步untrack操作，以後不再復習該筆記<br><b>true</b>: 同步untrack操作；<br><b>false</b>：刪除復習標籤後，需再次untrack，才不再復習該筆記。（同之前版本）",
 
     // dataLocation.ts
     DATA_LOCATION_PLUGIN_FOLDER: "在插件文件夾中",
@@ -294,11 +298,14 @@ export default {
     DATA_LOCATION_SAVE_ON_NOTE_FILE: "保存在筆記文件中",
 
     // fsrs.ts
-    FSRS_ALGORITHM_DESC: "用於間隔重複的算法。更多信息請查閱 <a href=\"https://github.com/open-spaced-repetition/ts-fsrs\">FSRS算法</a>。",
-    FSRS_W_PARAM_DESC: "查閱 <a href=\"https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm\">FSRS V6 WIKI</a> 和 <a href=\"https://open-spaced-repetition.github.io/anki_fsrs_visualizer\">FSRS w參數可視化</a> 以對各參數進行設置。",
+    FSRS_ALGORITHM_DESC:
+        '用於間隔重複的算法。更多信息請查閱 <a href="https://github.com/open-spaced-repetition/ts-fsrs">FSRS算法</a>。',
+    FSRS_W_PARAM_DESC:
+        '查閱 <a href="https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm">FSRS V6 WIKI</a> 和 <a href="https://open-spaced-repetition.github.io/anki_fsrs_visualizer">FSRS w參數可視化</a> 以對各參數進行設置。',
 
     // anki.ts
-    ANKI_ALGORITHM_DESC: "用於間隔重複的算法。更多信息請查閱 <a href=\"https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html\">Anki算法</a>。",
+    ANKI_ALGORITHM_DESC:
+        '用於間隔重複的算法。更多信息請查閱 <a href="https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html">Anki算法</a>。',
     STARTING_EASE: "起始難度",
     STARTING_EASE_DESC: "給予項目的初始難度。",
     STARTING_EASE_ERROR: "起始難度必須是正數。",
@@ -317,10 +324,12 @@ export default {
     EASY_INTERVAL_ERROR: "間隔必須是正數。",
 
     // scheduling_default.ts
-    DEFAULT_ALGORITHM_DESC: "用於間隔重複的算法。更多信息請查閱 <a href=\"https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/\">修改的Anki算法</a>。",
+    DEFAULT_ALGORITHM_DESC:
+        '用於間隔重複的算法。更多信息請查閱 <a href="https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/">修改的Anki算法</a>。',
 
     // supermemo.ts
-    SM2_ALGORITHM_DESC: "用於間隔重複的算法。目前與Anki算法共用參數（僅算法處理方式不同）。更多信息請查閱 <a href=\"https://www.supermemo.com/en/archives1990-2015/english/ol/sm2\">SM2算法</a>。",
+    SM2_ALGORITHM_DESC:
+        '用於間隔重複的算法。目前與Anki算法共用參數（僅算法處理方式不同）。更多信息請查閱 <a href="https://www.supermemo.com/en/archives1990-2015/english/ol/sm2">SM2算法</a>。',
 
     // info.ts
     ITEM_INFO_TITLE: "項目信息",
@@ -334,14 +343,16 @@ export default {
     ITEM_DATA_INFO: "項目數據信息",
 
     // locationSetting.ts
-    DATA_LOCATION_WARNING_TO_NOTE: "小心！！！\n如果您確認此操作，將會把`tracked_files.json`中的所有調度信息轉換到筆記中，這將同時更改大量筆記文件。\n請確保卡片和筆記的標籤設置是您正在使用的。",
+    DATA_LOCATION_WARNING_TO_NOTE:
+        "小心！！！\n如果您確認此操作，將會把`tracked_files.json`中的所有調度信息轉換到筆記中，這將同時更改大量筆記文件。\n請確保卡片和筆記的標籤設置是您正在使用的。",
     DATA_LOCATION_WARNING_OTHER_ALGO: "如果您想將數據保存在筆記文件中，您**必須**使用默認算法。",
-    DATA_LOCATION_WARNING_TO_TRACKED: "小心！！！\n如果您確認此操作，將會把筆記中的所有調度信息（同時會被刪除）轉換到`tracked_files.json`中。",
+    DATA_LOCATION_WARNING_TO_TRACKED:
+        "小心！！！\n如果您確認此操作，將會把筆記中的所有調度信息（同時會被刪除）轉換到`tracked_files.json`中。",
 
     // settings.ts - tab titles
     DEVELOPER: "開發者",
-    HELP: "幫助",
-    POST_ISSUE_MODIFIED_PLUGIN: "為這個帶有設置背景顏色的修改版sr插件<a href=\"${issue_url}\">提交issue</a>。",
+    POST_ISSUE_MODIFIED_PLUGIN:
+        '為這個帶有設置背景顏色的修改版sr插件<a href="${issue_url}">提交issue</a>。',
 
     // commands.ts
     CMD_ITEM_INFO: "項目信息",
@@ -371,12 +382,14 @@ export default {
     MENU_UNTRACK_NOTE: "取消追蹤筆記",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "這是帶標籤的文件，無法通過此方式取消追蹤。您可以刪除筆記文件中的#review標籤。",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "這是帶標籤的文件，無法通過此方式取消追蹤。您可以刪除筆記文件中的#review標籤。",
     DATA_UNTRACKED_ITEMS: "已取消追蹤${numItems}個項目${nulrstr}",
     DATA_UNABLE_TO_SAVE: "無法保存數據文件！",
     DATA_FOLDER_UNTRACKED: "在文件夾${folderPath}下，共有${totalRemoved}個文件不再跟踪重複了",
     DATA_ADDED_REMOVED_ITEMS: "添加了${totalAdded}個新項目，刪除了${totalRemoved}個項目。",
     DATA_ADDED_REMOVED_ITEMS_SHORT: "添加了${added}個新項目，刪除了${removed}個項目。",
-    DATA_FILE_UPDATE: "${filePath}更新 - 行號：${lineNo}\n添加：${added}個新卡片項目，刪除${removed}個卡片項目。",
+    DATA_FILE_UPDATE:
+        "${filePath}更新 - 行號：${lineNo}\n添加：${added}個新卡片項目，刪除${removed}個卡片項目。",
     DATA_ALL_ITEMS_UPDATED: "所有項目已更新。",
 };

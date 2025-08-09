@@ -4,26 +4,26 @@ First off, thanks for wanting to contribute to the Spaced Repetition plugin!
 
 ## Bug Reports & Feature Requests
 
-- Check the [roadmap](https://github.com/st3v3nmw/obsidian-spaced-repetition/projects/2/) for upcoming features & fixes.
-- Raise an issue [here](https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/) if you have a feature request or a bug report.
-- Visit the [discussions](https://github.com/st3v3nmw/obsidian-spaced-repetition/discussions/) section for Q&A help, feedback, and general discussion.
+-   Check the [roadmap](https://github.com/st3v3nmw/obsidian-spaced-repetition/projects/2/) for upcoming features & fixes.
+-   Raise an issue [here](https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/) if you have a feature request or a bug report.
+-   Visit the [discussions](https://github.com/st3v3nmw/obsidian-spaced-repetition/discussions/) section for Q&A help, feedback, and general discussion.
 
 ## Translating
 
 The plugin has been translated into the following languages by the Obsidian community 😄.
 
-- Arabic / العربية
-- Chinese (Simplified) / 简体中文
-- Chinese (Traditional) / 繁體中文
-- Czech / čeština
-- German / Deutsch
-- Italian / Italiano
-- Korean / 한국어
-- Japanese / 日本語
-- Polish / Polski
-- Portuguese (Brazil) / Português do Brasil
-- Spanish / Español
-- Russian / русский
+-   Arabic / العربية
+-   Chinese (Simplified) / 简体中文
+-   Chinese (Traditional) / 繁體中文
+-   Czech / čeština
+-   German / Deutsch
+-   Italian / Italiano
+-   Korean / 한국어
+-   Japanese / 日本語
+-   Polish / Polski
+-   Portuguese (Brazil) / Português do Brasil
+-   Spanish / Español
+-   Russian / русский
 
 ### Steps
 
