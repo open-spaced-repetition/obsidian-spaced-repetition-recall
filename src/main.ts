@@ -25,7 +25,7 @@ import {
     FlashcardReviewMode,
     FlashcardReviewSequencer as FlashcardReviewSequencer,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
-} from "./FlashcardReviewSequencer";
+} from "./flashcard-review-sequencer";
 import {
     CardOrder,
     DeckOrder,
@@ -36,7 +36,7 @@ import {
 import { CardScheduleCalculator } from "./CardSchedule";
 import { Note } from "./Note";
 import { NoteFileLoader } from "./NoteFileLoader";
-import { ISRFile, SrTFile as SrTFile } from "./SRFile";
+import { ISRFile, SrTFile as SrTFile } from "src/file";
 import { NoteEaseCalculator } from "./NoteEaseCalculator";
 import { DeckTreeStatsCalculator } from "./DeckTreeStatsCalculator";
 import { NoteEaseList } from "./NoteEaseList";

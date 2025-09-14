@@ -1,4 +1,4 @@
-import { NoteQuestionParser } from "src/NoteQuestionParser";
+import { NoteQuestionParser } from "src/note-question-parser";
 import { CardListType, Deck } from "src/Deck";
 import { DEFAULT_SETTINGS } from "src/settings";
 import { SampleItemDecks } from "./SampleItems";

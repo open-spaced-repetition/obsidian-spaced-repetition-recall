@@ -1,4 +1,4 @@
-import { NoteQuestionParser } from "src/NoteQuestionParser";
+import { NoteQuestionParser } from "src/note-question-parser";
 import { CardScheduleInfo } from "src/CardSchedule";
 import { TICKS_PER_DAY } from "src/constants";
 import { CardType, Question } from "src/Question";

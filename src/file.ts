@@ -1,19 +1,21 @@
 import {
-    MetadataCache,
-    TFile,
-    Vault,
+    FrontMatterCache,
     getAllTags as ObsidianGetAllTags,
     HeadingCache,
+    MetadataCache,
     TagCache,
-    FrontMatterCache,
+    TFile,
+    Vault,
 } from "obsidian";
-import { TextDirection } from "./util/TextDirection";
-import { parseObsidianFrontmatterTag } from "./util/utils";
+
+import { parseObsidianFrontmatterTag, TextDirection } from "src/utils/strings";
 
 // NOTE: Line numbers are zero based
 export interface ISRFile {
     get path(): string;
     get basename(): string;
+    get tfile(): TFile;
+    getFrontmatter(): Promise<Map<string, string>>;
     getAllTagsFromCache(): string[];
     getAllTagsFromText(): TagCache[];
     getQuestionContext(cardLine: number): string[];
@@ -46,6 +48,25 @@ export class SrTFile implements ISRFile {
         return this.file.basename;
     }
 
+    get tfile(): TFile {
+        return this.file;
+    }
+
+    async getFrontmatter(): Promise<Map<string, string>> {
+        const fileCachedData = this.metadataCache.getFileCache(this.file) || {};
+
+        const frontmatter: FrontMatterCache = fileCachedData.frontmatter || {};
+        const result: Map<string, string> = new Map<string, string>();
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const [key, value] of Object.entries(frontmatter) as [string, any][]) {
+            const v = Array.isArray(value) && value.length > 0 ? value[0] : value;
+            const vStr: string = v + "";
+            result.set(key, vStr);
+        }
+        return result;
+    }
+
     getAllTagsFromCache(): string[] {
         const fileCachedData = this.metadataCache.getFileCache(this.file) || {};
         const result: string[] = ObsidianGetAllTags(fileCachedData) || [];
@@ -56,7 +77,6 @@ export class SrTFile implements ISRFile {
         const result: TagCache[] = [] as TagCache[];
         const fileCachedData = this.metadataCache.getFileCache(this.file) || {};
         if (fileCachedData.tags?.length > 0) {
-            // console.log(`getAllTagsFromText: tags: ${fileCachedData.tags.map((item) => `(${item.position.start.line}: ${item.tag})`).join("|")}`);
             result.push(...fileCachedData.tags);
         }
 
@@ -78,8 +98,16 @@ export class SrTFile implements ISRFile {
                 const tag: TagCache = {
                     tag: str,
                     position: {
-                        start: { line: frontmatterTagPseudoLineNum, col: null, offset: null },
-                        end: { line: frontmatterTagPseudoLineNum, col: null, offset: null },
+                        start: {
+                            line: frontmatterTagPseudoLineNum,
+                            col: null,
+                            offset: null,
+                        },
+                        end: {
+                            line: frontmatterTagPseudoLineNum,
+                            col: null,
+                            offset: null,
+                        },
                     },
                 };
                 result.push(tag);
@@ -91,7 +119,6 @@ export class SrTFile implements ISRFile {
     getQuestionContext(cardLine: number): string[] {
         const fileCachedData = this.metadataCache.getFileCache(this.file) || {};
         const headings: HeadingCache[] = fileCachedData.headings || [];
-        // console.log(`getQuestionContext: headings: ${headings.map((item) => `(${item.position.start.line}: ${item.heading})`).join("|")}`);
         const stack: HeadingCache[] = [];
         for (const heading of headings) {
             if (heading.position.start.line > cardLine) {
@@ -118,13 +145,8 @@ export class SrTFile implements ISRFile {
         const fileCache = this.metadataCache.getFileCache(this.file);
         const frontMatter = fileCache?.frontmatter;
         if (frontMatter && frontMatter?.direction) {
-            // Don't know why the try/catch is needed; but copied from Obsidian RTL plug-in getFrontMatterDirection()
-            try {
-                const str: string = (frontMatter.direction + "").toLowerCase();
-                result = str == "rtl" ? TextDirection.Rtl : TextDirection.Ltr;
-            } catch (error) {
-                // continue regardless of error
-            }
+            const str: string = (frontMatter.direction + "").toLowerCase();
+            result = str == "rtl" ? TextDirection.Rtl : TextDirection.Ltr;
         }
         return result;
     }

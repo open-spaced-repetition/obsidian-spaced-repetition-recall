@@ -1,18 +1,19 @@
-import { Card } from "./Card";
+import { Card } from "src/card";
 import { CardScheduleInfo, NoteCardScheduleParser } from "./CardSchedule";
 import {
     OBSIDIAN_BLOCK_ID_ENDOFLINE_REGEX,
     OBSIDIAN_TAG_AT_STARTOFLINE_REGEX,
     SR_HTML_COMMENT_BEGIN,
     SR_HTML_COMMENT_END,
-} from "./constants";
-import { Note } from "./Note";
-import { ParsedQuestionInfo } from "./parser";
-import { SRSettings } from "./settings";
-import { TopicPath, TopicPathList, TopicPathWithWs } from "./TopicPath";
-import { MultiLineTextFinder } from "./util/MultiLineTextFinder";
-import { TextDirection } from "./util/TextDirection";
-import { cyrb53, stringTrimStart } from "./util/utils";
+} from "src/constants";
+// import { DataStoreAlgorithm } from "src/data-store-algorithm/data-store-algorithm";
+// import { DataStore } from "src/data-stores/base/data-store";
+import { Note } from "src/note";
+import { ParsedQuestionInfo } from "src/parser";
+import { SRSettings } from "src/settings";
+import { TopicPath, TopicPathList, TopicPathWithWs } from "src/topic-path";
+import { cyrb53, MultiLineTextFinder, stringTrimStart, TextDirection } from "src/utils/strings";
+
 import { DataLocation } from "src/dataStore/dataLocation";
 
 export enum CardType {
@@ -23,7 +24,6 @@ export enum CardType {
     Cloze,
 }
 
-//
 // QuestionText comprises the following components:
 //      1. QuestionTopicPath (optional, and if present there may be whitespace before)
 //
@@ -77,7 +77,6 @@ export enum CardType {
 //
 //  Question text with block identifier:
 //      Q2::A2 ^d7cee0
-//
 export class QuestionText {
     // Complete text including all components, as read from file
     original: string;
@@ -136,6 +135,7 @@ export class QuestionText {
     }
 
     static splitText(original: string, settings: SRSettings): [TopicPathWithWs, string, string] {
+        // const originalWithoutSR = DataStore.getInstance().questionRemoveScheduleInfo(original);
         const originalWithoutSR = NoteCardScheduleParser.removeCardScheduleInfo(original);
         let actualQuestion: string = originalWithoutSR.trimEnd();
 
@@ -263,6 +263,8 @@ export class Question {
         if (hasSchedule) {
             result = result.trimEnd();
             const scheduleHtml = this.formatScheduleAsHtmlComment(settings);
+            // const scheduleHtml =
+            //     DataStoreAlgorithm.getInstance().questionFormatScheduleAsHtmlComment(this);
             if (blockId) {
                 if (this.isCardCommentsOnSameLine(settings))
                     result += ` ${scheduleHtml} ${blockId}`;
@@ -277,13 +279,14 @@ export class Question {
         return result;
     }
 
-    updateQuestionText(noteText: string, settings: SRSettings): string {
+    updateQuestionWithinNoteText(noteText: string, settings: SRSettings): string {
+        const originalText: string = this.questionText.original;
+
         // Get the entire text for the question including:
         //      1. the topic path (if present),
         //      2. the question text
         //      3. the schedule HTML comment (if present)
         const replacementText = this.formatForNote(settings);
-        const originalText: string = this.questionText.original;
 
         let newText = MultiLineTextFinder.findAndReplace(noteText, originalText, replacementText);
         if (newText) {
@@ -308,7 +311,7 @@ export class Question {
     async writeQuestion(settings: SRSettings): Promise<void> {
         const fileText: string = await this.note.file.read();
 
-        const newText: string = this.updateQuestionText(fileText, settings);
+        const newText: string = this.updateQuestionWithinNoteText(fileText, settings);
         await this.note.file.write(newText);
         this.hasChanged = false;
     }

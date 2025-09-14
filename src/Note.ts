@@ -1,7 +1,7 @@
 import { SRSettings } from "./settings";
 import { Deck } from "./Deck";
 import { Question } from "./Question";
-import { ISRFile } from "./SRFile";
+import { ISRFile } from "src/file";
 import { Multi_cloze } from "src/util/multi-cloze-util";
 
 export class Note {
