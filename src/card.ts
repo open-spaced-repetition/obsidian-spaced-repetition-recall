@@ -1,11 +1,9 @@
-import { Question } from "./Question";
-import { CardScheduleInfo } from "./CardSchedule";
-import { CardListType } from "./Deck";
-import { IQuestionPostponementList } from "./QuestionPostponementList";
-import { globalDateProvider } from "./util/DateProvider";
-import { Queue } from "./dataStore/queue";
+// import { RepetitionItem } from "src/algorithms/base/repetition-item";
+import { CardScheduleInfo as RepItemScheduleInfo, ICardScheduleCalculator } from "./CardSchedule";
+import { CardListType } from "src/deck";
+import { Question } from "src/question";
 
-export class Card {
+export class Card extends RepetitionItem {
     question: Question;
     cardIdx: number;
     Id?: number;
@@ -15,13 +13,13 @@ export class Card {
     get hasSchedule(): boolean {
         return this.scheduleInfo != null;
     }
-    scheduleInfo?: CardScheduleInfo;
-
+    scheduleInfo?: RepItemScheduleInfo;
     // visuals
     front: string;
     back: string;
 
     constructor(init?: Partial<Card>) {
+        super();
         Object.assign(this, init);
     }
 
@@ -75,7 +73,7 @@ export class Card {
 
     formatSchedule(): string {
         let result: string = "";
-        if (this.hasSchedule) result = this.scheduleInfo.formatSchedule();
+        if (this.hasSchedule) result = this.scheduleInfo.formatCardScheduleForHtmlComment();
         else result = "New";
         return result;
     }
