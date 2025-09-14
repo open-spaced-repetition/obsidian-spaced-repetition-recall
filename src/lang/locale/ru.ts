@@ -23,7 +23,7 @@ export default {
     RESET_CARD_PROGRESS: "Сбросить прогресс карточки",
     RESET: "Сбросить",
     HARD: "Сложно",
-    GOOD: "Нормально",
+    GOOD: "Помню",
     EASY: "Легко",
     SHOW_ANSWER: "Показать ответ",
     CARD_PROGRESS_RESET: "Сбросить прогресс изучения карточки",
@@ -67,29 +67,31 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}мин",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition",
-    GROUP_TAGS_FOLDERS: "Tags & Folders",
-    GROUP_FLASHCARD_REVIEW: "Flashcard Review",
-    GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
-    GROUP_DATA_STORAGE: "Storage of Scheduling Data",
-    GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
-    GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
-    GROUP_CONTRIBUTING: "Contributing",
-    CHECK_WIKI: 'Для дополнительной информации посетите: <a href="${wikiUrl}">wiki</a>.',
+    SETTINGS_HEADER: "Интервальное Повторение с Вспоминанием",
+    GROUP_TAGS_FOLDERS: "Теги и папки",
+    GROUP_FLASHCARD_REVIEW: "Изучение карточек",
+    GROUP_FLASHCARD_SEPARATORS: "Разделители карточек",
+    GROUP_DATA_STORAGE: "Хранение данных планирования",
+    GROUP_DATA_STORAGE_DESC: "Выберите, где хранить данные планирования",
+    GROUP_FLASHCARDS_NOTES: "Карточки и заметки",
+    GROUP_CONTRIBUTING: "Участие в разработке",
+    CHECK_WIKI: 'Для дополнительной информации посетите: <a href="${wikiUrl}">Документацию</a>.',
     GITHUB_DISCUSSIONS:
-        'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
+        'Посмотрите <a href="${discussionsUrl}">Обсуждения</a> для помощи, отзывов и общих дискуссий.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
+        'Сообщите о проблеме <a href="${issuesUrl}">здесь</a>, если у вас есть запрос на функцию или сообщение об ошибке.',
+    GITHUB_ISSUES_MODIFIED_PLUGIN:
+        'Сообщите о проблеме <a href="${issuesUrl}">здесь</a> касательно этого модифицированного sr-плагина, если у вас есть запрос на функцию или сообщение об ошибке.',
     GITHUB_SOURCE_CODE:
-        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+        'Исходный код проекта доступен на <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
-        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+        'Внести свой вклад в <a href="${codeContributionUrl}">код плагина</a>.',
     TRANSLATION_CONTRIBUTION_INFO:
-        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
+        'Перевести плагин на <a href="${translationContributionUrl}">другой язык</a>',
     FOLDERS_TO_IGNORE: "Игнорируемые папки",
     FOLDERS_TO_IGNORE_DESC:
-        "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
-    OBSIDIAN_INTEGRATION: "Integration into Obsidian",
+        "Введите пути к папкам или глобальным шаблонам на отдельных строках, например: Templates/Scripts или **/*.excalidraw.md. Эта настройка общая для карточек и заметок.",
+    OBSIDIAN_INTEGRATION: "Интеграция с Obsidian",
     FLASHCARDS: "Карточки",
     FLASHCARD_EASY_LABEL: 'Текст кнопки "Легко"',
     FLASHCARD_GOOD_LABEL: 'Текст кнопки "Помню"',
@@ -97,11 +99,11 @@ export default {
     FLASHCARD_EASY_DESC: 'Настроить ярлык для кнопки "Легко"',
     FLASHCARD_GOOD_DESC: 'Настроить ярлык для кнопки "Помню"',
     FLASHCARD_HARD_DESC: 'Настроить ярлык для кнопки "Сложно"',
-    REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
-    REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
+    REVIEW_BUTTON_DELAY: "Задержка нажатия кнопки (мс)",
+    REVIEW_BUTTON_DELAY_DESC: "Добавить задержку к кнопкам повторения перед тем, как их можно будет нажать снова.",
     FLASHCARD_TAGS: "Теги карточек",
     FLASHCARD_TAGS_DESC:
-        "Введите теги, разделённые пробелами или новыми строками, например: #flashcards #deck2 #deck3.",
+        "Введите теги, разделённые пробелами или новыми строками, например: #карточки #колода2 #колода3.",
     CONVERT_FOLDERS_TO_DECKS: "Конвертировать папки в колоды и подколоды?",
     CONVERT_FOLDERS_TO_DECKS_DESC: "Это альтернатива указанным выше тегам карточек.",
     INLINE_SCHEDULING_COMMENTS:
@@ -109,14 +111,15 @@ export default {
     INLINE_SCHEDULING_COMMENTS_DESC: "HTML комментарии не будут нарушать форматирование списка",
     BURY_SIBLINGS_TILL_NEXT_DAY: "Скрывать родственные карточки до следующего дня?",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
-        "Родственные карточки - те, которые образованы из одного текста, пример: карточки с пропусками ([...])",
-    MULTI_CLOZE: "enable multi-cloze card?",
-    MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
-    SHOW_CARD_CONTEXT: "Показывать контекст (уровень) в карточках (во время повторения)?",
-    SHOW_CARD_CONTEXT_DESC: "пример: Title > Heading 1 > Subheading > ... > Subheading",
-    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
+        "Родственные карточки - те, которые образованы из одного текста, пример: закрытые карточки ([...])",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW: "Скрывать родственные карточки до следующего дня при повторении заметок",
+    MULTI_CLOZE: "включить мульти-закрытые карточки?",
+    MULTI_CLOZE_DESC: "Объединить новые/просроченные родственные закрытые карточки в одну карточку.",
+    SHOW_CARD_CONTEXT: "Показывать контекст в карточках?",
+    SHOW_CARD_CONTEXT_DESC: "например: Заголовок > Раздел 1 > Подраздел > ... > Подраздел",
+    SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Показывать время следующего повторения на кнопках",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
-        "Useful to know how far in the future your cards are being pushed.",
+        "Полезно знать, на какое время в будущем откладываются ваши карточки.",
     CARD_MODAL_HEIGHT_PERCENT: "Высота карточки в процентах",
     CARD_MODAL_SIZE_PERCENT_DESC:
         "Установите 100% на мобильных устройствах, если нужно просматривать большие изображения",
@@ -136,27 +139,27 @@ export default {
     REVIEW_DECK_ORDER_PREV_DECK_COMPLETE_RANDOM:
         "Случайно (после изучения всех карт из предыдущей колоды)",
     REVIEW_DECK_ORDER_RANDOM_DECK_AND_CARD: "Случайная карта из случайной колоды",
-    DISABLE_CLOZE_CARDS: "Выключить карты с пропусками (пример: [...])?",
-    CONVERT_HIGHLIGHTS_TO_CLOZES: "Конвертировать ==выделенный текст== в пропуски (пример: [...])?",
+    DISABLE_CLOZE_CARDS: "Выключить закрытые карточки (пример: [...])?",
+    CONVERT_HIGHLIGHTS_TO_CLOZES: "Конвертировать ==выделенный текст== в закрытые карточки (пример: [...])?",
     CONVERT_HIGHLIGHTS_TO_CLOZES_DESC:
-        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
-    CONVERT_BOLD_TEXT_TO_CLOZES: "Конвертировать **жирный текст** в пропуски (пример: [...])?",
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны закрытых карточек"',
+    CONVERT_BOLD_TEXT_TO_CLOZES: "Конвертировать **жирный текст** в закрытые карточки (пример: [...])?",
     CONVERT_BOLD_TEXT_TO_CLOZES_DESC:
-        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны закрытых карточек"',
     CONVERT_CURLY_BRACKETS_TO_CLOZES:
-        "Конвертировать {{фигурные скобки}} в пропуски (пример: [...])?",
+        "Конвертировать {{фигурные скобки}} в закрытые карточки (пример: [...])?",
     CONVERT_CURLY_BRACKETS_TO_CLOZES_DESC:
-        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны пропусков"',
-    CLOZE_PATTERNS: "Шаблоны пропусков",
+        'Добавить/удалить <code>${defaultPattern}</code> в ваши "Шаблоны закрытых карточек"',
+    CLOZE_PATTERNS: "Шаблоны закрытых карточек",
     CLOZE_PATTERNS_DESC:
-        'Введите шаблоны пропусков, разделенные переводами строк. Check the <a href="${docsUrl}">wiki</a> for guidance.',
+        'Введите шаблоны закрытых карточек, разделенные переводами строк. Посмотрите <a href="${docsUrl}">документацию</a> для ознакомления.',
     INLINE_CARDS_SEPARATOR: "Разделитель для внутристрочных карточек",
     FIX_SEPARATORS_MANUALLY_WARNING:
         "Внимание: после изменения этого параметра вам потребуется вручную изменить разделители в существующих карточках.",
     INLINE_REVERSED_CARDS_SEPARATOR: "Разделитель для обратных однострочных карточек",
     MULTILINE_CARDS_SEPARATOR: "Разделитель для многострочных карточек",
     MULTILINE_REVERSED_CARDS_SEPARATOR: "Разделитель для обратных многострочных карточек",
-    MULTILINE_CARDS_END_MARKER: "Символы, обозначающие конец закрытых и многострочных карточек",
+    MULTILINE_CARDS_END_MARKER: "Символы, обозначающие конец закрытых карточек и многострочных карточек",
     NOTES: "Заметки",
     NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Включить панель изучения карточек при запуске программы",
@@ -167,20 +170,20 @@ export default {
     OPEN_RANDOM_NOTE_DESC: "Если выключить, то заметки будут отсортированы по важности (PageRank).",
     AUTO_NEXT_NOTE: "После изучения автоматически открывать следующую заметку",
     ENABLE_FILE_MENU_REVIEW_OPTIONS:
-        "Включите параметры обзора в меню Файл (т.е.: Изучение: Легко, Нормально, Сложно)",
+        "Включите параметры обзора в меню Файл (т.е.: Изучение: Легко, Помню, Сложно)",
     ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
         "Если вы отключите параметры обзора в меню Файл, вы сможете просматривать свои заметки с помощью команд плагина и, если вы их задали, соответствующих горячих клавиш.",
     MAX_N_DAYS_REVIEW_QUEUE: "Наибольшее количество дней для отображение на панели справа",
     MIN_ONE_DAY: "Количество дней не меньше 1.",
     VALID_NUMBER_WARNING: "Пожалуйста, введите подходящее число.",
-    UI: "User Interface",
-    OPEN_IN_TAB: "Open in new tab",
-    OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
-    SHOW_STATUS_BAR: "Show status bar",
+    UI: "Пользовательский интерфейс",
+    OPEN_IN_TAB: "Открывать в новой вкладке",
+    OPEN_IN_TAB_DESC: "Отключите, чтобы открывать плагин в модальном окне",
+    SHOW_STATUS_BAR: "Показывать строку состояния",
     SHOW_STATUS_BAR_DESC:
-        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
-    SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
-    SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
+        "Отключите, чтобы скрыть статус повторения карточек в строке состояния Obsidian",
+    SHOW_RIBBON_ICON: "Показывать иконку на панели инструментов",
+    SHOW_RIBBON_ICON_DESC: "Отключите, чтобы скрыть иконку плагина с панели инструментов Obsidian",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "Дерево колод должно изначально отображаться развёрнутым",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Отключите этот параметр, чтобы свернуть вложенные колоды в одной карточке. Полезно, если у вас есть карточки, принадлежащие многим колодам в одном файле.",
@@ -197,10 +200,10 @@ export default {
     EASY_BONUS_DESC:
         "Бонус за Легко позволяет вам установить разницу в промежутках между ответами Хорошо и Легко на карточке/заметке (мин. = 100%).",
     EASY_BONUS_MIN_WARNING: 'Бонус за "Легко" должен быть не меньше 100.',
-    LOAD_BALANCE: "Enable load balancer",
-    LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
-        It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
-        It's turned off for small intervals.`,
+    LOAD_BALANCE: "Включить балансировщик нагрузки",
+    LOAD_BALANCE_DESC: `Слегка корректирует интервал, чтобы количество повторений в день было более постоянным.
+        Это похоже на размытие в Anki, но вместо случайности выбирает день с наименьшим количеством повторений.
+        Отключается для малых интервалов.`,
     MAX_INTERVAL: "Максимальный интервал повторения в днях",
     MAX_INTERVAL_DESC:
         "Устанавливает верхний предел интервала повторения (по умолчанию = 100 лет).",
@@ -216,11 +219,11 @@ export default {
         "При отключении позволяет пользователю пропустить краткосрочное планирование и сразу перейти к долгосрочному.",
     LOGGING: "Журналирование",
     DISPLAY_SCHEDULING_DEBUG_INFO: "Отображать отладочную информацию в консоли разработчика",
-    DISPLAY_PARSER_DEBUG_INFO: "Show the parser's debugging information on the developer console",
-    SCHEDULING: "Scheduling",
-    EXPERIMENTAL: "Experimental",
-    HELP: "Help",
-    STORE_IN_NOTES: "In the notes",
+    DISPLAY_PARSER_DEBUG_INFO: "Показывать отладочную информацию парсера в консоли разработчика",
+    SCHEDULING: "Планирование",
+    EXPERIMENTAL: "Экспериментальные",
+    HELP: "Помощь",
+    STORE_IN_NOTES: "В заметках",
 
     DATA_LOC: "Расположение данных",
     DATA_LOC_DESC: "Где хранить файл данных для элементов интервального повторения.",
@@ -296,13 +299,140 @@ export default {
     CARD_TYPE_YOUNG: "Повторяемых",
     CARD_TYPE_MATURE: "Изученных",
     CARD_TYPES_SUMMARY: "Всего карточек: ${totalCardsCount}",
-    SEARCH: "Search",
-    PREVIOUS: "Previous",
-    NEXT: "Next",
-    REVIEWED_TODAY: "Reviewed today",
-    REVIEWED_TODAY_DESC: "counts of cards/notes you have reviewed today",
-    NEW_LEARNED: "New Learned",
-    DUE_REVIEWED: "due Reviewed",
-    REVIEWED_TODAY_SUMMARY: "Total Reviewed today: ${totalreviewedCount}",
-    DATE: "Date",
+    SEARCH: "Поиск",
+    PREVIOUS: "Предыдущий",
+    NEXT: "Следующий",
+    REVIEWED_TODAY: "Повторено сегодня",
+    REVIEWED_TODAY_DESC: "количество карточек/заметок, которые вы повторили сегодня",
+    NEW_LEARNED: "Новых изучено",
+    DUE_REVIEWED: "Просроченных повторено",
+    REVIEWED_TODAY_SUMMARY: "Всего повторено сегодня: ${totalreviewedCount}",
+    DATE: "Дата",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "это файл с тегом, нельзя отменить отслеживание таким образом. Вы можете удалить тег #review в файле заметки.",
+    DATA_UNTRACKED_ITEMS: "Отменено отслеживание ${numItems} элементов${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Не удалось сохранить файл данных!",
+    DATA_FOLDER_UNTRACKED:
+        "В папке ${folderPath}, ${totalRemoved} файлов больше не отслеживаются для повторения",
+    DATA_ADDED_REMOVED_ITEMS: "Добавлено ${totalAdded} новых элементов, удалено ${totalRemoved} элементов.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Добавлено ${added} новых элементов, удалено ${removed} элементов.",
+    DATA_FILE_UPDATE:
+        "${filePath} обновлен - строка: ${lineNo}\nДобавлено: ${added} новых карточек, удалено ${removed} карточек.",
+    DATA_ALL_ITEMS_UPDATED: "Все элементы были обновлены.",
+
+    // reviewView.ts
+    NEXT_REVIEW_MINUTES: "Можно повторить через ${interval} минут",
+    NEXT_REVIEW_HOURS: "Можно повторить через ${interval} часов",
+
+    // location_switch.ts
+    DATA_FILE_MOVED_SUCCESS: "Файл данных успешно перемещен!",
+    DATA_FILE_DELETE_OLD_FAILED: "Не удалось удалить старый файл данных, удалите его вручную.",
+    DATA_FILE_MOVE_FAILED: "Не удалось переместить файл данных!",
+    DATA_LOST_WARNING: "Некоторые данные потеряны, смотрите консоль для подробностей.",
+
+    // algorithms_switch.ts
+    ALGORITHM_SWITCH_FAILED: "Конвертация не удалась, восстановлен старый алгоритм и данные, пожалуйста, сообщите об этом.",
+    ALGORITHM_SWITCH_SUCCESS: "Конвертация завершена, из-за различных параметров алгоритма последующие интервалы повторения будут скорректированы",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Отслеживать все заметки",
+    MENU_UNTRACK_ALL_NOTES: "Не отслеживать все заметки",
+    MENU_TRACK_NOTE: "Отслеживать заметку",
+    MENU_UNTRACK_NOTE: "Не отслеживать заметку",
+
+    // info.ts
+    ITEM_INFO_TITLE: "Информация об элементе",
+    CARDS_IN_NOTE: "Карточки в этой заметке",
+    SAVE_ITEM_INFO: "Сохранить",
+    SAVE_ITEM_INFO_TOOLTIP: "сохранить только информацию об элементах текущей заметки",
+    CLOSE_ITEM_INFO: "Закрыть",
+    LINE_NO: "Строка:",
+    NEXT_REVIEW: "Следующее повторение:",
+    NEW_CARD: "Новая карточка",
+    ITEM_DATA_INFO: "Информация о данных элемента",
+
+    // cardBlockIDSetting.ts
+    CARD_BLOCK_ID: "ID блока карточки",
+    CARD_BLOCK_ID_DESC: "использовать ID блока карточки вместо номера строки и хеша текста.<br><b>Если включено, ID блока будет добавлен после текста карточки. И ID блока останется в заметке после отключения.</b>",
+    CARD_BLOCK_ID_CONFIRM: "**Если включено, ID блока будет добавлен после текста карточки. И ID блока останется в заметке после отключения.** \n\nРекомендация: сделайте резервную копию хранилища перед включением. Или попробуйте в тестовом хранилище. \n\nПосле включения настройки ID блока будут добавлены после всех карточек. Даже если настройка будет отключена, добавленные ID блоков останутся в заметке и не будут удалены.\n\nРекомендуется **сначала сделать резервную копию** библиотеки заметок или попробовать в тестовой библиотеке.",
+
+    // mixQueueSetting.ts
+    MIX_QUEUE: "Смешанная очередь",
+    MIX_QUEUE_DESC: "смешивать просроченные и новые заметки при повторении. **Первый** слайдер для общего количества, второй слайдер для количества просроченных. А количество новых = (общее - просроченные).",
+
+    // dataLocation.ts
+    DATA_LOCATION_PLUGIN_FOLDER: "В папке плагина",
+    DATA_LOCATION_ROOT_FOLDER: "В папке хранилища",
+    DATA_LOCATION_SPECIFIED_FOLDER: "В указанной ниже папке",
+    DATA_LOCATION_SAVE_ON_NOTE_FILE: "Сохранить в файле заметки",
+
+    // locationSetting.ts
+    DATA_LOCATION_WARNING_TO_NOTE: "БУДЬТЕ ОСТОРОЖНЫ!!!\nЕсли вы подтвердите это, все ваши данные планирования из `tracked_files.json` будут конвертированы в заметки, что изменит множество ваших файлов заметок одновременно.\nПожалуйста, убедитесь, что настройки тегов карточек и заметок соответствуют тому, что вы используете.",
+    DATA_LOCATION_WARNING_OTHER_ALGO: "если вы хотите сохранять данные в файле заметки, вы **должны** использовать алгоритм по умолчанию.",
+    DATA_LOCATION_WARNING_TO_TRACKED: "БУДЬТЕ ОСТОРОЖНЫ!!!\nЕсли вы подтвердите это, все ваши данные планирования из заметок (которые будут удалены одновременно) будут конвертированы В `tracked_files.json`.",
+
+    // trackSetting.ts
+    UNTRACK_WITH_REVIEWTAG_DESC: "При удалении тега повторения в заметке синхронно отменить отслеживание, чтобы заметка больше не повторялась<br><b>включено</b>: синхронная операция отмены отслеживания;<br><b>отключено</b>: После удаления тега повторения нужно отменить отслеживание еще раз, прежде чем заметка перестанет повторяться. (как в предыдущей версии)",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Информация об элементе",
+    CMD_TRACK_NOTE: "Отслеживать заметку",
+    CMD_UNTRACK_NOTE: "Не отслеживать заметку",
+    CMD_RESCHEDULE: "Перепланировать",
+    CMD_POSTPONE_CARDS: "Отложить карточки",
+    CMD_POSTPONE_NOTES: "Отложить заметки",
+    CMD_POSTPONE_ALL: "Отложить всё",
+    CMD_POSTPONE_NOTE_MANUAL: "Отложить эту заметку на x дней",
+    CMD_POSTPONE_CARDS_MANUAL: "Отложить карточки в этой заметке на x дней",
+    CMD_BUILD_QUEUE: "Построить очередь",
+    CMD_REVIEW: "Изучать",
+    CMD_PRINT_VIEW_STATE: "Вывести состояние вида",
+    CMD_PRINT_EPHEMERAL_STATE: "Вывести временное состояние",
+    CMD_CLEAR_QUEUE: "Очистить очередь",
+    CMD_QUEUE_ALL: "Добавить всё в очередь",
+    CMD_PRINT_DATA: "Вывести данные",
+    CMD_UPDATE_ITEMS: "Обновить элементы",
+    CMD_INPUT_POSITIVE_NUMBER: "Пожалуйста, введите положительное число",
+    CMD_NOTE_POSTPONED: "Эта заметка была отложена на ${days} дней",
+
+    // anki.ts
+    ANKI_ALGORITHM_DESC: 'Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href="https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html">алгоритм Anki</a>.',
+    STARTING_EASE: "Начальная лёгкость",
+    STARTING_EASE_DESC: "Начальная лёгкость, присваиваемая элементу.",
+    STARTING_EASE_ERROR: "Начальная лёгкость должна быть положительным числом.",
+    STARTING_EASE_WARNING: "Начальная лёгкость менее 1.3 не рекомендуется.",
+    EASY_BONUS_ANKI: "Бонус за лёгкость",
+    EASY_BONUS_ANKI_DESC: "Бонусный множитель для элементов, отмеченных как лёгкие.",
+    EASY_BONUS_ANKI_ERROR: "Бонус за лёгкость должен быть числом больше или равным 1.",
+    LAPSE_INTERVAL_MODIFIER: "Модификатор интервала при ошибке",
+    LAPSE_INTERVAL_MODIFIER_DESC: "Коэффициент для изменения интервала повторения, когда элемент отмечен как неправильный.",
+    LAPSE_INTERVAL_ERROR: "Интервал при ошибке должен быть положительным числом.",
+    GRADUATING_INTERVAL: "Интервал выпуска",
+    GRADUATING_INTERVAL_DESC: "Интервал (в днях) до следующего повторения после отметки нового элемента как 'Хорошо'.",
+    GRADUATING_INTERVAL_ERROR: "Интервал должен быть положительным числом.",
+    EASY_INTERVAL: "Интервал для лёгких",
+    EASY_INTERVAL_DESC: "Интервал (в днях) до следующего повторения после отметки нового элемента как 'Легко'.",
+    EASY_INTERVAL_ERROR: "Интервал должен быть положительным числом.",
+
+    // scheduling_default.ts
+    DEFAULT_ALGORITHM_DESC: 'Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href="https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/">модифицированный алгоритм Anki</a>.',
+
+    // supermemo.ts
+    SM2_ALGORITHM_DESC: 'Алгоритм, используемый для интервального повторения. В настоящее время использует те же параметры, что и алгоритм Anki (отличается только метод обработки алгоритма). Для получения дополнительной информации см. <a href="https://www.supermemo.com/en/archives1990-2015/english/ol/sm2">алгоритм SM2</a>.',
+
+    // fsrs.ts
+    FSRS_ALGORITHM_DESC: 'Алгоритм, используемый для интервального повторения. Для получения дополнительной информации см. <a href="https://github.com/open-spaced-repetition/ts-fsrs">алгоритм FSRS</a>.',
+    FSRS_W_PARAM_DESC: 'См. <a href="https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm">FSRS V6 Документацию</a> и <a href="https://open-spaced-repetition.github.io/anki_fsrs_visualizer">визуализацию параметров FSRS w</a> для настройки различных параметров.',
+
+    POST_ISSUE_MODIFIED_PLUGIN: 'Сообщите о проблеме <a href="${issue_url}">здесь</a> касательно этого модифицированного sr-плагина с фоновым цветом для настроек.',
+
+    // donation.ts
+    DONATION_TEXT: "Это хобби-проект. Если он вам помогает, можете угостить меня напитком или чаем с пузырьками",
+
+    // locationSetting.ts
+    FOLDER_PLACEHOLDER: "Пример: папка1/папка2",
+    SAVE_BUTTON: "Сохранить",
+    LOCATION_CHANGE_FINISHED: "Изменение местоположения завершено.",
 };

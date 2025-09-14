@@ -272,4 +272,7 @@ export default {
     DUE_REVIEWED: "复习",
     REVIEWED_TODAY_SUMMARY: "总复习数: ${totalreviewedCount}",
     DATE: "日期",
+
+    // donation.ts
+    DONATION_TEXT: "业余时间折腾的，如果对你有所帮助，可以请我喝瓶饮料或奶茶呀~",
 };

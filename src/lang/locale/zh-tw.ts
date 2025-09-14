@@ -392,4 +392,7 @@ export default {
     DATA_FILE_UPDATE:
         "${filePath}更新 - 行號：${lineNo}\n添加：${added}個新卡片項目，刪除${removed}個卡片項目。",
     DATA_ALL_ITEMS_UPDATED: "所有項目已更新。",
+
+    // donation.ts
+    DONATION_TEXT: "業餘時間折騰的，如果對你有所幫助，可以請我喝瓶飲料或奶茶呀~",
 };

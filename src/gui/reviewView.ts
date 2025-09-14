@@ -88,9 +88,9 @@ export class ReviewView {
             const now = Date.now();
             const interval = Math.round((minNextView - now) / 1000 / 60);
             if (interval < 60) {
-                new Notice("可以在" + interval + "分钟后来复习");
+                new Notice(t("NEXT_REVIEW_MINUTES", { interval: interval }));
             } else if (interval < 60 * 5) {
-                new Notice("可以在" + interval / 60 + "小时后来复习");
+                new Notice(t("NEXT_REVIEW_HOURS", { interval: Math.round(interval / 60) }));
             }
         }
     }

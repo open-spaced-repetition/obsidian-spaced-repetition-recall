@@ -119,7 +119,7 @@ export function addDataLocationSettings(containerEl: HTMLElement, plugin: SRPlug
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     await plugin.app.plugins.enablePlugin(plugin.manifest.id);
-                    console.debug("finish location change.");
+                    console.debug(t("LOCATION_CHANGE_FINISHED"));
 
                     await plugin.sync();
                     locSwitch.resultCheck(noteStats, cardStats, plugin.noteStats, plugin.cardStats);
@@ -148,7 +148,7 @@ export function addSpecifiedFolderSetting(containerEl: HTMLElement, plugin: SRPl
         // .setDesc('Folder for `tracked_files.json`')
         .addSearch((cb) => {
             new FolderSuggest(cb.inputEl);
-            cb.setPlaceholder("Example: folder1/folder2")
+            cb.setPlaceholder(t("FOLDER_PLACEHOLDER"))
                 .setValue(cusFolder)
                 .onChange((new_folder) => {
                     cusFolder = new_folder;
@@ -157,7 +157,7 @@ export function addSpecifiedFolderSetting(containerEl: HTMLElement, plugin: SRPl
         })
         .addButton((btn) =>
             btn
-                .setButtonText("save")
+                .setButtonText(t("SAVE_BUTTON"))
                 .setCta()
                 .onClick(async () => {
                     plugin.data.settings.customFolder = cusFolder + "/" + cusFilename;

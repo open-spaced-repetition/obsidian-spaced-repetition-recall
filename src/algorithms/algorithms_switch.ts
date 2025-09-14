@@ -1,5 +1,6 @@
 import { Notice } from "obsidian";
 import { SrsAlgorithm, algorithmNames } from "src/algorithms/algorithms";
+import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
 import { AnkiAlgorithm } from "./anki";
 import { FsrsAlgorithm } from "./fsrs";
@@ -55,13 +56,13 @@ export async function algorithmSwitchData(
         }
 
         await store.save();
-        const msg = fromTo + "转换完成，因算法参数不同，会导致后续复习间隔调整";
+        const msg = fromTo + t("ALGORITHM_SWITCH_SUCCESS");
         new Notice(msg);
         console.debug(msg);
         return true;
     } catch (error) {
         await store.load(bak_path);
-        new Notice(error + fromTo + "转换失败，已恢复旧算法及数据" + "please issue it.");
+        new Notice(error + fromTo + t("ALGORITHM_SWITCH_FAILED"));
         console.log(error);
         return false;
     }

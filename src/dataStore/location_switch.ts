@@ -10,6 +10,7 @@ import {
     YAML_FRONT_MATTER_REGEX,
     YAML_TAGS_REGEX,
 } from "src/constants";
+import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
 import { escapeRegexString } from "src/utils/strings";
@@ -78,18 +79,18 @@ export class LocationSwitch {
             adapter.remove(store.dataPath).then(
                 () => {
                     store.setdataPath(newPath);
-                    new Notice("Successfully moved data file!");
+                    new Notice(t("DATA_FILE_MOVED_SUCCESS"));
                     return true;
                 },
                 (e) => {
                     store.setdataPath(newPath);
-                    new Notice("Unable to delete old data file, please delete it manually.");
+                    new Notice(t("DATA_FILE_DELETE_OLD_FAILED"));
                     console.log(e);
                     return true;
                 },
             );
         } catch (e) {
-            new Notice("Unable to move data file!");
+            new Notice(t("DATA_FILE_MOVE_FAILED"));
             console.log(e);
             return false;
         }
@@ -454,7 +455,7 @@ export class LocationSwitch {
                 afternoteStats,
                 aftercardStats,
             );
-            new Notice("have some data lost, see console for detials.");
+            new Notice(t("DATA_LOST_WARNING"));
         }
     }
     compare(before: Stats, after: Stats, prefix: string) {

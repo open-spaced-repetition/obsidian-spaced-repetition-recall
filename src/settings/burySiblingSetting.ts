@@ -4,7 +4,7 @@ import SRPlugin from "src/main";
 
 export function addburySiblingSetting(containerEl: HTMLElement, plugin: SRPlugin) {
     new Setting(containerEl)
-        .setName(t("BURY_SIBLINGS_TILL_NEXT_DAY") + "by note review")
+        .setName(t("BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW"))
         .setDesc(t("BURY_SIBLINGS_TILL_NEXT_DAY_DESC"))
         .addToggle((toggle) => {
             toggle

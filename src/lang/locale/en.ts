@@ -56,7 +56,7 @@ export default {
     MINUTES_STR_IVL_MOBILE: "${interval}min",
 
     // settings.ts
-    SETTINGS_HEADER: "Spaced Repetition",
+    SETTINGS_HEADER: "Spaced Repetition Recall",
     GROUP_TAGS_FOLDERS: "Tags & Folders",
     GROUP_FLASHCARD_REVIEW: "Flashcard Review",
     GROUP_FLASHCARD_SEPARATORS: "Flashcard Separators",
@@ -68,7 +68,9 @@ export default {
     GITHUB_DISCUSSIONS:
         'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
-        'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
+        'Raise an <a href="${issuesUrl}">issue</a> if you have a feature request or a bug report.',
+    GITHUB_ISSUES_MODIFIED_PLUGIN:
+        'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
         'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
@@ -100,6 +102,7 @@ export default {
     BURY_SIBLINGS_TILL_NEXT_DAY: "Bury sibling cards until the next day",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Siblings are cards generated from the same card text i.e. cloze deletions",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW: "Bury sibling cards until the next day by note review",
     MULTI_CLOZE: "enable multi-cloze card?",
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Show context in cards",
@@ -375,6 +378,14 @@ export default {
     POST_ISSUE_MODIFIED_PLUGIN:
         'Post an <a href="${issue_url}">issue</a> about this modified sr-plugin which has background color for settings.',
 
+    // donation.ts
+    DONATION_TEXT: "This is a hobby project. If it helps you, you can buy me a drink or bubble tea~",
+
+    // locationSetting.ts
+    FOLDER_PLACEHOLDER: "Example: folder1/folder2",
+    SAVE_BUTTON: "Save",
+    LOCATION_CHANGE_FINISHED: "Finished location change.",
+
     // commands.ts
     CMD_ITEM_INFO: "Item Info",
     CMD_TRACK_NOTE: "Track Note",
@@ -414,4 +425,18 @@ export default {
     DATA_FILE_UPDATE:
         "${filePath} update - lineNo: ${lineNo}\nAdded: ${added} new card items, removed ${removed} card items.",
     DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
+
+    // reviewView.ts
+    NEXT_REVIEW_MINUTES: "You can review in ${interval} minutes",
+    NEXT_REVIEW_HOURS: "You can review in ${interval} hours",
+
+    // location_switch.ts
+    DATA_FILE_MOVED_SUCCESS: "Successfully moved data file!",
+    DATA_FILE_DELETE_OLD_FAILED: "Unable to delete old data file, please delete it manually.",
+    DATA_FILE_MOVE_FAILED: "Unable to move data file!",
+    DATA_LOST_WARNING: "have some data lost, see console for details.",
+
+    // algorithms_switch.ts
+    ALGORITHM_SWITCH_FAILED: "conversion failed, old algorithm and data restored, please issue it.",
+    ALGORITHM_SWITCH_SUCCESS: "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
 };

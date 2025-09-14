@@ -1,6 +1,6 @@
 {
     "name": "obsidian-spaced-repetition-recall",
-    "version": "1.12.5.19",
+    "version": "1.12.5.20",
     "description": "Fight the forgetting curve by reviewing flashcards & entire notes.",
     "main": "main.js",
     "scripts": {
@@ -18,7 +18,7 @@
         "spaced-repetition",
         "flashcards"
     ],
-    "author": "Stephen Mwangi",
+    "author": "Stephen Mwangi & Modifiedby Newdea",
     "license": "MIT",
     "devDependencies": {
         "@popperjs/core": "^2.11.8",

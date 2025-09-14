@@ -4,6 +4,7 @@ import QR_alipay from ".github/funding/QR_alipay.png";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import QR_wechat from ".github/funding/QR_wechat.png";
+import { t } from "src/lang/helpers";
 
 export function buildDonation(containerEl: HTMLElement): void {
     const div = containerEl.createEl("div");
@@ -14,8 +15,7 @@ export function buildDonation(containerEl: HTMLElement): void {
     div.style.margin = "0 auto";
 
     const text = document.createElement("p");
-    // text.textContent = t("COFFEE");
-    text.textContent = "业余时间折腾的，如果对你有所帮助，可以请我喝瓶饮料或奶茶呀~";
+    text.textContent = t("DONATION_TEXT");
     div.appendChild(text);
 
     let anchor = document.createElement("a");
