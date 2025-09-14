@@ -1,17 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import h from "vhtml";
 
-import type SRPlugin from "src/main";
-import { SRSettings } from "src/settings";
 import { COLLAPSE_ICON } from "src/constants";
-import { t } from "src/lang/helpers";
-import { Deck } from "../Deck";
+import { Deck } from "src/deck";
 import {
     DeckStats,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
-} from "src/FlashcardReviewSequencer";
-import { TopicPath } from "src/TopicPath";
-import { FlashcardMode } from "./FlashcardModal";
+} from "src/flashcard-review-sequencer";
+import { FlashcardMode } from "src/gui/sr-modal";
+import { t } from "src/lang/helpers";
+import type SRPlugin from "src/main";
+import { SRSettings } from "src/settings";
+import { TopicPath } from "src/topic-path";
 
 export class DeckUI {
     public plugin: SRPlugin;
@@ -22,6 +22,7 @@ export class DeckUI {
     public header: HTMLDivElement;
     public title: HTMLDivElement;
     public stats: HTMLDivElement;
+    public headerDivider: HTMLHRElement;
     public content: HTMLDivElement;
 
     private reviewSequencer: IFlashcardReviewSequencer;
@@ -32,14 +33,14 @@ export class DeckUI {
         plugin: SRPlugin,
         settings: SRSettings,
         reviewSequencer: IFlashcardReviewSequencer,
-        contentEl: HTMLElement,
+        view: HTMLDivElement,
         startReviewOfDeck: (deck: Deck) => void,
     ) {
         // Init properties
         this.plugin = plugin;
         this.settings = settings;
         this.reviewSequencer = reviewSequencer;
-        this.contentEl = contentEl;
+        this.view = view;
         this.startReviewOfDeck = startReviewOfDeck;
 
         // Build ui
@@ -50,7 +51,6 @@ export class DeckUI {
      * Initializes all static elements in the DeckListView
      */
     init(): void {
-        this.view = this.contentEl.createDiv();
         this.view.addClasses(["sr-deck-list", "sr-is-hidden"]);
 
         this.header = this.view.createDiv();
@@ -63,6 +63,8 @@ export class DeckUI {
         this.stats = this.header.createDiv();
         this.stats.addClass("sr-header-stats-container");
         this._createHeaderStats();
+
+        this.headerDivider = this.view.createEl("hr");
 
         this.content = this.view.createDiv();
         this.content.addClass("sr-content");

@@ -1,14 +1,15 @@
-import { ItemView, WorkspaceLeaf } from "obsidian";
+import { ItemView, setIcon, WorkspaceLeaf } from "obsidian";
 
 import { SR_TAB_VIEW } from "src/constants";
-import { Deck } from "src/Deck";
-import { CardUI } from "src/gui/CardUI";
-import { DeckUI } from "src/gui/DeckUI";
+import { Deck } from "src/deck";
+import { FlashcardReviewMode, IFlashcardReviewSequencer } from "src/flashcard-review-sequencer";
+import { CardUI } from "src/gui/card-ui";
+import { DeckUI } from "src/gui/deck-ui";
+import { FlashcardEditModal } from "src/gui/edit-modal";
+import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { Question } from "src/Question";
+import { Question } from "src/question";
 import { SRSettings } from "src/settings";
-import { FlashcardEditModal } from "src/gui/EditModal";
-import { FlashcardReviewMode, IFlashcardReviewSequencer } from "src/FlashcardReviewSequencer";
 
 /**
  * Represents a tab view for spaced repetition plugin.
@@ -25,7 +26,7 @@ import { FlashcardReviewMode, IFlashcardReviewSequencer } from "src/FlashcardRev
  * @method onOpen - Initializes the view and loads necessary data when opened.
  * @method onClose - Cleans up resources when the view is closed.
  */
-export class TabView extends ItemView {
+export class SRTabView extends ItemView {
     loadReviewSequencerData: () => Promise<{
         reviewSequencer: IFlashcardReviewSequencer;
         mode: FlashcardReviewMode;
@@ -40,6 +41,7 @@ export class TabView extends ItemView {
     private deckView: DeckUI;
     private flashcardView: CardUI;
     private openErrorCount: number = 0; // Counter for catching the first inevitable error but the letting the other through
+    public backButton: HTMLDivElement;
 
     constructor(
         leaf: WorkspaceLeaf,
@@ -104,6 +106,7 @@ export class TabView extends ItemView {
      */
     async onOpen() {
         try {
+            this._createBackButton();
             const loadedData = await this.loadReviewSequencerData();
 
             this.reviewSequencer = loadedData.reviewSequencer;
@@ -115,7 +118,7 @@ export class TabView extends ItemView {
                     this.plugin,
                     this.settings,
                     this.reviewSequencer,
-                    this.viewContentEl,
+                    this.viewContentEl.createDiv(),
                     this._startReviewOfDeck.bind(this),
                 );
             }
@@ -127,8 +130,7 @@ export class TabView extends ItemView {
                     this.settings,
                     this.reviewSequencer,
                     this.reviewMode,
-                    this.viewContentEl,
-                    this.viewContainerEl,
+                    this.viewContentEl.createDiv(),
                     this._showDecksList.bind(this),
                     this._doEditQuestionText.bind(this),
                 );
@@ -171,7 +173,7 @@ export class TabView extends ItemView {
 
     private _showFlashcard(deck: Deck): void {
         this._hideDecksList();
-        this.flashcardView.show();
+        this.flashcardView.show(deck);
     }
 
     private _hideFlashcard(): void {
@@ -181,6 +183,7 @@ export class TabView extends ItemView {
     private _startReviewOfDeck(deck: Deck) {
         this.reviewSequencer.setCurrentDeck(deck.getTopicPath());
         if (this.reviewSequencer.hasCurrentCard) {
+            this.backButton.removeClass("sr-is-hidden");
             this._showFlashcard(deck);
         } else {
             this._showDecksList();
@@ -203,5 +206,16 @@ export class TabView extends ItemView {
                 this.reviewSequencer.updateCurrentQuestionText(modifiedCardText);
             })
             .catch((reason) => console.log(reason));
+    }
+
+    private _createBackButton() {
+        this.backButton = this.viewContentEl.createDiv();
+        this.backButton.addClasses(["sr-back-button", "sr-is-hidden"]);
+        setIcon(this.backButton, "arrow-left");
+        this.backButton.setAttribute("aria-label", t("BACK"));
+        this.backButton.addEventListener("click", () => {
+            this.backButton.addClass("sr-is-hidden");
+            this._showDecksList();
+        });
     }
 }

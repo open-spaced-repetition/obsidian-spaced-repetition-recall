@@ -1,12 +1,12 @@
-import { PaneType, TFile, ViewCreator, WorkspaceLeaf } from "obsidian";
+import { PaneType, TFile, WorkspaceLeaf } from "obsidian";
 
 import { SR_TAB_VIEW } from "src/constants";
+// import { OsrAppCore } from "src/core";
+import { Deck } from "src/deck";
+import { FlashcardReviewMode } from "src/flashcard-review-sequencer";
+import { SRTabView } from "src/gui/sr-tab-view";
 import SRPlugin from "src/main";
-import { FlashcardReviewMode } from "src/FlashcardReviewSequencer";
-import { Deck } from "src/Deck";
-import { TabView } from "src/gui/TabView";
-
-export type TabViewType = { type: string; viewCreator: ViewCreator };
+import { TabViewType } from "src/utils/types";
 
 /**
  * Manages tab views for the Spaced Repetition plugin, allowing for the opening and closing
@@ -21,6 +21,7 @@ export type TabViewType = { type: string; viewCreator: ViewCreator };
  */
 export default class TabViewManager {
     private plugin: SRPlugin;
+    // private osrAppCore: OsrAppCore;
     private shouldOpenSingeNoteTabView: boolean;
     private chosenReviewModeForTabbedView: FlashcardReviewMode;
     private chosenSingleNoteForTabbedView: TFile;
@@ -30,7 +31,7 @@ export default class TabViewManager {
         {
             type: SR_TAB_VIEW,
             viewCreator: (leaf) =>
-                new TabView(leaf, this.plugin, async () => {
+                new SRTabView(leaf, this.plugin, async () => {
                     // Tabbed views cant get params on open call, so we have to do it here
                     // This allows us to load the data from inside the view when the open function is called
                     if (this.shouldOpenSingeNoteTabView) {
@@ -76,6 +77,7 @@ export default class TabViewManager {
      * This method sets up the necessary state for the tab view and invokes the
      * internal method to open the tab view with the specified parameters.
      *
+     * @param osrAppCore - The core application instance used for managing reviewable decks.
      * @param reviewMode - The mode of flashcard review.
      * @param singleNote - Optional parameter specifying a single note to review.
      *                     If provided, the tab view will focus on this note.

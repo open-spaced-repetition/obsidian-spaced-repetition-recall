@@ -10,7 +10,7 @@ import {
 import * as graph from "pagerank.js";
 
 import { DEFAULT_SETTINGS, SettingsUtil, SRSettings, upgradeSettings } from "src/settings";
-import { FlashcardModal } from "src/gui/FlashcardModal";
+import { FlashcardModal } from "src/gui/sr-modal";
 import { StatsModal } from "src/gui/StatsModal";
 import { REVIEW_QUEUE_VIEW_TYPE, ReviewQueueListView } from "src/gui/Sidebar";
 import { ReviewResponse, schedule } from "src/scheduling";
@@ -67,8 +67,8 @@ import { IReviewNote } from "./reviewNote/review-note";
 import { ReviewView } from "./gui/reviewView";
 import { MixQueSet } from "./dataStore/mixQueSet";
 import { Iadapter } from "./dataStore/adapter";
-import TabViewManager from "src/gui/TabViewManager";
-import { TabView } from "src/gui/TabView";
+import TabViewManager from "src/gui/tab-view-manager";
+import { SRTabView } from "src/gui/sr-tab-view";
 import { SRSettingTab } from "src/gui/settings";
 
 interface PluginData {
@@ -1143,7 +1143,7 @@ export default class SRPlugin extends Plugin {
     }
 
     public handleFocusChange(leaf: WorkspaceLeaf | null) {
-        this.setSRViewInFocus(leaf !== null && leaf.view instanceof TabView);
+        this.setSRViewInFocus(leaf !== null && leaf.view instanceof SRTabView);
     }
 
     public setSRViewInFocus(value: boolean) {
