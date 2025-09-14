@@ -34,15 +34,15 @@ import {
     IIteratorOrder,
 } from "./DeckTreeIterator";
 import { CardScheduleCalculator } from "./CardSchedule";
-import { Note } from "./Note";
+import { Note } from "src/note";
 import { NoteFileLoader } from "./NoteFileLoader";
 import { ISRFile, SrTFile as SrTFile } from "src/file";
 import { NoteEaseCalculator } from "./NoteEaseCalculator";
 import { DeckTreeStatsCalculator } from "./DeckTreeStatsCalculator";
 import { NoteEaseList } from "./NoteEaseList";
-import { QuestionPostponementList } from "./QuestionPostponementList";
-import { TextDirection } from "./util/TextDirection";
-import { convertToStringOrEmpty, isEqualOrSubPath } from "./util/utils";
+import { QuestionPostponementList } from "src/question-postponement-list";
+import { TextDirection } from "./utils/strings";
+import { convertToStringOrEmpty } from "src/utils/strings";
 import { setDebugParser } from "src/parser";
 
 // https://github.com/martin-jw/obsidian-recall

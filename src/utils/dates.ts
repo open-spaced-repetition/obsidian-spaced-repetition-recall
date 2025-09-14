@@ -82,6 +82,7 @@ export function formatDate(
 export interface IDateProvider {
     get now(): Moment;
     get today(): Moment;
+    get endofToday(): Moment;
 }
 
 export class LiveDateProvider implements IDateProvider {
@@ -91,6 +92,10 @@ export class LiveDateProvider implements IDateProvider {
 
     get today(): Moment {
         return moment().startOf("day");
+    }
+
+    get endofToday(): Moment {
+        return moment().endOf("day");
     }
 }
 
@@ -107,6 +112,10 @@ export class StaticDateProvider implements IDateProvider {
 
     get today(): Moment {
         return this.moment.clone().startOf("day");
+    }
+
+    get endofToday(): Moment {
+        return this.moment.clone().endOf("day");
     }
 
     static fromDateStr(str: string): StaticDateProvider {

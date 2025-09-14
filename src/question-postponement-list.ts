@@ -1,6 +1,7 @@
-import { Question } from "./Question";
-import SRPlugin from "./main";
-import { SRSettings } from "./settings";
+import SRPlugin from "src/main";
+import { PluginData } from "src/plugin-data";
+import { Question } from "src/question";
+import { SRSettings } from "src/settings";
 
 export interface IQuestionPostponementList {
     clear(): void;
@@ -18,6 +19,19 @@ export class QuestionPostponementList implements IQuestionPostponementList {
         this.plugin = plugin;
         this.settings = settings;
         this.list = list;
+    }
+
+    async clearIfNewDay(data: PluginData): Promise<void> {
+        const now = window.moment(Date.now());
+        const todayDate: string = now.format("YYYY-MM-DD");
+
+        // clear bury list if we've changed dates
+        const isNewDay: boolean = todayDate !== data.buryDate;
+        if (isNewDay) {
+            data.buryDate = todayDate;
+            this.clear();
+            await this.write();
+        }
     }
 
     clear(): void {

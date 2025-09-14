@@ -1,4 +1,4 @@
-import { getTypedObjectEntries } from "./utils";
+import { getTypedObjectEntries } from "src/utils/types";
 
 export interface IRandomNumberProvider {
     getInteger(lowerBound: number, upperBound: number): number;

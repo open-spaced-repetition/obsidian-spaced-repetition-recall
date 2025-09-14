@@ -2,7 +2,7 @@ import { DateUtils, isArray, logExecutionTime } from "src/util/utils_recall";
 import { DataStore } from "./data";
 import { TrackedFile } from "./trackedFile";
 import { RepetitionItem } from "./repetitionItem";
-import { getKeysPreserveType } from "src/util/utils";
+import { getKeysPreserveType } from "src/utils/types";
 import { globalDateProvider } from "src/util/DateProvider";
 
 export interface IQueue {

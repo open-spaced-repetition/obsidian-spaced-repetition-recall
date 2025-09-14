@@ -1,4 +1,4 @@
-import { literalStringReplace, splitTextIntoLineArray } from "./utils";
+import { literalStringReplace, splitTextIntoLineArray } from "src/utils/strings";
 
 export class MultiLineTextFinder {
     static findAndReplace(

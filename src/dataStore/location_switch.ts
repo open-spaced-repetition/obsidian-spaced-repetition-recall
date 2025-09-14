@@ -12,7 +12,7 @@ import {
 } from "src/constants";
 import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
-import { escapeRegexString } from "src/util/utils";
+import { escapeRegexString } from "src/utils/strings";
 import { DataStore } from "./data";
 import { Tags } from "src/tags";
 
