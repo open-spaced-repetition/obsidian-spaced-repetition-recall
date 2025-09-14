@@ -2,7 +2,7 @@ import { Notice } from "obsidian";
 import { AnkiData } from "src/algorithms/anki";
 import { balance } from "src/algorithms/balance/balance";
 import { FsrsData } from "src/algorithms/fsrs";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 import { DateUtils, debug } from "src/util/utils_recall";
 
 export enum RPITEMTYPE {

@@ -3,7 +3,7 @@ import { DataStore } from "./data";
 import { TrackedFile } from "./trackedFile";
 import { RepetitionItem } from "./repetitionItem";
 import { getKeysPreserveType } from "src/utils/types";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 
 export interface IQueue {
     /**

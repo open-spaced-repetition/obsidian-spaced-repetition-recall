@@ -1,9 +1,9 @@
 import { CardScheduleInfo, NoteCardScheduleParser } from "src/CardSchedule";
 import { TICKS_PER_DAY } from "src/constants";
-import { setupStaticDateProvider_20230906 } from "src/util/DateProvider";
+import { setupStaticDateProvider20230906 } from "src/utils/dates";
 
 beforeAll(() => {
-    setupStaticDateProvider_20230906();
+    setupStaticDateProvider20230906();
 });
 
 test("No schedule info for question", () => {

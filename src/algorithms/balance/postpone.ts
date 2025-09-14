@@ -1,5 +1,5 @@
 import { RepetitionItem } from "src/dataStore/repetitionItem";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 import { DateUtils, debug } from "src/util/utils_recall";
 
 export function postponeItems(items: RepetitionItem[], days?: number): RepetitionItem[] {

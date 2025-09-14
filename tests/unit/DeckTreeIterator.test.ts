@@ -1,5 +1,5 @@
 import { NoteQuestionParser } from "src/note-question-parser";
-import { CardListType, Deck } from "src/Deck";
+import { CardListType, Deck } from "src/deck";
 import { DEFAULT_SETTINGS } from "src/settings";
 import { SampleItemDecks } from "./SampleItems";
 import { TopicPath } from "src/topic-path";
@@ -7,8 +7,8 @@ import { CardOrder, DeckTreeIterator, IIteratorOrder, DeckOrder } from "src/Deck
 import {
     StaticDateProvider,
     globalDateProvider,
-    setupStaticDateProvider_20230906,
-} from "src/util/DateProvider";
+    setupStaticDateProvider20230906,
+} from "src/utils/dates";
 import {
     setupNextRandomNumber,
     setupStaticRandomNumberProvider,
@@ -22,7 +22,7 @@ const order_DueFirst_Sequential: IIteratorOrder = {
 let iterator: DeckTreeIterator;
 
 beforeAll(() => {
-    setupStaticDateProvider_20230906();
+    setupStaticDateProvider20230906();
     setupStaticRandomNumberProvider();
 });
 

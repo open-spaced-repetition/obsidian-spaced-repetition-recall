@@ -22,7 +22,7 @@ import { RPITEMTYPE } from "./repetitionItem";
 import deepcopy from "deepcopy";
 import { NoteCardScheduleParser } from "src/CardSchedule";
 import { DataLocation, getStorePath } from "./dataLocation";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 import { Iadapter } from "./adapter";
 
 export class LocationSwitch {

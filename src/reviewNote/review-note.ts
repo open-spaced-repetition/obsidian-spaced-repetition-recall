@@ -9,7 +9,7 @@ import { Decks, ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { ReviewResponse } from "src/scheduling";
 import { SRSettings } from "src/settings";
 import { Tags } from "src/tags";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 import { DateUtils, isIgnoredPath } from "src/util/utils_recall";
 
 type Tsync = (notes: TFile[], reviewDecks?: Decks, easeByPath?: NoteEaseList) => Promise<void>;
