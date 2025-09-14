@@ -1,9 +1,9 @@
 import { Card } from "src/Card";
-import { Deck } from "src/Deck";
-import { Note } from "src/Note";
+import { Deck } from "src/deck";
+import { Note } from "src/note";
 import { NoteParser } from "src/NoteParser";
 import { NoteQuestionParser } from "src/note-question-parser";
-import { CardType, Question } from "src/Question";
+import { CardType, Question } from "src/question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { TopicPath } from "src/TopicPath";

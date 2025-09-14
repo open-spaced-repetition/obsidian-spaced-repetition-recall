@@ -19,7 +19,7 @@ import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { t } from "src/lang/helpers";
 import { appIcon } from "src/icons/appicon";
 import { TopicPath } from "./TopicPath";
-import { CardListType, Deck, DeckTreeFilter } from "./Deck";
+import { CardListType, Deck, DeckTreeFilter } from "src/deck";
 import { Stats } from "./stats";
 import {
     FlashcardReviewMode,

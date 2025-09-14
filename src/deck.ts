@@ -1,8 +1,8 @@
-import { Card } from "./Card";
-import { FlashcardReviewMode } from "./FlashcardReviewSequencer";
-import { Question } from "./Question";
-import { IQuestionPostponementList } from "./QuestionPostponementList";
-import { TopicPath, TopicPathList } from "./TopicPath";
+import { Card } from "src/card";
+import { FlashcardReviewMode } from "src/flashcard-review-sequencer";
+import { Question } from "src/question";
+import { IQuestionPostponementList } from "src/question-postponement-list";
+import { TopicPath, TopicPathList } from "src/topic-path";
 
 export enum CardListType {
     NewCard,
@@ -10,12 +10,10 @@ export enum CardListType {
     All,
 }
 
-//
 // The same card can be added to multiple decks e.g.
 //      #flashcards/language/words
 //      #flashcards/trivia
 // To simplify certain functions (e.g. getDistinctCardCount), we explicitly use the same card object (and not a copy)
-//
 export class Deck {
     public deckName: string;
     public newFlashcards: Card[];
@@ -80,10 +78,8 @@ export class Deck {
         return result;
     }
 
-    //
     // Returns a count of the number of this question's cards are present in this deck.
     // (The returned value would be <= question.cards.length)
-    //
     public getQuestionCardCount(question: Question): number {
         let result: number = 0;
         result += this.getQuestionCardCountForCardListType(question, this.newFlashcards);
@@ -179,26 +175,24 @@ export class Deck {
             // We explicitly are adding the same card object to each of the specified decks
             // This is required by getDistinctCardCount()
             for (const topicPath of topicPathList.list) {
-                this.appendCard_SingleTopic(topicPath, cardObj);
+                this.appendCardSingleTopic(topicPath, cardObj);
             }
         }
     }
 
     appendCardToRootDeck(cardObj: Card): void {
-        this.appendCard_SingleTopic(TopicPath.emptyPath, cardObj);
+        this.appendCardSingleTopic(TopicPath.emptyPath, cardObj);
     }
 
-    appendCard_SingleTopic(topicPath: TopicPath, cardObj: Card): void {
+    appendCardSingleTopic(topicPath: TopicPath, cardObj: Card): void {
         const deck: Deck = this.getOrCreateDeck(topicPath);
         const cardList: Card[] = deck.getCardListForCardType(cardObj.cardListType);
 
         cardList.push(cardObj);
     }
 
-    //
     // The question lists all the topics in which this card is included.
     // The topics are relative to the base deck, and this method must be called on that deck
-    //
     deleteQuestionFromAllDecks(question: Question, exceptionIfMissing: boolean): void {
         for (const card of question.cards) {
             this.deleteCardFromAllDecks(card, exceptionIfMissing);
@@ -211,10 +205,8 @@ export class Deck {
         }
     }
 
-    //
     // The card's question lists all the topics in which this card is included.
     // The topics are relative to the base deck, and this method must be called on that deck
-    //
     deleteCardFromAllDecks(card: Card, exceptionIfMissing: boolean): void {
         for (const topicPath of card.question.topicPathList.list) {
             const deck: Deck = this.getDeck(topicPath);
@@ -327,7 +319,8 @@ export class DeckTreeFilter {
         return deckTree.copyWithCardFilter(
             (card) =>
                 (reviewMode == FlashcardReviewMode.Cram || card.isNew || card.isDue) &&
-                card.getIsNotBury(questionPostponementList),
+                !questionPostponementList.includes(card.question),
+            // card.getIsNotBury(questionPostponementList),
         );
     }
 }
