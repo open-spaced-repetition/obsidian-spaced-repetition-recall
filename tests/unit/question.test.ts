@@ -1,10 +1,9 @@
-import { TopicPath } from "src/TopicPath";
+import { Question, QuestionText } from "src/question";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
-import { Question, QuestionText } from "src/Question";
-import { TextDirection } from "src/util/TextDirection";
+import { TextDirection } from "src/utils/strings";
 
-const settings_cardCommentOnSameLine: SRSettings = { ...DEFAULT_SETTINGS };
-settings_cardCommentOnSameLine.cardCommentOnSameLine = true;
+const settingsCardCommentOnSameLine: SRSettings = { ...DEFAULT_SETTINGS };
+settingsCardCommentOnSameLine.cardCommentOnSameLine = true;
 
 describe("Question", () => {
     describe("getHtmlCommentSeparator", () => {
@@ -18,7 +17,7 @@ describe("Question", () => {
             });
 
             expect(question.getHtmlCommentSeparator(DEFAULT_SETTINGS)).toEqual("\n");
-            expect(question.getHtmlCommentSeparator(settings_cardCommentOnSameLine)).toEqual("\n");
+            expect(question.getHtmlCommentSeparator(settingsCardCommentOnSameLine)).toEqual("\n");
         });
 
         test("Doesn't end with a code block", async () => {
@@ -29,7 +28,7 @@ describe("Question", () => {
             });
 
             expect(question.getHtmlCommentSeparator(DEFAULT_SETTINGS)).toEqual("\n");
-            expect(question.getHtmlCommentSeparator(settings_cardCommentOnSameLine)).toEqual(" ");
+            expect(question.getHtmlCommentSeparator(settingsCardCommentOnSameLine)).toEqual(" ");
         });
     });
 });
