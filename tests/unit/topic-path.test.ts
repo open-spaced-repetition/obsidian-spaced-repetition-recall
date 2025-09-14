@@ -1,12 +1,9 @@
-import { ISRFile } from "src/SRFile";
-import { TopicPath, TopicPathList } from "src/TopicPath";
-import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
-import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
+import { TopicPath } from "src/topic-path";
 
 describe("Constructor exception handling", () => {
     test("Constructor rejects null path", () => {
         const t = () => {
-            const path: TopicPath = new TopicPath(null);
+            new TopicPath(null);
         };
         expect(t).toThrow();
     });
@@ -18,7 +15,7 @@ describe("Constructor exception handling", () => {
 
     test("Constructor rejects path that includes '/'", () => {
         const t = () => {
-            const path: TopicPath = new TopicPath(["Hello/Goodbye"]);
+            new TopicPath(["Hello/Goodbye"]);
         };
         expect(t).toThrow();
     });
@@ -43,7 +40,7 @@ describe("shift", () => {
 
     test("shift() on empty path", () => {
         const path: TopicPath = new TopicPath(["Level1"]);
-        const result: string = path.shift();
+        path.shift();
 
         const t = () => {
             path.shift();
@@ -221,7 +218,7 @@ describe("formatTag", () => {
 
     test("Empty path", () => {
         const t = () => {
-            const str: string = TopicPath.emptyPath.formatAsTag();
+            TopicPath.emptyPath.formatAsTag();
         };
         expect(t).toThrow();
     });

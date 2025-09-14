@@ -1,5 +1,5 @@
 import { CachedMetadata, FrontMatterCache, Notice, TFile } from "obsidian";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import {
     DEFAULT_DECKNAME,
     LEGACY_SCHEDULING_EXTRACTOR,
