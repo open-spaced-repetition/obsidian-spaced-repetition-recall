@@ -4,7 +4,7 @@
     "version": "1.12.5.20",
     "minAppVersion": "1.2.8",
     "description": "Fight the forgetting curve by reviewing flashcards & entire notes.",
-    "author": "Newdea",
+    "author": "Stephen Mwangi & Modifiedby Newdea",
     "authorUrl": "https://github.com/Newdea",
     "helpUrl": "https://github.com/open-spaced-repetition/obsidian-spaced-repetition-recall/blob/dev-master/docs/README_ZH.md",
     "isDesktopOnly": false,
