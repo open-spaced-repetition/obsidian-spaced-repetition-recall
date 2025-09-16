@@ -214,7 +214,7 @@ export class DefaultAlgorithm extends SrsAlgorithm {
         update: (settings: DefaultAlgoSettings, refresh?: boolean) => void,
     ): void {
         containerEl.createDiv().innerHTML = t("CHECK_ALGORITHM_WIKI", {
-            algo_url: "https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/",
+            algoUrl: "https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/",
         });
         containerEl.createDiv().innerHTML = t("DEFAULT_ALGORITHM_DESC");
 

@@ -426,6 +426,9 @@ export class LocationSwitch {
         console.log(msg);
     }
 
+    /**
+     * reset stats.
+     */
     private initStats() {
         this.beforenoteStats = new Stats();
         this.beforecardStats = new Stats();
@@ -433,10 +436,18 @@ export class LocationSwitch {
         this.aftercardStats = new Stats();
     }
 
+    /**
+     * before swithch loaction set this.beforeXXXXStats
+     * X stands for note and/or card.
+     */
     private setBeforeStats() {
         this.beforenoteStats = deepcopy(this.plugin.noteStats);
         this.beforecardStats = deepcopy(this.plugin.cardStats);
     }
+    /**
+     * after switch location set this.afterXXXXStats
+     * X stands for note and/or card.
+     */
     private setAfterStats() {
         this.afternoteStats = deepcopy(this.plugin.noteStats);
         this.aftercardStats = deepcopy(this.plugin.cardStats);
