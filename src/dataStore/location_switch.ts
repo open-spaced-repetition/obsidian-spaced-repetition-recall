@@ -12,13 +12,13 @@ import {
 } from "src/constants";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { SRSettings } from "src/settings";
+import { SettingsUtil, SRSettings } from "src/settings";
 import { escapeRegexString } from "src/util/utils";
 import { DataStore } from "./data";
 import { Tags } from "src/tags";
 
 import { Stats } from "src/stats";
-import { DateUtils, isIgnoredPath } from "src/util/utils_recall";
+import { DateUtils } from "src/util/utils_recall";
 import { RPITEMTYPE } from "./repetitionItem";
 import deepcopy from "deepcopy";
 import { NoteCardScheduleParser } from "src/CardSchedule";
@@ -128,7 +128,7 @@ export class LocationSwitch {
         let notes: TFile[] = Iadapter.instance.vault.getMarkdownFiles();
         notes = notes.filter(
             (noteFile) =>
-                !isIgnoredPath(settings.noteFoldersToIgnore, noteFile.path) &&
+                !SettingsUtil.isPathInNoteIgnoreFolder(settings, noteFile.path) &&
                 plugin.createSrTFile(noteFile).getAllTagsFromCache().length > 0,
         );
         for (const noteFile of notes) {
@@ -310,8 +310,11 @@ export class LocationSwitch {
         const dueIds: number[] = [];
         await Promise.all(
             tracked_files
-                .filter((tkfile) => tkfile != null)
-                .filter((tkfile) => !isIgnoredPath(this.settings.noteFoldersToIgnore, tkfile.path))
+                .filter(
+                    (tkfile) =>
+                        tkfile != null &&
+                        !SettingsUtil.isPathInNoteIgnoreFolder(this.settings, tkfile.path),
+                )
                 .map(async (tkfile) => {
                     const item = store.getItembyID(tkfile.noteID);
                     const note = Iadapter.instance.vault.getAbstractFileByPath(

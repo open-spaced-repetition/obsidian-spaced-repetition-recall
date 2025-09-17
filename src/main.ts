@@ -51,7 +51,7 @@ import Commands from "./commands";
 import { algorithmNames, SrsAlgorithm } from "src/algorithms/algorithms";
 
 import { reviewResponseModal } from "src/gui/reviewresponse-modal";
-import { debug, isIgnoredPath, isVersionNewerThanOther } from "./util/utils_recall";
+import { debug, isVersionNewerThanOther } from "./util/utils_recall";
 import { ReleaseNotes } from "src/gui/ReleaseNotes";
 
 import { algorithms } from "src/algorithms/algorithms_switch";
@@ -510,7 +510,7 @@ export default class SRPlugin extends Plugin {
                 tags.some((notetag) => notetag.startsWith(igntag)),
             );
             return (
-                !isIgnoredPath(this.data.settings.noteFoldersToIgnore, noteFile.path) &&
+                !SettingsUtil.isPathInNoteIgnoreFolder(this.data.settings, noteFile.path) &&
                 !isIgnoredTags
             );
         });
@@ -690,7 +690,7 @@ export default class SRPlugin extends Plugin {
 
     async saveReviewResponse(note: TFile, response: ReviewResponse): Promise<void> {
         const settings = this.data.settings;
-        if (isIgnoredPath(settings.noteFoldersToIgnore, note.path)) {
+        if (SettingsUtil.isPathInNoteIgnoreFolder(settings, note.path)) {
             new Notice(t("NOTE_IN_IGNORED_FOLDER"));
             return;
         }
