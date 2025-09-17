@@ -6,7 +6,7 @@ import { NoteQuestionParser } from "src/NoteQuestionParser";
 import { CardType, Question } from "src/Question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { TextDirection } from "src/util/TextDirection";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 import { CardOrder, DeckOrder, DeckTreeIterator } from "src/DeckTreeIterator";

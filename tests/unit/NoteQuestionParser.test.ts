@@ -3,7 +3,7 @@ import { CardScheduleInfo } from "src/CardSchedule";
 import { TICKS_PER_DAY } from "src/constants";
 import { CardType, Question } from "src/Question";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
-import { TopicPath, TopicPathList } from "src/TopicPath";
+import { TopicPath, TopicPathList } from "src/topic-path";
 import { createTest_NoteQuestionParser } from "./SampleItems";
 import { ISRFile, frontmatterTagPseudoLineNum } from "src/SRFile";
 import { setupStaticDateProvider_20230906 } from "src/util/DateProvider";

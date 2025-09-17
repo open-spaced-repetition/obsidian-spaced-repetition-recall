@@ -10,7 +10,7 @@ import {
     DeckStats,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
 } from "src/FlashcardReviewSequencer";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { FlashcardMode } from "./FlashcardModal";
 
 export class DeckUI {

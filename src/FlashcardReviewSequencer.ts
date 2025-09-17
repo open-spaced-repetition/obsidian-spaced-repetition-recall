@@ -3,7 +3,7 @@ import { CardListType, Deck } from "./Deck";
 import { Question, QuestionText } from "./Question";
 import { ReviewResponse } from "./scheduling";
 import { SRSettings } from "./settings";
-import { TopicPath } from "./TopicPath";
+import { TopicPath } from "src/topic-path";
 import { CardScheduleInfo, ICardScheduleCalculator } from "./CardSchedule";
 import { Note } from "./Note";
 import { IDeckTreeIterator } from "./DeckTreeIterator";

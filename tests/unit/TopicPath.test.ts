@@ -1,5 +1,5 @@
 import { ISRFile } from "src/SRFile";
-import { TopicPath, TopicPathList } from "src/TopicPath";
+import { TopicPath, TopicPathList } from "src/topic-path";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 

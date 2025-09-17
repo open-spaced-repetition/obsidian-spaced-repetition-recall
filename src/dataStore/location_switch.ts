@@ -1,5 +1,5 @@
 import { CachedMetadata, FrontMatterCache, Notice, TFile } from "obsidian";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import {
     DEFAULT_DECKNAME,
     LEGACY_SCHEDULING_EXTRACTOR,
@@ -126,11 +126,15 @@ export class LocationSwitch {
         // await plugin.sync_Algo();
 
         let notes: TFile[] = Iadapter.instance.vault.getMarkdownFiles();
-        notes = notes.filter(
-            (noteFile) =>
+        const canReview = (noteFile: TFile) => {
+            const srfile = plugin.createSrTFile(noteFile);
+            return (
                 !SettingsUtil.isPathInNoteIgnoreFolder(settings, noteFile.path) &&
-                plugin.createSrTFile(noteFile).getAllTagsFromCache().length > 0,
-        );
+                (plugin.createSrTFile(noteFile).getAllTagsFromCache().length > 0 ||
+                    TopicPath.getFolderPathFromFilename(srfile, settings))
+            );
+        };
+        notes = notes.filter(canReview);
         for (const noteFile of notes) {
             let deckname = Tags.getNoteDeckName(noteFile, this.settings);
             const srfile = plugin.createSrTFile(noteFile);
@@ -323,13 +327,15 @@ export class LocationSwitch {
                     if (!(note instanceof TFile)) {
                         return;
                     }
-                    const deckPath: string[] = TopicPath.getFolderPathFromFilename(
-                        plugin.createSrTFile(note),
-                        this.settings,
-                    ).path;
+                    const srfile = plugin.createSrTFile(note);
+                    const hasPath =
+                        TopicPath.getFolderPathFromFilename(srfile, this.settings).hasPath ||
+                        TopicPath.getTopicPathOfFile(srfile, this.settings).hasPath;
                     let fileText: string = await note.vault.read(note);
                     let fileChanged = false;
-                    if (deckPath.length !== 0) {
+
+                    // check and convert cards
+                    if (hasPath) {
                         tkfile.syncNoteCardsIndex(fileText, this.settings, (cardText, cardinfo) => {
                             if (cardinfo == null || cardinfo?.itemIds == null) {
                                 return;
@@ -364,6 +370,8 @@ export class LocationSwitch {
                         });
                     }
                     // console.debug("_convert CardsSched end :\n", fileText);
+
+                    // check and convert note review data
                     if (
                         item?.isTracked &&
                         (tkfile.isDefault || Tags.isTagedNoteDeckName(item.deckName, this.settings))

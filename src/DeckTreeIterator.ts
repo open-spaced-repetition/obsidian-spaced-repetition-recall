@@ -1,7 +1,7 @@
 import { Card } from "./Card";
 import { CardListType, Deck } from "./Deck";
 import { Question } from "./Question";
-import { TopicPath } from "./TopicPath";
+import { TopicPath } from "src/topic-path";
 import { WeightedRandomNumber, globalRandomNumberProvider } from "./util/RandomNumberProvider";
 
 export enum CardOrder {

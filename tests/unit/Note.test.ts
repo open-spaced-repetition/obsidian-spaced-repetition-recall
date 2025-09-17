@@ -1,5 +1,5 @@
 import { NoteParser } from "src/NoteParser";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { Deck } from "src/Deck";
 import { Note } from "src/Note";
 import { DEFAULT_SETTINGS } from "src/settings";

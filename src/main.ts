@@ -18,7 +18,7 @@ import { SCHEDULING_INFO_REGEX, YAML_FRONT_MATTER_REGEX } from "src/constants";
 import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { t } from "src/lang/helpers";
 import { appIcon } from "src/icons/appicon";
-import { TopicPath } from "./TopicPath";
+import { TopicPath } from "src/topic-path";
 import { CardListType, Deck, DeckTreeFilter } from "./Deck";
 import { Stats } from "./stats";
 import {
