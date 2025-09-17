@@ -576,9 +576,12 @@ export class CardUI {
     private _resetResponseButtons() {
         // Sets all buttons in to their default state
         this.answerButton.removeClass("sr-is-hidden");
-        this.hardButton.addClass("sr-is-hidden");
-        this.goodButton.addClass("sr-is-hidden");
-        this.easyButton.addClass("sr-is-hidden");
+        // this.hardButton.addClass("sr-is-hidden");
+        // this.goodButton.addClass("sr-is-hidden");
+        // this.easyButton.addClass("sr-is-hidden");
+        this.options.slice(1).forEach((_v, idx) => {
+            this.responseBtns[idx + 1].addClass("sr-is-hidden");
+        });
     }
 
     private _createShowAnswerButton() {
