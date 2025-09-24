@@ -329,7 +329,7 @@ export default class SRPlugin extends Plugin {
             id: "srs-cram-flashcards",
             name: t("CRAM_ALL_CARDS"),
             callback: async () => {
-                await this.sync();
+                await this.sync(FlashcardReviewMode.Cram);
                 if (this.data.settings.openViewInNewTab) {
                     this.tabViewManager.openSRTabView(FlashcardReviewMode.Cram);
                 } else {
@@ -471,7 +471,7 @@ export default class SRPlugin extends Plugin {
     }
 
     // @logExecutionTime()
-    async sync(): Promise<void> {
+    async sync(reviewMode = FlashcardReviewMode.Review): Promise<void> {
         // this.clock_start = Date.now();
         const settings = this.data.settings;
 
@@ -541,7 +541,7 @@ export default class SRPlugin extends Plugin {
         this.remainingDeckTree = DeckTreeFilter.filterForRemainingCards(
             this.questionPostponementList,
             this.deckTree,
-            FlashcardReviewMode.Review,
+            reviewMode,
         );
         const calc: DeckTreeStatsCalculator = new DeckTreeStatsCalculator();
         this.cardStats = calc.calculate(this.deckTree);
