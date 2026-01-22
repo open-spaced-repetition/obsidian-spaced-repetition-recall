@@ -22,7 +22,7 @@
     "license": "MIT",
     "devDependencies": {
         "@open-spaced-repetition/binding": "^0.1.2",
-        "@napi-rs/wasm-runtime": "^1.0.7",
+        "@napi-rs/wasm-runtime": "^1.1.1",
         "@popperjs/core": "^2.11.8",
         "@types/jest": "^29.5.12",
         "@types/node": "^20.16.2",
