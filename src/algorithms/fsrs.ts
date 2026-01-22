@@ -1,4 +1,4 @@
-import { Setting, Notice } from "obsidian";
+import { Setting, Notice, ButtonComponent } from "obsidian";
 import { DateUtils, MiscUtils } from "src/util/utils_recall";
 import { SrsAlgorithm, algorithmNames } from "./algorithms";
 import { DataStore } from "../dataStore/data";
@@ -10,6 +10,7 @@ import { AnkiData } from "./anki";
 import { Rating, ReviewLog } from "ts-fsrs";
 import { RepetitionItem, ReviewResult } from "src/dataStore/repetitionItem";
 import { Iadapter } from "src/dataStore/adapter";
+import { fsrsOptimizer, type OptimizerProgress } from "./fsrs-optimizer";
 
 // https://github.com/mgmeyers/obsidian-kanban/blob/main/src/Settings.ts
 let applyDebounceTimer = 0;
@@ -99,9 +100,11 @@ export class FsrsAlgorithm extends SrsAlgorithm {
     updateSettings(settings: unknown) {
         this.settings = MiscUtils.assignOnly(this.defaultSettings(), settings);
         SrsAlgorithm.instance = this;
-        if (this.settings.w.length !== this.defaultSettings().w.length) {
+        // FSRS supports 17 params (standard) or 21 params (with short-term)
+        const validLengths = [17, 19, 21];
+        if (!validLengths.includes(this.settings.w.length)) {
             const errmsg =
-                "fsrs algothrim has been updated, please update w of algorithm setting. reset `w` to default will fix this error";
+                "fsrs algorithm has been updated, please update w of algorithm setting. reset `w` to default will fix this error";
             console.error(errmsg);
             new Notice(errmsg, 0);
         }
@@ -408,7 +411,9 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                             const numValue: number[] = value.split(/[ ,]+/).map((v) => {
                                 return Number.parseFloat(v);
                             });
-                            if (numValue.length === this.settings.w.length) {
+                            // FSRS supports 17 params (standard) or 21 params (with short-term)
+                            const validLengths = [17, 19, 21];
+                            if (validLengths.includes(numValue.length)) {
                                 this.settings.w = numValue;
                                 update(this.settings);
                                 this.updateFsrsParams();
@@ -489,6 +494,182 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                     });
             });
 
+        // FSRS Optimizer Section
+        this.displayOptimizerSettings(containerEl, update);
+
         return;
+    }
+
+    /**
+     * Display FSRS Optimizer settings UI
+     */
+    private displayOptimizerSettings(
+        containerEl: HTMLElement,
+        update: (settings: FsrsSettings, refresh?: boolean) => void,
+    ) {
+        // Section header
+        containerEl.createEl("h4", { text: t("FSRS_OPTIMIZER") });
+        containerEl.createEl("p", {
+            text: t("FSRS_OPTIMIZER_DESC"),
+            cls: "setting-item-description",
+        });
+
+        // Progress container (initially hidden)
+        const progressContainer = containerEl.createDiv({ cls: "fsrs-optimizer-progress" });
+        progressContainer.style.display = "none";
+
+        const progressBar = progressContainer.createDiv({ cls: "fsrs-progress-bar-container" });
+        const progressFill = progressBar.createDiv({ cls: "fsrs-progress-bar-fill" });
+        const progressText = progressContainer.createDiv({ cls: "fsrs-progress-text" });
+
+        // Result container (initially hidden)
+        const resultContainer = containerEl.createDiv({ cls: "fsrs-optimizer-result" });
+        resultContainer.style.display = "none";
+
+        // Helper to update progress UI
+        const updateProgressUI = (progress: OptimizerProgress) => {
+            progressContainer.style.display = "block";
+            progressFill.style.width = `${progress.current}%`;
+
+            const statusMessages: Record<OptimizerProgress["status"], string> = {
+                idle: "",
+                loading: t("FSRS_LOADING_FILE"),
+                converting: t("FSRS_CONVERTING_DATA"),
+                training: t("FSRS_TRAINING_PROGRESS", {
+                    current: progress.current,
+                    total: progress.total,
+                }),
+                done: t("FSRS_TRAINING_COMPLETE"),
+                error: progress.message || t("FSRS_TRAINING_ERROR"),
+            };
+
+            progressText.textContent = statusMessages[progress.status];
+
+            if (progress.status === "error") {
+                progressFill.addClass("fsrs-progress-error");
+            } else {
+                progressFill.removeClass("fsrs-progress-error");
+            }
+        };
+
+        // Helper to show result
+        const showResult = (newParams: number[], oldParams: readonly number[]) => {
+            resultContainer.empty();
+            resultContainer.style.display = "block";
+
+            resultContainer.createEl("h5", { text: t("FSRS_OPTIMIZED_PARAMS") });
+
+            // Show parameter comparison
+            const table = resultContainer.createEl("table", { cls: "fsrs-params-table" });
+            const thead = table.createEl("thead");
+            const headerRow = thead.createEl("tr");
+            headerRow.createEl("th", { text: "Index" });
+            headerRow.createEl("th", { text: t("FSRS_OLD_VALUE") });
+            headerRow.createEl("th", { text: t("FSRS_NEW_VALUE") });
+            headerRow.createEl("th", { text: t("FSRS_CHANGE") });
+
+            const tbody = table.createEl("tbody");
+
+            // Show all new params for comparison (supports both 17 and 21 param versions)
+            for (let i = 0; i < newParams.length; i++) {
+                const row = tbody.createEl("tr");
+                row.createEl("td", { text: `w[${i}]` });
+                row.createEl("td", { text: oldParams[i]?.toFixed(4) || "N/A" });
+                row.createEl("td", { text: newParams[i].toFixed(4) });
+
+                const change = newParams[i] - (oldParams[i] || 0);
+                const changeCell = row.createEl("td");
+                changeCell.textContent = (change >= 0 ? "+" : "") + change.toFixed(4);
+                changeCell.addClass(change >= 0 ? "fsrs-change-positive" : "fsrs-change-negative");
+            }
+
+            // Buttons container
+            const buttonContainer = resultContainer.createDiv({ cls: "fsrs-result-buttons" });
+
+            // Copy button
+            new ButtonComponent(buttonContainer)
+                .setButtonText(t("FSRS_COPY_PARAMS"))
+                .onClick(() => {
+                    // Format as array string: [x, x, x, ...]
+                    const paramsStr = "[" + newParams.map((p) => p.toFixed(4)).join(", ") + "]";
+                    navigator.clipboard
+                        .writeText(paramsStr)
+                        .then(() => {
+                            new Notice(t("FSRS_PARAMS_COPIED"), 2000);
+                        })
+                        .catch(() => {
+                            new Notice("Failed to copy to clipboard", 2000);
+                        });
+                });
+
+            // Apply button
+            new ButtonComponent(buttonContainer)
+                .setButtonText(t("FSRS_APPLY_PARAMS"))
+                .setCta()
+                .onClick(() => {
+                    // Apply all new params (supports both 17 and 21 param versions)
+                    this.settings.w = newParams;
+                    update(this.settings, true);
+                    this.updateFsrsParams();
+                    new Notice(t("FSRS_PARAMS_APPLIED"), 3000);
+                    resultContainer.style.display = "none";
+                });
+        };
+
+        // CSV Upload setting
+        new Setting(containerEl)
+            .setName(t("FSRS_OPTIMIZER_UPLOAD"))
+            .setDesc(t("FSRS_OPTIMIZER_UPLOAD_DESC"))
+            .addButton((button) => {
+                button.setButtonText(t("FSRS_SELECT_CSV")).onClick(async () => {
+                    // Create file input
+                    const input = document.createElement("input");
+                    input.type = "file";
+                    input.accept = ".csv";
+
+                    input.onchange = async (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0];
+                        if (!file) return;
+
+                        // Hide previous result
+                        resultContainer.style.display = "none";
+
+                        try {
+                            // Set plugin base path for WASM loading
+                            const dataStore = DataStore.getInstance();
+                            if (dataStore?.dataPath) {
+                                // Get the plugin directory path relative to vault
+                                const pluginBasePath = dataStore.dataPath.substring(
+                                    0,
+                                    dataStore.dataPath.lastIndexOf("/"),
+                                );
+                                fsrsOptimizer.setPluginBasePath(pluginBasePath);
+                            }
+
+                            const newParams = await fsrsOptimizer.trainFromFile(file, {
+                                nextDayStartsAt: 4, // Default 4 AM
+                                enableShortTerm: this.settings.enable_short_term,
+                                onProgress: updateProgressUI,
+                            });
+
+                            showResult(newParams, this.settings.w);
+                        } catch (error) {
+                            console.error("Training failed:", error);
+                            updateProgressUI({
+                                status: "error",
+                                current: 0,
+                                total: 100,
+                                message: (error as Error).message,
+                            });
+                            new Notice(
+                                t("FSRS_TRAINING_FAILED") + ": " + (error as Error).message,
+                                5000,
+                            );
+                        }
+                    };
+
+                    input.click();
+                });
+            });
     }
 }
