@@ -834,11 +834,13 @@ export class DataStore {
 
         this.data = MiscUtils.assignOnly(DEFAULT_SRS_DATA, this.data);
 
-        this.data.trackedFiles = this.data.trackedFiles.filter((tkfile, _idx) => {
+        this.data.trackedFiles = this.data.trackedFiles.filter(async (tkfile, _idx) => {
             if (tkfile == null || !tkfile.isTracked) {
                 return false;
             }
-            return this.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0; // this tkfile has tracked items
+            const hasFileIdx =
+                this.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0; // this tkfile has tracked items
+            return hasFileIdx && (await this.verify(tkfile.path));
         });
 
         this.data.items = this.data.trackedFiles

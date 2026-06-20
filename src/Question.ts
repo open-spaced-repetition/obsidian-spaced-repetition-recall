@@ -9,7 +9,7 @@ import {
 import { Note } from "./Note";
 import { ParsedQuestionInfo } from "./parser";
 import { SRSettings } from "./settings";
-import { TopicPath, TopicPathList, TopicPathWithWs } from "./TopicPath";
+import { TopicPath, TopicPathList, TopicPathWithWs } from "src/topic-path";
 import { MultiLineTextFinder } from "./util/MultiLineTextFinder";
 import { TextDirection } from "./util/TextDirection";
 import { cyrb53, stringTrimStart } from "./util/utils";

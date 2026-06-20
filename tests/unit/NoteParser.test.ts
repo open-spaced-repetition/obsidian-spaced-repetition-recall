@@ -1,5 +1,5 @@
 import { NoteParser } from "src/NoteParser";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { Note } from "src/Note";
 import { Question } from "src/Question";
 import { DEFAULT_SETTINGS } from "src/settings";

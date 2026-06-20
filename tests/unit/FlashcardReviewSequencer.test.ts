@@ -12,7 +12,7 @@ import {
     FlashcardReviewSequencer,
     IFlashcardReviewSequencer,
 } from "src/FlashcardReviewSequencer";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { CardListType, Deck, DeckTreeFilter } from "src/Deck";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { SampleItemDecks } from "./SampleItems";

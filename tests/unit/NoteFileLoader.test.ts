@@ -1,6 +1,6 @@
 import { Note } from "src/Note";
 import { NoteFileLoader } from "src/NoteFileLoader";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { DEFAULT_SETTINGS } from "src/settings";
 import { TextDirection } from "src/util/TextDirection";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";

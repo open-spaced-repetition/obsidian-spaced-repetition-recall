@@ -7,10 +7,10 @@ import { t } from "src/lang/helpers";
 import { NoteEaseList } from "src/NoteEaseList";
 import { Decks, ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { ReviewResponse } from "src/scheduling";
-import { SRSettings } from "src/settings";
+import { SettingsUtil, SRSettings } from "src/settings";
 import { Tags } from "src/tags";
 import { globalDateProvider } from "src/util/DateProvider";
-import { DateUtils, isIgnoredPath } from "src/util/utils_recall";
+import { DateUtils } from "src/util/utils_recall";
 
 type Tsync = (notes: TFile[], reviewDecks?: Decks, easeByPath?: NoteEaseList) => Promise<void>;
 export type TrespResult = { sNote: SchedNote; buryList?: string[] };
@@ -67,7 +67,7 @@ export abstract class IReviewNote {
         const store = DataStore.getInstance();
         // const settings = plugin.data.settings;
 
-        if (isIgnoredPath(settings.noteFoldersToIgnore, note.path)) {
+        if (SettingsUtil.isPathInNoteIgnoreFolder(settings, note.path)) {
             new Notice(t("NOTE_IN_IGNORED_FOLDER"));
             return;
         }

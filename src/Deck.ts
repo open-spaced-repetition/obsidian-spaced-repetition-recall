@@ -2,7 +2,7 @@ import { Card } from "./Card";
 import { FlashcardReviewMode } from "./FlashcardReviewSequencer";
 import { Question } from "./Question";
 import { IQuestionPostponementList } from "./QuestionPostponementList";
-import { TopicPath, TopicPathList } from "./TopicPath";
+import { TopicPath, TopicPathList } from "src/topic-path";
 
 export enum CardListType {
     NewCard,

@@ -6,7 +6,7 @@ import { Question, QuestionText } from "./Question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { SRSettings, SettingsUtil } from "./settings";
 import { ISRFile, frontmatterTagPseudoLineNum } from "./SRFile";
-import { TopicPath, TopicPathList } from "./TopicPath";
+import { TopicPath, TopicPathList } from "src/topic-path";
 import { TextDirection } from "./util/TextDirection";
 import { extractFrontmatter, splitTextIntoLineArray } from "./util/utils";
 

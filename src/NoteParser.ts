@@ -2,7 +2,7 @@ import { NoteQuestionParser } from "./NoteQuestionParser";
 import { ISRFile } from "./SRFile";
 import { Note } from "./Note";
 import { SRSettings } from "./settings";
-import { TopicPath } from "./TopicPath";
+import { TopicPath } from "src/topic-path";
 import { TextDirection } from "./util/TextDirection";
 
 export class NoteParser {

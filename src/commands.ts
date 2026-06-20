@@ -288,15 +288,15 @@ export default class Commands {
         //     },
         // });
 
-        // plugin.addCommand({
-        //     id: "debug-prune-data",
-        //     name: "Prune Data",
-        //     callback: () => {
-        //         console.log("Pruning data...");
-        //         plugin.store.pruneData();
-        //         console.log(plugin.store.data);
-        //     },
-        // });
+        plugin.addCommand({
+            id: "debug-prune-data",
+            name: "Prune Data",
+            callback: () => {
+                console.log("Pruning data...");
+                plugin.store.pruneData();
+                console.log(plugin.store.data);
+            },
+        });
 
         plugin.addCommand({
             id: "update-dataItems",
