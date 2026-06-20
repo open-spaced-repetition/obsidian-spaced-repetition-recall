@@ -53,6 +53,25 @@ export class RenderMarkdownWrapper {
                 }
             }
         });
+
+        // Make `.internal-link` wikilinks (e.g. `[[Note]]`) clickable in the review modal.
+        // MarkdownRenderer.render() emits the anchors but the modal context suppresses
+        // their default navigation; wiring openLinkText explicitly restores it and adds
+        // ctrl/cmd-click for new-tab.
+        el.findAll("a.internal-link").forEach((linkEl: HTMLElement) => {
+            linkEl.addEventListener("click", (ev: MouseEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+                const href = linkEl.getAttribute("data-href") || linkEl.getAttribute("href");
+                if (href) {
+                    this.app.workspace.openLinkText(
+                        href,
+                        this.notePath,
+                        ev.ctrlKey || ev.metaKey,
+                    );
+                }
+            });
+        });
     }
 
     private parseLink(src: string) {
