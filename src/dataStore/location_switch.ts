@@ -302,6 +302,7 @@ export class LocationSwitch {
      */
     async converteTrackfileToNoteSched(dryrun: boolean = false) {
         const plugin = this.plugin;
+        const settings = plugin.data.settings;
         const store = plugin.store;
         this.initStats();
         this.setBeforeStats();
@@ -311,6 +312,8 @@ export class LocationSwitch {
 
         // eslint-disable-next-line prefer-const
         let tracked_files = store.data.trackedFiles;
+        const orgLocation = this.settings.dataLocation;
+
         const dueIds: number[] = [];
         await Promise.all(
             tracked_files
@@ -333,43 +336,6 @@ export class LocationSwitch {
                         TopicPath.getTopicPathOfFile(srfile, this.settings).hasPath;
                     let fileText: string = await note.vault.read(note);
                     let fileChanged = false;
-
-                    // check and convert cards
-                    if (hasPath) {
-                        tkfile.syncNoteCardsIndex(fileText, this.settings, (cardText, cardinfo) => {
-                            if (cardinfo == null || cardinfo?.itemIds == null) {
-                                return;
-                            }
-                            const ids = cardinfo.itemIds;
-                            const scheduling: RegExpMatchArray[] = [];
-                            ids.map((id: number) => store.getItembyID(id))
-                                .filter((citem) => citem.isTracked)
-                                .forEach((citem) => {
-                                    // const citem = store.getItembyID(id);
-                                    // if (citem.isTracked) {
-                                    const sched = citem.getSchedDurAsStr();
-                                    if (citem.hasDue && sched != null) {
-                                        scheduling.push(sched);
-                                        dueIds.push(citem.ID);
-                                    }
-                                    this.aftercardStats.updateStats(
-                                        citem,
-                                        globalDateProvider.endofToday.valueOf(),
-                                    );
-                                    // }
-                                });
-                            const newCardText = updateCardSchedXml(
-                                cardText,
-                                this.settings.cardCommentOnSameLine,
-                                scheduling,
-                            );
-                            fileText = cardTextReplace(fileText, cardText, newCardText);
-                            // const replacementRegex = new RegExp(escapeRegexString(cardText), "gm");
-                            // fileText = fileText.replace(replacementRegex, () => newCardText);
-                            fileChanged = true;
-                        });
-                    }
-                    // console.debug("_convert CardsSched end :\n", fileText);
 
                     // check and convert note review data
                     if (
@@ -406,6 +372,31 @@ export class LocationSwitch {
                             }
                         }
                     }
+
+                    // check and convert cards
+                    if (hasPath) {
+                        // todo: get Question and use updateQuestionText() to update filetext
+                        const nnote = await plugin.loadNote(note);
+                        this.settings.dataLocation = DataLocation.SaveOnNoteFile;
+                        for (let i = 0; i < nnote.questionList.length; i++) {
+                            const qst = nnote.questionList[i];
+                            fileText = qst.updateQuestionText(fileText, this.settings);
+
+                            qst.cards
+                                .map((card) => store.getItembyID(card.Id as number))
+                                .filter((citem) => citem.isTracked)
+                                .forEach((citem) => {
+                                    this.aftercardStats.updateStats(
+                                        citem,
+                                        globalDateProvider.endofToday.valueOf(),
+                                    );
+                                });
+                        }
+                        fileChanged = true;
+                        settings.dataLocation = orgLocation;
+                    }
+                    // console.debug("_convert CardsSched end :\n", fileText);
+
                     if (!dryrun && fileChanged) {
                         if (fileText == null) {
                             console.error("fileText null");
@@ -420,11 +411,10 @@ export class LocationSwitch {
         const msg = "converteTrackfileToNoteSched success!";
         console.debug("dueids after: ", dueIds, store.data.trackedFiles, store.data.items);
         if (dryrun) {
-            // const settings = plugin.data.settings;
             // const orgLocation = settings.dataLocation;
             // settings.dataLocation = DataLocation.SaveOnNoteFile;
             // await plugin.sync();
-            // settings.dataLocation = orgLocation;
+            settings.dataLocation = orgLocation;
             this.resultCheck(
                 this.beforenoteStats,
                 this.beforecardStats,
