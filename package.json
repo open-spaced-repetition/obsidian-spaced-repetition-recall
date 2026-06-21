@@ -1,6 +1,6 @@
 {
     "name": "obsidian-spaced-repetition-recall",
-    "version": "1.12.5.21",
+    "version": "1.12.5.23",
     "description": "Fight the forgetting curve by reviewing flashcards & entire notes.",
     "main": "main.js",
     "scripts": {
@@ -29,7 +29,7 @@
         "@types/vhtml": "^2.2.9",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
-        "auto-changelog": "^2.5.0",
+        "auto-changelog": "^2.6.0",
         "builtin-modules": "^4.0.0",
         "chai": "^4.5.0",
         "deepcopy": "^2.1.0",
