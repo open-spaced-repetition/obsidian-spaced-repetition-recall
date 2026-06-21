@@ -449,3 +449,96 @@ ResponseFloatBar TOOLBAR
 #sr-incorrect\ \(easy\)-btn {
     background: #ff9088;
 }
+
+/*----------------------------------------------------------------
+  FSRS Optimizer
+  ----------------------------------------------------------------*/
+
+.fsrs-optimizer-progress {
+    margin: 16px 0;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: var(--background-secondary);
+}
+
+.fsrs-progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--background-modifier-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.fsrs-progress-bar-fill {
+    height: 100%;
+    background-color: var(--interactive-accent);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.fsrs-progress-bar-fill.fsrs-progress-error {
+    background-color: var(--text-error);
+}
+
+.fsrs-progress-text {
+    font-size: var(--font-ui-small);
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.fsrs-optimizer-result {
+    margin: 16px 0;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: var(--background-secondary);
+}
+
+.fsrs-optimizer-result h5 {
+    margin: 0 0 12px 0;
+    font-size: var(--font-ui-medium);
+}
+
+.fsrs-params-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-ui-small);
+    margin-bottom: 12px;
+}
+
+.fsrs-params-table th,
+.fsrs-params-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.fsrs-params-table th {
+    font-weight: var(--font-semibold);
+    text-align: right;
+    background-color: var(--background-modifier-hover);
+}
+
+.fsrs-params-table th:first-child,
+.fsrs-params-table td:first-child {
+    text-align: left;
+}
+
+.fsrs-params-table tbody tr:hover {
+    background-color: var(--background-modifier-hover);
+}
+
+.fsrs-change-positive {
+    color: var(--text-success);
+}
+
+.fsrs-change-negative {
+    color: var(--text-error);
+}
+
+.fsrs-result-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}

@@ -275,4 +275,31 @@ export default {
 
     // donation.ts
     DONATION_TEXT: "业余时间折腾的，如果对你有所帮助，可以请我喝瓶饮料或奶茶呀~",
+
+    // fsrs-optimizer
+    FSRS_OPTIMIZER: "FSRS 优化器",
+    FSRS_OPTIMIZER_DESC: "从复习历史 CSV 文件训练个性化 FSRS 参数，以获得更准确的调度预测。",
+    FSRS_OPTIMIZER_UPLOAD: "上传复习记录",
+    FSRS_OPTIMIZER_UPLOAD_DESC: "选择包含复习历史的 CSV 文件来训练优化参数。",
+    FSRS_SELECT_CSV: "选择 CSV 文件",
+    FSRS_LOADING_FILE: "正在加载文件...",
+    FSRS_CONVERTING_DATA: "正在转换数据...",
+    FSRS_TRAINING_PROGRESS: "训练中: ${current}%",
+    FSRS_TRAINING_COMPLETE: "训练完成！",
+    FSRS_TRAINING_ERROR: "训练错误",
+    FSRS_OPTIMIZED_PARAMS: "优化后的参数",
+    FSRS_OLD_VALUE: "原值",
+    FSRS_NEW_VALUE: "新值",
+    FSRS_CHANGE: "变化",
+    FSRS_APPLY_PARAMS: "应用参数",
+    FSRS_COPY_PARAMS: "复制参数",
+    FSRS_PARAMS_APPLIED: "参数应用成功！",
+    FSRS_PARAMS_COPIED: "参数已复制到剪贴板！",
+    FSRS_TRAINING_FAILED: "训练失败",
+    FSRS_BINDING_LOAD_ERROR: "加载 FSRS 优化模块失败",
+    FSRS_CSV_PARSE_ERROR: "解析 CSV 文件失败",
+    FSRS_NO_VALID_ITEMS: "数据中未找到有效的复习项目",
+    FSRS_LOW_REVIEW_COUNT_WARNING:
+        "警告: 仅找到 ${count} 条有效复习记录。更多记录将产生更好的结果。",
+    FSRS_PLUGIN_BASE_PATH_NOT_SET: "插件基础路径未设置。请重启 Obsidian 后重试。",
 };

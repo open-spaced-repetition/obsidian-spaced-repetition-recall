@@ -27,6 +27,12 @@ importers:
         specifier: ^5.2.0
         version: 5.2.0
     devDependencies:
+      '@napi-rs/wasm-runtime':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@open-spaced-repetition/binding':
+        specifier: ^0.1.2
+        version: 0.1.2
       '@popperjs/core':
         specifier: ^2.11.8
         version: 2.11.8
@@ -281,6 +287,15 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@emnapi/core@1.8.1':
+    resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
+
+  '@emnapi/runtime@1.8.1':
+    resolution: {integrity: sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg==}
+
+  '@emnapi/wasi-threads@1.1.0':
+    resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -557,6 +572,9 @@ packages:
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
 
+  '@napi-rs/wasm-runtime@1.1.1':
+    resolution: {integrity: sha512-p64ah1M1ld8xjWv3qbvFwHiFVWrq1yFvV4f7w+mzaqiR4IlSgkqhcRdHwsGgomwzBH51sRY4NEowLxnaBjcW/A==}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -568,6 +586,75 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@open-spaced-repetition/binding-android-arm64@0.1.2':
+    resolution: {integrity: sha512-/t+SNZWAaiPwFX1AOk36hYws3yhAkvUKcbMmGg4EQ1ihzOcqJxirlz3zxEI0sArWPpq9fTZExcVZ/d5EEDOUBQ==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [android]
+
+  '@open-spaced-repetition/binding-darwin-arm64@0.1.2':
+    resolution: {integrity: sha512-WK1DO6MerbBoPhQY6ZFfQboDO5mQNyOESH23AoDFd7S6MzxOHvUegqMCQmQiW6JJEcPX10ZjAG9LoWqlO6gzsQ==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@open-spaced-repetition/binding-darwin-x64@0.1.2':
+    resolution: {integrity: sha512-FRBDw23AlVkeFkx+OTT5u3nptpRDQyoqJ2G18aTRnH169GlQQ8fRkyZpPYFvu/AIZNQqjyacecnX5pHmneAB+w==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@open-spaced-repetition/binding-linux-arm64-gnu@0.1.2':
+    resolution: {integrity: sha512-+LOIRlA2lsVU9+R9mF5fg+egPzf3Sgjr1AHVw14nkzOS2LxCTZKAZMB6X3e8nBEYNqS3SBXFFMjOivLh3sYMHw==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@open-spaced-repetition/binding-linux-arm64-musl@0.1.2':
+    resolution: {integrity: sha512-HyBiF50pbsm+Ael+VwJHX18WtgKFzuAQi494Wq8zQ/EiGZ++CvcI/NvfRGYECpRa3/MY3y1LJ5PBPmdwnN0uow==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@open-spaced-repetition/binding-linux-x64-gnu@0.1.2':
+    resolution: {integrity: sha512-s6TEyMfOkYgRNw7bCXxcy8xd7TE2P0D8oQmtPn76zNkhKVHETbvGHfa3YHUiXjcx070z4bP49oz4OjDqvDjQdw==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [linux]
+
+  '@open-spaced-repetition/binding-linux-x64-musl@0.1.2':
+    resolution: {integrity: sha512-+vJD8XWmXL8BTw4w8Kjox0F4h0ddU8e4zss8rXL9/B0KBvebox2cSFa0w64KfFR4Z9Cut75dd8gWuXXA8gYeMw==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [linux]
+
+  '@open-spaced-repetition/binding-wasm32-wasi@0.1.2':
+    resolution: {integrity: sha512-2Hq/b4Y4aH4leia74t0Uj5e1t+KY4NYT/IsM+z5HWR5nKDZFbRpy0jkl5IlZSbdRKH7Drh7T0vgEnWoDfh+4Gg==}
+    engines: {node: '>=14.0.0'}
+    cpu: [wasm32]
+
+  '@open-spaced-repetition/binding-win32-arm64-msvc@0.1.2':
+    resolution: {integrity: sha512-u1Qb0Bw14eU+9y8YOev6UK7e8ig6pepzVzeAKLwWbcHOAhOKqiaB4LKFIaLyLEVdcZpPudjulR2KBuZqDZYWsg==}
+    engines: {node: '>= 20'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@open-spaced-repetition/binding-win32-ia32-msvc@0.1.2':
+    resolution: {integrity: sha512-5Gx4IGuhrN5FOEvGDDWWZMhdZorFW4jO6p/5bZUwD1BbaT0raQ9pM6MJso0aBhyPZ4IfUVBsI7MKVI54woVKSA==}
+    engines: {node: '>= 20'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@open-spaced-repetition/binding-win32-x64-msvc@0.1.2':
+    resolution: {integrity: sha512-My+E1DOMtIoTteW0uBs+a23hnxn/cbSB7mf0HljXdKRn5umq2UihbILL/Dr/h05PeQFK7ntvl/fa1dHMf+1J4g==}
+    engines: {node: '>= 20'}
+    cpu: [x64]
+    os: [win32]
+
+  '@open-spaced-repetition/binding@0.1.2':
+    resolution: {integrity: sha512-hxMUyJq/Cw73/VYKBTZy0Tj7t/jHQLzvfphCCxevE8sSIq+WTGrrrS2p+Uv1M4BHKviH5cOEIJVqS7vpuJKVJg==}
+    engines: {node: '>= 20'}
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -596,6 +683,9 @@ packages:
 
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
+
+  '@tybys/wasm-util@0.10.1':
+    resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -2435,6 +2525,19 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.9
     optional: true
 
+  '@emnapi/core@1.8.1':
+    dependencies:
+      '@emnapi/wasi-threads': 1.1.0
+      tslib: 2.6.1
+
+  '@emnapi/runtime@1.8.1':
+    dependencies:
+      tslib: 2.6.1
+
+  '@emnapi/wasi-threads@1.1.0':
+    dependencies:
+      tslib: 2.6.1
+
   '@esbuild/aix-ppc64@0.19.12':
     optional: true
 
@@ -2742,6 +2845,12 @@ snapshots:
 
   '@kurkle/color@0.3.2': {}
 
+  '@napi-rs/wasm-runtime@1.1.1':
+    dependencies:
+      '@emnapi/core': 1.8.1
+      '@emnapi/runtime': 1.8.1
+      '@tybys/wasm-util': 0.10.1
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -2753,6 +2862,55 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  '@open-spaced-repetition/binding-android-arm64@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-darwin-arm64@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-darwin-x64@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-linux-arm64-gnu@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-linux-arm64-musl@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-linux-x64-gnu@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-linux-x64-musl@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-wasm32-wasi@0.1.2':
+    dependencies:
+      '@napi-rs/wasm-runtime': 1.1.1
+    optional: true
+
+  '@open-spaced-repetition/binding-win32-arm64-msvc@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-win32-ia32-msvc@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding-win32-x64-msvc@0.1.2':
+    optional: true
+
+  '@open-spaced-repetition/binding@0.1.2':
+    optionalDependencies:
+      '@open-spaced-repetition/binding-android-arm64': 0.1.2
+      '@open-spaced-repetition/binding-darwin-arm64': 0.1.2
+      '@open-spaced-repetition/binding-darwin-x64': 0.1.2
+      '@open-spaced-repetition/binding-linux-arm64-gnu': 0.1.2
+      '@open-spaced-repetition/binding-linux-arm64-musl': 0.1.2
+      '@open-spaced-repetition/binding-linux-x64-gnu': 0.1.2
+      '@open-spaced-repetition/binding-linux-x64-musl': 0.1.2
+      '@open-spaced-repetition/binding-wasm32-wasi': 0.1.2
+      '@open-spaced-repetition/binding-win32-arm64-msvc': 0.1.2
+      '@open-spaced-repetition/binding-win32-ia32-msvc': 0.1.2
+      '@open-spaced-repetition/binding-win32-x64-msvc': 0.1.2
 
   '@popperjs/core@2.11.8': {}
 
@@ -2779,6 +2937,10 @@ snapshots:
 
   '@tsconfig/node16@1.0.4':
     optional: true
+
+  '@tybys/wasm-util@0.10.1':
+    dependencies:
+      tslib: 2.6.1
 
   '@types/babel__core@7.20.5':
     dependencies:

@@ -9,17 +9,20 @@ env:
     PLUGIN_NAME: obsidian-spaced-repetition-recall
     COREPACK_ENABLE_STRICT: 0
 
-permissions: write-all
-
 jobs:
     release:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: write
+            attestations: write
+            artifact-metadata: write
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
 
             - name: Use Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version: "22"
 
@@ -30,14 +33,14 @@ jobs:
                   pnpm install
                   pnpm build
                   mkdir ${{ env.PLUGIN_NAME }}
-                  cp build/main.js manifest.json styles.css ${{ env.PLUGIN_NAME }}
+                  cp build/main.js manifest.json styles.css build/fsrs-wasi-worker.js build/fsrs-binding.wasm32-wasi.wasm ${{ env.PLUGIN_NAME }}
                   zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
                   ls
                   echo "::set-output name=tag_name::$(git tag --sort version:refname | tail -n 1)"
 
             - name: Extract release notes
               id: extract-release-notes
-              uses: ffurrer2/extract-release-notes@v1
+              uses: ffurrer2/extract-release-notes@v3
               with:
                   changelog_file: docs/docs/changelog.md
 
@@ -98,8 +101,30 @@ jobs:
                   asset_name: styles.css
                   asset_content_type: text/css
 
+            - name: Upload fsrs-wasi-worker.js
+              id: upload-worker
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create-release.outputs.upload_url }}
+                  asset_path: ./build/fsrs-wasi-worker.js
+                  asset_name: fsrs-wasi-worker.js
+                  asset_content_type: text/javascript
+
+            - name: Upload fsrs-binding.wasm32-wasi.wasm
+              id: upload-fsrs-wasm
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create-release.outputs.upload_url }}
+                  asset_path: ./build/fsrs-binding.wasm32-wasi.wasm
+                  asset_name: fsrs-binding.wasm32-wasi.wasm
+                  asset_content_type: text/wasm
+
             - name: Use Python
-              uses: actions/setup-python@v3
+              uses: actions/setup-python@v6
               with:
                   python-version: "3.12"
 

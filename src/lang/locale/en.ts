@@ -438,5 +438,36 @@ export default {
 
     // algorithms_switch.ts
     ALGORITHM_SWITCH_FAILED: "conversion failed, old algorithm and data restored, please issue it.",
-    ALGORITHM_SWITCH_SUCCESS: "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
+    ALGORITHM_SWITCH_SUCCESS:
+        "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
+
+    // fsrs-optimizer
+    FSRS_OPTIMIZER: "FSRS Optimizer",
+    FSRS_OPTIMIZER_DESC:
+        "Train personalized FSRS parameters from your review history CSV file for better scheduling predictions.",
+    FSRS_OPTIMIZER_UPLOAD: "Upload Review Log",
+    FSRS_OPTIMIZER_UPLOAD_DESC:
+        "Select a CSV file containing your review history to train optimized parameters.",
+    FSRS_SELECT_CSV: "Select CSV File",
+    FSRS_LOADING_FILE: "Loading file...",
+    FSRS_CONVERTING_DATA: "Converting data...",
+    FSRS_TRAINING_PROGRESS: "Training: ${current}%",
+    FSRS_TRAINING_COMPLETE: "Training complete!",
+    FSRS_TRAINING_ERROR: "Training error",
+    FSRS_OPTIMIZED_PARAMS: "Optimized Parameters",
+    FSRS_OLD_VALUE: "Old Value",
+    FSRS_NEW_VALUE: "New Value",
+    FSRS_CHANGE: "Change",
+    FSRS_APPLY_PARAMS: "Apply Parameters",
+    FSRS_COPY_PARAMS: "Copy Parameters",
+    FSRS_PARAMS_APPLIED: "Parameters applied successfully!",
+    FSRS_PARAMS_COPIED: "Parameters copied to clipboard!",
+    FSRS_TRAINING_FAILED: "Training failed",
+    FSRS_BINDING_LOAD_ERROR: "Failed to load FSRS optimization module",
+    FSRS_CSV_PARSE_ERROR: "Failed to parse CSV file",
+    FSRS_NO_VALID_ITEMS: "No valid review items found in the data",
+    FSRS_LOW_REVIEW_COUNT_WARNING:
+        "Warning: Only ${count} valid reviews found. More reviews will produce better results.",
+    FSRS_PLUGIN_BASE_PATH_NOT_SET:
+        "Plugin base path not set. Please restart Obsidian and try again.",
 };
