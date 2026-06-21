@@ -9,7 +9,7 @@ import {
 import { Card } from "./Card";
 import { Stats } from "./stats";
 import { CardScheduleInfo } from "./CardSchedule";
-import { TopicPath } from "./TopicPath";
+import { TopicPath } from "src/topic-path";
 
 export class DeckTreeStatsCalculator {
     private deckTree: Deck;

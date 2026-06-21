@@ -43,7 +43,7 @@ export function addDataLocationSettings(containerEl: HTMLElement, plugin: SRPlug
                             new ConfirmModal(
                                 plugin,
                                 desc_toNote +
-                                    "### review Notes\n" +
+                                    "\n### review Notes\n" +
                                     locSwitch.createTable(
                                         locSwitch.beforenoteStats,
                                         locSwitch.afternoteStats,
@@ -77,7 +77,7 @@ export function addDataLocationSettings(containerEl: HTMLElement, plugin: SRPlug
                         new ConfirmModal(
                             plugin,
                             desc_toTrackedFiles +
-                                "### review Notes\n" +
+                                "\n### review Notes\n" +
                                 locSwitch.createTable(
                                     locSwitch.beforenoteStats,
                                     locSwitch.afternoteStats,

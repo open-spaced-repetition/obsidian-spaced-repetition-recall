@@ -2,7 +2,7 @@ import { NoteQuestionParser } from "src/NoteQuestionParser";
 import { CardListType, Deck } from "src/Deck";
 import { DEFAULT_SETTINGS } from "src/settings";
 import { SampleItemDecks } from "./SampleItems";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { CardOrder, DeckTreeIterator, IIteratorOrder, DeckOrder } from "src/DeckTreeIterator";
 import {
     StaticDateProvider,

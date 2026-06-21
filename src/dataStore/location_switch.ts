@@ -1,5 +1,5 @@
 import { CachedMetadata, FrontMatterCache, Notice, TFile } from "obsidian";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import {
     DEFAULT_DECKNAME,
     LEGACY_SCHEDULING_EXTRACTOR,
@@ -12,13 +12,13 @@ import {
 } from "src/constants";
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
-import { SRSettings } from "src/settings";
+import { SettingsUtil, SRSettings } from "src/settings";
 import { escapeRegexString } from "src/util/utils";
 import { DataStore } from "./data";
 import { Tags } from "src/tags";
 
 import { Stats } from "src/stats";
-import { DateUtils, isIgnoredPath } from "src/util/utils_recall";
+import { DateUtils } from "src/util/utils_recall";
 import { RPITEMTYPE } from "./repetitionItem";
 import deepcopy from "deepcopy";
 import { NoteCardScheduleParser } from "src/CardSchedule";
@@ -126,11 +126,15 @@ export class LocationSwitch {
         // await plugin.sync_Algo();
 
         let notes: TFile[] = Iadapter.instance.vault.getMarkdownFiles();
-        notes = notes.filter(
-            (noteFile) =>
-                !isIgnoredPath(settings.noteFoldersToIgnore, noteFile.path) &&
-                plugin.createSrTFile(noteFile).getAllTagsFromCache().length > 0,
-        );
+        const canReview = (noteFile: TFile) => {
+            const srfile = plugin.createSrTFile(noteFile);
+            return (
+                !SettingsUtil.isPathInNoteIgnoreFolder(settings, noteFile.path) &&
+                (plugin.createSrTFile(noteFile).getAllTagsFromCache().length > 0 ||
+                    TopicPath.getFolderPathFromFilename(srfile, settings))
+            );
+        };
+        notes = notes.filter(canReview);
         for (const noteFile of notes) {
             let deckname = Tags.getNoteDeckName(noteFile, this.settings);
             const srfile = plugin.createSrTFile(noteFile);
@@ -298,6 +302,7 @@ export class LocationSwitch {
      */
     async converteTrackfileToNoteSched(dryrun: boolean = false) {
         const plugin = this.plugin;
+        const settings = plugin.data.settings;
         const store = plugin.store;
         this.initStats();
         this.setBeforeStats();
@@ -307,11 +312,16 @@ export class LocationSwitch {
 
         // eslint-disable-next-line prefer-const
         let tracked_files = store.data.trackedFiles;
+        const orgLocation = this.settings.dataLocation;
+
         const dueIds: number[] = [];
         await Promise.all(
             tracked_files
-                .filter((tkfile) => tkfile != null)
-                .filter((tkfile) => !isIgnoredPath(this.settings.noteFoldersToIgnore, tkfile.path))
+                .filter(
+                    (tkfile) =>
+                        tkfile != null &&
+                        !SettingsUtil.isPathInNoteIgnoreFolder(this.settings, tkfile.path),
+                )
                 .map(async (tkfile) => {
                     const item = store.getItembyID(tkfile.noteID);
                     const note = Iadapter.instance.vault.getAbstractFileByPath(
@@ -320,47 +330,14 @@ export class LocationSwitch {
                     if (!(note instanceof TFile)) {
                         return;
                     }
-                    const deckPath: string[] = TopicPath.getFolderPathFromFilename(
-                        plugin.createSrTFile(note),
-                        this.settings,
-                    ).path;
+                    const srfile = plugin.createSrTFile(note);
+                    const hasPath =
+                        TopicPath.getFolderPathFromFilename(srfile, this.settings).hasPath ||
+                        TopicPath.getTopicPathOfFile(srfile, this.settings).hasPath;
                     let fileText: string = await note.vault.read(note);
                     let fileChanged = false;
-                    if (deckPath.length !== 0) {
-                        tkfile.syncNoteCardsIndex(fileText, this.settings, (cardText, cardinfo) => {
-                            if (cardinfo == null || cardinfo?.itemIds == null) {
-                                return;
-                            }
-                            const ids = cardinfo.itemIds;
-                            const scheduling: RegExpMatchArray[] = [];
-                            ids.map((id: number) => store.getItembyID(id))
-                                .filter((citem) => citem.isTracked)
-                                .forEach((citem) => {
-                                    // const citem = store.getItembyID(id);
-                                    // if (citem.isTracked) {
-                                    const sched = citem.getSchedDurAsStr();
-                                    if (citem.hasDue && sched != null) {
-                                        scheduling.push(sched);
-                                        dueIds.push(citem.ID);
-                                    }
-                                    this.aftercardStats.updateStats(
-                                        citem,
-                                        globalDateProvider.endofToday.valueOf(),
-                                    );
-                                    // }
-                                });
-                            const newCardText = updateCardSchedXml(
-                                cardText,
-                                this.settings.cardCommentOnSameLine,
-                                scheduling,
-                            );
-                            fileText = cardTextReplace(fileText, cardText, newCardText);
-                            // const replacementRegex = new RegExp(escapeRegexString(cardText), "gm");
-                            // fileText = fileText.replace(replacementRegex, () => newCardText);
-                            fileChanged = true;
-                        });
-                    }
-                    // console.debug("_convert CardsSched end :\n", fileText);
+
+                    // check and convert note review data
                     if (
                         item?.isTracked &&
                         (tkfile.isDefault || Tags.isTagedNoteDeckName(item.deckName, this.settings))
@@ -395,6 +372,31 @@ export class LocationSwitch {
                             }
                         }
                     }
+
+                    // check and convert cards
+                    if (hasPath) {
+                        // todo: get Question and use updateQuestionText() to update filetext
+                        const nnote = await plugin.loadNote(note);
+                        this.settings.dataLocation = DataLocation.SaveOnNoteFile;
+                        for (let i = 0; i < nnote.questionList.length; i++) {
+                            const qst = nnote.questionList[i];
+                            fileText = qst.updateQuestionText(fileText, this.settings);
+
+                            qst.cards
+                                .map((card) => store.getItembyID(card.Id as number))
+                                .filter((citem) => citem.isTracked)
+                                .forEach((citem) => {
+                                    this.aftercardStats.updateStats(
+                                        citem,
+                                        globalDateProvider.endofToday.valueOf(),
+                                    );
+                                });
+                        }
+                        fileChanged = true;
+                        settings.dataLocation = orgLocation;
+                    }
+                    // console.debug("_convert CardsSched end :\n", fileText);
+
                     if (!dryrun && fileChanged) {
                         if (fileText == null) {
                             console.error("fileText null");
@@ -409,11 +411,10 @@ export class LocationSwitch {
         const msg = "converteTrackfileToNoteSched success!";
         console.debug("dueids after: ", dueIds, store.data.trackedFiles, store.data.items);
         if (dryrun) {
-            // const settings = plugin.data.settings;
             // const orgLocation = settings.dataLocation;
             // settings.dataLocation = DataLocation.SaveOnNoteFile;
             // await plugin.sync();
-            // settings.dataLocation = orgLocation;
+            settings.dataLocation = orgLocation;
             this.resultCheck(
                 this.beforenoteStats,
                 this.beforecardStats,
@@ -426,6 +427,9 @@ export class LocationSwitch {
         console.log(msg);
     }
 
+    /**
+     * reset stats.
+     */
     private initStats() {
         this.beforenoteStats = new Stats();
         this.beforecardStats = new Stats();
@@ -433,10 +437,18 @@ export class LocationSwitch {
         this.aftercardStats = new Stats();
     }
 
+    /**
+     * before swithch loaction set this.beforeXXXXStats
+     * X stands for note and/or card.
+     */
     private setBeforeStats() {
         this.beforenoteStats = deepcopy(this.plugin.noteStats);
         this.beforecardStats = deepcopy(this.plugin.cardStats);
     }
+    /**
+     * after switch location set this.afterXXXXStats
+     * X stands for note and/or card.
+     */
     private setAfterStats() {
         this.afternoteStats = deepcopy(this.plugin.noteStats);
         this.aftercardStats = deepcopy(this.plugin.cardStats);

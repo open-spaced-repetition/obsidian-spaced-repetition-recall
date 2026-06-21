@@ -3,7 +3,7 @@ import { CardScheduleInfo, NoteCardScheduleParser } from "src/CardSchedule";
 import { Note } from "src/Note";
 import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { SrTFile } from "src/SRFile";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { DataStore } from "src/dataStore/data";
 import { BlockUtils, debug, logExecutionTime } from "src/util/utils_recall";
 import { CardInfo } from "./trackedFile";

@@ -1,5 +1,5 @@
 import { CardListType, Deck } from "src/Deck";
-import { TopicPath } from "src/TopicPath";
+import { TopicPath } from "src/topic-path";
 import { SampleItemDecks } from "./SampleItems";
 import { Card } from "src/Card";
 

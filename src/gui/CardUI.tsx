@@ -402,8 +402,10 @@ export class CardUI {
 
     private _formatQuestionContextText(questionContext: string[]): string {
         const separator: string = " > ";
-        let result = this._currentNote.file.basename;
-        questionContext.forEach((context) => {
+        // MQV: show only the chapter (the heading path), not the note basename
+        // or a trailing "..." — the sr-review-cards snippet styles this as a
+        // bold heading above the card.
+        const chapters = questionContext.map((context) => {
             // Check for links trim [[ ]]
             if (context.startsWith("[[") && context.endsWith("]]")) {
                 context = context.replace("[[", "").replace("]]", "");
@@ -412,9 +414,10 @@ export class CardUI {
                     context = context.split("|")[1];
                 }
             }
-            result += separator + context;
+            return context;
         });
-        return result + separator + "...";
+        // Fall back to the note name when the card sits under no heading
+        return chapters.length ? chapters.join(separator) : this._currentNote.file.basename;
     }
 
     // -> Header
@@ -576,9 +579,12 @@ export class CardUI {
     private _resetResponseButtons() {
         // Sets all buttons in to their default state
         this.answerButton.removeClass("sr-is-hidden");
-        this.hardButton.addClass("sr-is-hidden");
-        this.goodButton.addClass("sr-is-hidden");
-        this.easyButton.addClass("sr-is-hidden");
+        // this.hardButton.addClass("sr-is-hidden");
+        // this.goodButton.addClass("sr-is-hidden");
+        // this.easyButton.addClass("sr-is-hidden");
+        this.options.slice(1).forEach((_v, idx) => {
+            this.responseBtns[idx + 1].addClass("sr-is-hidden");
+        });
     }
 
     private _createShowAnswerButton() {
