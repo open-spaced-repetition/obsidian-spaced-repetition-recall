@@ -136,7 +136,7 @@ Goodbye`;
     });
 
     test("With frontmatter (and nothing else)", () => {
-        let frontmatter: string = `---
+        const frontmatter: string = `---
 sr-due: 2024-01-17
 sr-interval: 16
 sr-ease: 278
