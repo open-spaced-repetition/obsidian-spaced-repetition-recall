@@ -140,16 +140,16 @@ export const isVersionNewerThanOther = (version: string, otherVersion: string): 
 
     return Boolean(
         v &&
-            v.length >= 4 &&
-            o &&
-            o.length >= 4 &&
-            !(isNaN(parseInt(v[1])) || isNaN(parseInt(v[2])) || isNaN(parseInt(v[3]))) &&
-            !(isNaN(parseInt(o[1])) || isNaN(parseInt(o[2])) || isNaN(parseInt(o[3]))) &&
-            (newer(1) ||
-                newer(2) ||
-                newer(3) ||
-                (!isNaN(parseInt(v[4])) && isNaN(parseInt(o[4]))) ||
-                (!(isNaN(parseInt(v[4])) || isNaN(parseInt(o[4]))) && newer(4))),
+        v.length >= 4 &&
+        o &&
+        o.length >= 4 &&
+        !(isNaN(parseInt(v[1])) || isNaN(parseInt(v[2])) || isNaN(parseInt(v[3]))) &&
+        !(isNaN(parseInt(o[1])) || isNaN(parseInt(o[2])) || isNaN(parseInt(o[3]))) &&
+        (newer(1) ||
+            newer(2) ||
+            newer(3) ||
+            (!isNaN(parseInt(v[4])) && isNaN(parseInt(o[4]))) ||
+            (!(isNaN(parseInt(v[4])) || isNaN(parseInt(o[4]))) && newer(4))),
     );
 
     function newer(idx: number): boolean {
