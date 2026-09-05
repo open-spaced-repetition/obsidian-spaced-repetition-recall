@@ -790,6 +790,73 @@ export class DataStore {
         return null;
     }
 
+    /**
+     * findCardInfoByBlockID.
+     * Search across ALL tracked files for a CardInfo matching the given blockID.
+     *
+     * @param {string} blockID
+     * @param {string} excludePath - path to exclude from search (current file)
+     * @returns {{ trackedFile: TrackedFile; cardInfo: CardInfo; cardIndex: number } | null}
+     */
+    findCardInfoByBlockID(
+        blockID: string,
+        excludePath?: string,
+    ): { trackedFile: TrackedFile; cardInfo: CardInfo; cardIndex: number } | null {
+        if (!blockID) return null;
+        for (const tf of this.data.trackedFiles) {
+            if (tf == null || !tf.hasCards || tf.path === excludePath) continue;
+            for (let i = 0; i < tf.cardItems.length; i++) {
+                if (tf.cardItems[i].blockID === blockID) {
+                    return { trackedFile: tf, cardInfo: tf.cardItems[i], cardIndex: i };
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * migrateCardInfo.
+     * Move a CardInfo (with its itemIds and review data) from one TrackedFile to another.
+     *
+     * @param {TrackedFile} sourceFile - the file the card is moving FROM
+     * @param {number} cardIndex - index of the CardInfo in sourceFile.cardItems
+     * @param {TrackedFile} destFile - the file the card is moving TO
+     * @param {number} lineNo - new line number in the destination file
+     * @param {string} cardTextHash - new card text hash
+     * @param {string} blockID - the block ID
+     * @returns {CardInfo} the migrated CardInfo now in destFile
+     */
+    migrateCardInfo(
+        sourceFile: TrackedFile,
+        cardIndex: number,
+        destFile: TrackedFile,
+        lineNo: number,
+        cardTextHash: string,
+        blockID: string,
+    ): CardInfo {
+        const cardInfo = sourceFile.cardItems.splice(cardIndex, 1)[0];
+        cardInfo.lineNo = lineNo;
+        cardInfo.cardTextHash = cardTextHash;
+        cardInfo.blockID = blockID;
+
+        if (!destFile.hasCards) {
+            destFile.cardItems = [];
+        }
+        destFile.cardItems.push(cardInfo);
+        destFile.cardItems.sort((a, b) => a.lineNo - b.lineNo);
+
+        // Update fileIndex on all associated RepetitionItems
+        const destFileIndex = this.getFileIndex(destFile.path);
+        for (const id of cardInfo.itemIds) {
+            const item = this.getItembyID(id);
+            if (item != null) {
+                item.setTracked(destFileIndex);
+            }
+        }
+
+        return cardInfo;
+    }
+
     updateMovedFile(trackedFile: TrackedFile): boolean {
         const newpath = this.findMovedFile(trackedFile.path);
         if (newpath !== null) {
