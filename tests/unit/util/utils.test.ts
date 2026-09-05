@@ -124,21 +124,19 @@ describe("extractFrontmatter", () => {
     test("No frontmatter", () => {
         let text: string = `Hello
 Goodbye`;
-        let frontmatter: string;
-        let content: string;
-        [frontmatter, content] = extractFrontmatter(text);
+        const [frontmatter, content] = extractFrontmatter(text);
         expect(frontmatter).toEqual("");
         expect(content).toEqual(text);
 
         text = `---
 Goodbye`;
-        [frontmatter, content] = extractFrontmatter(text);
-        expect(frontmatter).toEqual("");
-        expect(content).toEqual(text);
+        const [frontmatter2, content2] = extractFrontmatter(text);
+        expect(frontmatter2).toEqual("");
+        expect(content2).toEqual(text);
     });
 
     test("With frontmatter (and nothing else)", () => {
-        let frontmatter: string = `---
+        const frontmatter: string = `---
 sr-due: 2024-01-17
 sr-interval: 16
 sr-ease: 278
@@ -147,9 +145,8 @@ tags:
   - flashcards/datascience
 ---`;
         const text: string = frontmatter;
-        let content: string;
-        [frontmatter, content] = extractFrontmatter(text);
-        expect(frontmatter).toEqual(text);
+        const [frontmatter2, content] = extractFrontmatter(text);
+        expect(frontmatter2).toEqual(text);
         const frontmatterBlankedOut: string = `
 
 

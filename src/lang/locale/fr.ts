@@ -70,6 +70,8 @@ export default {
         'Visitez les <a href="${discussionsUrl}">discussions</a> pour des questions-réponses, des retours ou une discussion généraliste.',
     GITHUB_ISSUES:
         'Créez un ticket <a href="${issuesUrl}">sur GitHub</a> si vous trouvez un bug ou voulez demander une fonctionnalité.',
+    GITHUB_ISSUES_MODIFIED_PLUGIN:
+        'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
         'Code source du projet disponible sur <a href="${githubProjectUrl}">GitHub</a>',
     CODE_CONTRIBUTION_INFO:
@@ -102,6 +104,8 @@ export default {
     BURY_SIBLINGS_TILL_NEXT_DAY: "Enterrer les cartes sœurs jusqu'au lendemain ?",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Les cartes sœurs sont les cartes générées depuis le même texte, par exemple pour les textes à trous",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW:
+        "Bury sibling cards until the next day by note review",
     MULTI_CLOZE: "enable multi-cloze card?",
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Montrer le contexte dans les cartes ?",
@@ -216,7 +220,6 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
-
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
     DATA_FOLDER: "Folder for `tracked_files.json`",
@@ -248,15 +251,14 @@ export default {
     REVLOG_TAGS: "Tags for output review log",
     REVLOG_TAGS_DESC:
         "Tags for output review log, could be flashcards tags or/and notes tags(e.g. #review #flashcards #tag1), default empty means it output to the review log file normally without filtered by tags",
-
     FLASHCARD_AGAIN_LABEL: "Again Button Text",
     FLASHCARD_BLACKOUT_LABEL: "Blackout Button Text",
     FLASHCARD_INCORRECT_LABEL: "Incorrect Button Text",
-    "FLASHCARD_INCORRECT (EASY)_LABEL": "Incorrect (Easy) Button Text",
+    _LABEL: "Incorrect (Easy) Button Text",
     FLASHCARD_AGAIN_DESC: 'Customize the label for the "Again" Button',
     FLASHCARD_BLACKOUT_DESC: 'Customize the label for the "Blackout" Button',
     FLASHCARD_INCORRECT_DESC: 'Customize the label for the "Incorrect" Button',
-    "FLASHCARD_INCORRECT (EASY)_DESC": 'Customize the label for the "Incorrect (Easy)" Button',
+    _DESC: 'Customize the label for the "Incorrect (Easy)" Button',
     UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
@@ -301,4 +303,184 @@ export default {
     DUE_REVIEWED: "due Reviewed",
     REVIEWED_TODAY_SUMMARY: "Total Reviewed today: ${totalreviewedCount}",
     DATE: "Date",
+
+    // cardBlockIDSetting.ts
+    CARD_BLOCK_ID: "Card Block ID",
+    CARD_BLOCK_ID_DESC:
+        "use Card Block ID instead of line number and text hash.<br>  <b>If set True, block id will append after card text. And block id will keep in note after reset to False again.</b>",
+    CARD_BLOCK_ID_CONFIRM: `**If set True, block id will append after card text. And block id will keep in note after reset to False again. ** 
+
+Suggestion： backup your vault before set True. Or try it in sandbox vault. 
+
+After setting is turned on, blockid will be added after all cards. Even if it is turned off again, the added blockid will still remain in the note and will not be deleted.
+
+It is recommended to **backup first** the note library, or try it in a sandbox library.`,
+
+    // mixQueueSetting.ts
+    MIX_QUEUE: "Mix queue",
+    MIX_QUEUE_DESC:
+        "mix ondue and new notes when review. **first** slider for total count, second slider for ondue count. And new count is (total - ondue).",
+
+    // trackSetting.ts
+    UNTRACK_WITH_REVIEWTAG_DESC:
+        "When deleting the review tag in the note, synchronously untrack the operation, so that the note will no longer be reviewed<br><b>true</b>: synchronous untrack operation;<br><b>false</b>：After deleting the review tag, you need to untrack again before the note will no longer be reviewed. (same as previous version)",
+
+    // dataLocation.ts
+    DATA_LOCATION_PLUGIN_FOLDER: "In Plugin Folder",
+    DATA_LOCATION_ROOT_FOLDER: "In Vault Folder",
+    DATA_LOCATION_SPECIFIED_FOLDER: "In the folder specified below",
+    DATA_LOCATION_SAVE_ON_NOTE_FILE: "Save On Note File",
+
+    // fsrs.ts
+    FSRS_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://github.com/open-spaced-repetition/ts-fsrs">FSRS algorithm</a>.',
+    FSRS_W_PARAM_DESC:
+        'See <a href="https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm">FSRS V6 WIKI</a> and <a href="https://open-spaced-repetition.github.io/anki_fsrs_visualizer">FSRS w parameter visualization</a> to set various parameters.',
+
+    // anki.ts
+    ANKI_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html">Anki algorithm</a>.',
+    STARTING_EASE: "Starting Ease",
+    STARTING_EASE_DESC: "The initial ease given to an item.",
+    STARTING_EASE_ERROR: "Starting ease must be a positive number.",
+    STARTING_EASE_WARNING: "Starting ease lower than 1.3 is not recommended.",
+    EASY_BONUS_ANKI: "Easy Bonus",
+    EASY_BONUS_ANKI_DESC: "A bonus multiplier for items reviewed as easy.",
+    EASY_BONUS_ANKI_ERROR: "Easy bonus must be a number greater than or equal to 1.",
+    LAPSE_INTERVAL_MODIFIER: "Lapse Interval Modifier",
+    LAPSE_INTERVAL_MODIFIER_DESC:
+        "A factor to modify the review interval with when an item is reviewed as wrong.",
+    LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
+    GRADUATING_INTERVAL: "Graduating Interval",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
+    EASY_INTERVAL: "Easy Interval",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_ERROR: "Interval must be a positive number.",
+
+    // scheduling_default.ts
+    DEFAULT_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/">modified Anki algorithm</a>.',
+
+    // supermemo.ts
+    SM2_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. Currently shares the same parameters as the Anki algorithm (only the algorithm processing method is different). For more information see <a href="https://www.supermemo.com/en/archives1990-2015/english/ol/sm2">SM2 algorithm</a>.',
+
+    // info.ts
+    ITEM_INFO_TITLE: "Item info of",
+    CARDS_IN_NOTE: "Cards in this Note",
+    SAVE_ITEM_INFO: "Save",
+    SAVE_ITEM_INFO_TOOLTIP: "only save current note's item info",
+    CLOSE_ITEM_INFO: "Close",
+    LINE_NO: "LineNo:",
+    NEXT_REVIEW: "nextReivew:",
+    NEW_CARD: "NewCard",
+    ITEM_DATA_INFO: "Item.data info",
+
+    // locationSetting.ts
+    DATA_LOCATION_WARNING_TO_NOTE: `BE CAREFUL!!!
+  if you confirm this, it will convert all your scheduling informations in \`tracked_files.json\` to note, which will change lots of your note file in the same time.
+ Please make sure the setting tags of flashcards and notes is what you are using.`,
+    DATA_LOCATION_WARNING_OTHER_ALGO:
+        "if you want to save data on notefile, you **have to** use Default Algorithm.",
+    DATA_LOCATION_WARNING_TO_TRACKED: `BE CAREFUL!!! 
+ if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO \`tracked_files.json\`.`,
+    POST_ISSUE_MODIFIED_PLUGIN:
+        'Post an <a href="${issue_url}">issue</a> about this modified sr-plugin which has background color for settings.',
+
+    // donation.ts
+    DONATION_TEXT:
+        "This is a hobby project. If it helps you, you can buy me a drink or bubble tea~",
+
+    // locationSetting.ts
+    FOLDER_PLACEHOLDER: "Example: folder1/folder2",
+    SAVE_BUTTON: "Save",
+    LOCATION_CHANGE_FINISHED: "Finished location change.",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Item Info",
+    CMD_TRACK_NOTE: "Track Note",
+    CMD_UNTRACK_NOTE: "Untrack Note",
+    CMD_RESCHEDULE: "Reschedule",
+    CMD_POSTPONE_CARDS: "Postpone cards",
+    CMD_POSTPONE_NOTES: "Postpone notes",
+    CMD_POSTPONE_ALL: "Postpone All",
+    CMD_POSTPONE_NOTE_MANUAL: "Postpone this note after x days",
+    CMD_POSTPONE_CARDS_MANUAL: "Postpone cards in this note after x days",
+    CMD_BUILD_QUEUE: "Build Queue",
+    CMD_REVIEW: "Review",
+    CMD_PRINT_VIEW_STATE: "Print View State",
+    CMD_PRINT_EPHEMERAL_STATE: "Print Ephemeral State",
+    CMD_CLEAR_QUEUE: "Clear Queue",
+    CMD_QUEUE_ALL: "Queue All",
+    CMD_PRINT_DATA: "Print Data",
+    CMD_UPDATE_ITEMS: "Update Items",
+    CMD_INPUT_POSITIVE_NUMBER: "please input positive number",
+    CMD_NOTE_POSTPONED: "This note has been postponed ${days} days",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Track All Notes",
+    MENU_UNTRACK_ALL_NOTES: "Untrack All Notes",
+    MENU_TRACK_NOTE: "Track Note",
+    MENU_UNTRACK_NOTE: "Untrack Note",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Unable to save data file!",
+    DATA_FOLDER_UNTRACKED:
+        "In folder ${folderPath}, ${totalRemoved} files are no longer tracked for repetition",
+    DATA_ADDED_REMOVED_ITEMS: "Added ${totalAdded} new items, removed ${totalRemoved} items.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Added ${added} new items, removed ${removed} items.",
+    DATA_FILE_UPDATE: `\${filePath} update - lineNo: \${lineNo}
+Added: \${added} new card items, removed \${removed} card items.`,
+    DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
+
+    // reviewView.ts
+    NEXT_REVIEW_MINUTES: "You can review in ${interval} minutes",
+    NEXT_REVIEW_HOURS: "You can review in ${interval} hours",
+
+    // location_switch.ts
+    DATA_FILE_MOVED_SUCCESS: "Successfully moved data file!",
+    DATA_FILE_DELETE_OLD_FAILED: "Unable to delete old data file, please delete it manually.",
+    DATA_FILE_MOVE_FAILED: "Unable to move data file!",
+    DATA_LOST_WARNING: "have some data lost, see console for details.",
+
+    // algorithms_switch.ts
+    ALGORITHM_SWITCH_FAILED: "conversion failed, old algorithm and data restored, please issue it.",
+    ALGORITHM_SWITCH_SUCCESS:
+        "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
+
+    // fsrs-optimizer
+    FSRS_OPTIMIZER: "FSRS Optimizer",
+    FSRS_OPTIMIZER_DESC:
+        "Train personalized FSRS parameters from your review history CSV file for better scheduling predictions.",
+    FSRS_OPTIMIZER_UPLOAD: "Upload Review Log",
+    FSRS_OPTIMIZER_UPLOAD_DESC:
+        "Select a CSV file containing your review history to train optimized parameters.",
+    FSRS_SELECT_CSV: "Select CSV File",
+    FSRS_LOADING_FILE: "Loading file...",
+    FSRS_CONVERTING_DATA: "Converting data...",
+    FSRS_TRAINING_PROGRESS: "Training: ${current}%",
+    FSRS_TRAINING_COMPLETE: "Training complete!",
+    FSRS_TRAINING_ERROR: "Training error",
+    FSRS_OPTIMIZED_PARAMS: "Optimized Parameters",
+    FSRS_OLD_VALUE: "Old Value",
+    FSRS_NEW_VALUE: "New Value",
+    FSRS_CHANGE: "Change",
+    FSRS_APPLY_PARAMS: "Apply Parameters",
+    FSRS_COPY_PARAMS: "Copy Parameters",
+    FSRS_PARAMS_APPLIED: "Parameters applied successfully!",
+    FSRS_PARAMS_COPIED: "Parameters copied to clipboard!",
+    FSRS_TRAINING_FAILED: "Training failed",
+    FSRS_BINDING_LOAD_ERROR: "Failed to load FSRS optimization module",
+    FSRS_CSV_PARSE_ERROR: "Failed to parse CSV file",
+    FSRS_NO_VALID_ITEMS: "No valid review items found in the data",
+    FSRS_LOW_REVIEW_COUNT_WARNING:
+        "Warning: Only ${count} valid reviews found. More reviews will produce better results.",
+    FSRS_PLUGIN_BASE_PATH_NOT_SET:
+        "Plugin base path not set. Please restart Obsidian and try again.",
 };

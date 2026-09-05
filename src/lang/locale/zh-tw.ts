@@ -29,9 +29,9 @@ export default {
     REVIEW_CARDS: "復習卡片",
     REVIEW_DIFFICULTY_FILE_MENU: "復習：${difficulty}",
     REVIEW_NOTE_DIFFICULTY_CMD: "標記為「${difficulty}」",
-    REVIEW_CARDS_IN_NOTE: "復習此筆記中的卡片",
     CRAM_ALL_CARDS: "選擇要不計難易度復習的牌組",
     REVIEW_ALL_CARDS: "復習所有筆記中的卡片",
+    REVIEW_CARDS_IN_NOTE: "復習此筆記中的卡片",
     CRAM_CARDS_IN_NOTE: "不計難易度復習此筆記中的卡片",
     VIEW_STATS: "檢視數據",
     OPEN_REVIEW_QUEUE_VIEW: "Open Notes Review Queue in sidebar",
@@ -69,6 +69,8 @@ export default {
         'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
+    GITHUB_ISSUES_MODIFIED_PLUGIN:
+        'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
         'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
@@ -96,6 +98,8 @@ export default {
     INLINE_SCHEDULING_COMMENTS_DESC: "勾選後HTML註解不會破壞列表格式問題。",
     BURY_SIBLINGS_TILL_NEXT_DAY: "將反轉卡片隱藏至下一天？",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC: "反轉卡片由同一卡片文字產生，例如：填空克漏字",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW:
+        "Bury sibling cards until the next day by note review",
     MULTI_CLOZE: "允許多個完形填空?",
     MULTI_CLOZE_DESC: "將新/到期的關聯卡片組合到一個卡片中.",
     SHOW_CARD_CONTEXT: "在卡片中顯示上下文？",
@@ -145,9 +149,6 @@ export default {
     OPEN_RANDOM_NOTE: "復習隨機筆記",
     OPEN_RANDOM_NOTE_DESC: "關閉此選項，筆記將以重要度(PageRank)排序。",
     AUTO_NEXT_NOTE: "復習後自動打開下一個筆記",
-    ENABLE_FILE_MENU_REVIEW_OPTIONS: "請在檔案選單中啟用檢視選項（例如：檢視：簡單、記得、較難）",
-    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "如果您在檔案選單中停用檢視選項，您可以使用插件指令檢視筆記，如果有設定，也可以使用相關的快捷鍵。",
     MAX_N_DAYS_REVIEW_QUEUE: "右邊面板顯示的最大天數",
     MIN_ONE_DAY: "天數最小值為1",
     VALID_NUMBER_WARNING: "請輸入有效的數字。",
@@ -159,6 +160,9 @@ export default {
         "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS: "請在檔案選單中啟用檢視選項（例如：檢視：簡單、記得、較難）",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "如果您在檔案選單中停用檢視選項，您可以使用插件指令檢視筆記，如果有設定，也可以使用相關的快捷鍵。",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "牌組樹最初應顯示為展開",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "關閉此選項可摺疊同一張卡片中的巢狀牌組。如果您的卡片屬於同一檔案中的許多套牌，則很有用。",
@@ -194,7 +198,6 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
-
     DATA_LOC: "數據位置",
     DATA_LOC_DESC: "間隔重複資料項目的檔的保存位置.",
     DATA_FOLDER: "`tracked_files.json`的檔夾",
@@ -221,15 +224,14 @@ export default {
     REVLOG_TAGS: "輸出到日誌的標籤",
     REVLOG_TAGS_DESC:
         "用於輸出到日誌的標籤, 卡片或筆記的標籤（如#review #flashcards #tag1）都行。默認留空則不按標籤區分，都正常輸出到日誌表格",
-
     FLASHCARD_AGAIN_LABEL: "重來 按鈕文本",
     FLASHCARD_BLACKOUT_LABEL: "忘記 按鈕文本",
     FLASHCARD_INCORRECT_LABEL: "猜錯 按鈕文本",
-    "FLASHCARD_INCORRECT (EASY)_LABEL": "猜錯（簡單） 按鈕文本",
+    _LABEL: "猜錯（簡單） 按鈕文本",
     FLASHCARD_AGAIN_DESC: "自定義“重來”按鈕的標籤",
     FLASHCARD_BLACKOUT_DESC: "自定義“忘記”按鈕的標籤",
     FLASHCARD_INCORRECT_DESC: "自定義“猜錯”按鈕的標籤",
-    "FLASHCARD_INCORRECT (EASY)_DESC": "自定義“猜錯（簡單）”按鈕的標籤",
+    _DESC: "自定義“猜錯（簡單）”按鈕的標籤",
     UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
@@ -279,8 +281,13 @@ export default {
     CARD_BLOCK_ID: "卡片區塊ID",
     CARD_BLOCK_ID_DESC:
         "使用卡片區塊ID而不是行號和文本哈希。<br><b>如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。</b>",
-    CARD_BLOCK_ID_CONFIRM:
-        "**如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。**\n\n建議：在設置為True之前備份您的庫。或在沙盒庫中試用。\n\n設置打開後，就會在所有卡片後添加blockid，就算再關閉添加的blockid也依然保留在筆記中，不會被刪除。\n\n建議**先備份**筆記庫，或在沙盒庫中試用。",
+    CARD_BLOCK_ID_CONFIRM: `**如果設置為True，區塊ID將附加在卡片文本後。即使重新設置為False，區塊ID也會保留在筆記中。**
+
+建議：在設置為True之前備份您的庫。或在沙盒庫中試用。
+
+設置打開後，就會在所有卡片後添加blockid，就算再關閉添加的blockid也依然保留在筆記中，不會被刪除。
+
+建議**先備份**筆記庫，或在沙盒庫中試用。`,
 
     // mixQueueSetting.ts
     MIX_QUEUE: "混合隊列",
@@ -343,16 +350,22 @@ export default {
     ITEM_DATA_INFO: "項目數據信息",
 
     // locationSetting.ts
-    DATA_LOCATION_WARNING_TO_NOTE:
-        "小心！！！\n如果您確認此操作，將會把`tracked_files.json`中的所有調度信息轉換到筆記中，這將同時更改大量筆記文件。\n請確保卡片和筆記的標籤設置是您正在使用的。",
+    DATA_LOCATION_WARNING_TO_NOTE: `小心！！！
+如果您確認此操作，將會把\`tracked_files.json\`中的所有調度信息轉換到筆記中，這將同時更改大量筆記文件。
+請確保卡片和筆記的標籤設置是您正在使用的。`,
     DATA_LOCATION_WARNING_OTHER_ALGO: "如果您想將數據保存在筆記文件中，您**必須**使用默認算法。",
-    DATA_LOCATION_WARNING_TO_TRACKED:
-        "小心！！！\n如果您確認此操作，將會把筆記中的所有調度信息（同時會被刪除）轉換到`tracked_files.json`中。",
-
-    // settings.ts - tab titles
-    DEVELOPER: "開發者",
+    DATA_LOCATION_WARNING_TO_TRACKED: `小心！！！
+如果您確認此操作，將會把筆記中的所有調度信息（同時會被刪除）轉換到\`tracked_files.json\`中。`,
     POST_ISSUE_MODIFIED_PLUGIN:
         '為這個帶有設置背景顏色的修改版sr插件<a href="${issue_url}">提交issue</a>。',
+
+    // donation.ts
+    DONATION_TEXT: "業餘時間折騰的，如果對你有所幫助，可以請我喝瓶飲料或奶茶呀~",
+
+    // locationSetting.ts
+    FOLDER_PLACEHOLDER: "Example: folder1/folder2",
+    SAVE_BUTTON: "Save",
+    LOCATION_CHANGE_FINISHED: "Finished location change.",
 
     // commands.ts
     CMD_ITEM_INFO: "項目信息",
@@ -389,10 +402,52 @@ export default {
     DATA_FOLDER_UNTRACKED: "在文件夾${folderPath}下，共有${totalRemoved}個文件不再跟踪重複了",
     DATA_ADDED_REMOVED_ITEMS: "添加了${totalAdded}個新項目，刪除了${totalRemoved}個項目。",
     DATA_ADDED_REMOVED_ITEMS_SHORT: "添加了${added}個新項目，刪除了${removed}個項目。",
-    DATA_FILE_UPDATE:
-        "${filePath}更新 - 行號：${lineNo}\n添加：${added}個新卡片項目，刪除${removed}個卡片項目。",
+    DATA_FILE_UPDATE: `\${filePath}更新 - 行號：\${lineNo}
+添加：\${added}個新卡片項目，刪除\${removed}個卡片項目。`,
     DATA_ALL_ITEMS_UPDATED: "所有項目已更新。",
 
-    // donation.ts
-    DONATION_TEXT: "業餘時間折騰的，如果對你有所幫助，可以請我喝瓶飲料或奶茶呀~",
+    // reviewView.ts
+    NEXT_REVIEW_MINUTES: "You can review in ${interval} minutes",
+    NEXT_REVIEW_HOURS: "You can review in ${interval} hours",
+
+    // location_switch.ts
+    DATA_FILE_MOVED_SUCCESS: "Successfully moved data file!",
+    DATA_FILE_DELETE_OLD_FAILED: "Unable to delete old data file, please delete it manually.",
+    DATA_FILE_MOVE_FAILED: "Unable to move data file!",
+    DATA_LOST_WARNING: "have some data lost, see console for details.",
+
+    // algorithms_switch.ts
+    ALGORITHM_SWITCH_FAILED: "conversion failed, old algorithm and data restored, please issue it.",
+    ALGORITHM_SWITCH_SUCCESS:
+        "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
+
+    // fsrs-optimizer
+    FSRS_OPTIMIZER: "FSRS Optimizer",
+    FSRS_OPTIMIZER_DESC:
+        "Train personalized FSRS parameters from your review history CSV file for better scheduling predictions.",
+    FSRS_OPTIMIZER_UPLOAD: "Upload Review Log",
+    FSRS_OPTIMIZER_UPLOAD_DESC:
+        "Select a CSV file containing your review history to train optimized parameters.",
+    FSRS_SELECT_CSV: "Select CSV File",
+    FSRS_LOADING_FILE: "Loading file...",
+    FSRS_CONVERTING_DATA: "Converting data...",
+    FSRS_TRAINING_PROGRESS: "Training: ${current}%",
+    FSRS_TRAINING_COMPLETE: "Training complete!",
+    FSRS_TRAINING_ERROR: "Training error",
+    FSRS_OPTIMIZED_PARAMS: "Optimized Parameters",
+    FSRS_OLD_VALUE: "Old Value",
+    FSRS_NEW_VALUE: "New Value",
+    FSRS_CHANGE: "Change",
+    FSRS_APPLY_PARAMS: "Apply Parameters",
+    FSRS_COPY_PARAMS: "Copy Parameters",
+    FSRS_PARAMS_APPLIED: "Parameters applied successfully!",
+    FSRS_PARAMS_COPIED: "Parameters copied to clipboard!",
+    FSRS_TRAINING_FAILED: "Training failed",
+    FSRS_BINDING_LOAD_ERROR: "Failed to load FSRS optimization module",
+    FSRS_CSV_PARSE_ERROR: "Failed to parse CSV file",
+    FSRS_NO_VALID_ITEMS: "No valid review items found in the data",
+    FSRS_LOW_REVIEW_COUNT_WARNING:
+        "Warning: Only ${count} valid reviews found. More reviews will produce better results.",
+    FSRS_PLUGIN_BASE_PATH_NOT_SET:
+        "Plugin base path not set. Please restart Obsidian and try again.",
 };

@@ -64,11 +64,7 @@ export class RenderMarkdownWrapper {
                 ev.stopPropagation();
                 const href = linkEl.getAttribute("data-href") || linkEl.getAttribute("href");
                 if (href) {
-                    this.app.workspace.openLinkText(
-                        href,
-                        this.notePath,
-                        ev.ctrlKey || ev.metaKey,
-                    );
+                    this.app.workspace.openLinkText(href, this.notePath, ev.ctrlKey || ev.metaKey);
                 }
             });
         });

@@ -100,6 +100,9 @@ class QuestionTypeCloze implements IQuestionTypeHandler {
 
         let front: string, back: string;
         const result: CardFrontBack[] = [];
+        if (!clozeNote) {
+            return []; // 统一处理 null 情况
+        }
         for (let i = 0; i < clozeNote.numCards; i++) {
             front = clozeNote.getCardFront(i, clozeFormatter);
             back = clozeNote.getCardBack(i, clozeFormatter);

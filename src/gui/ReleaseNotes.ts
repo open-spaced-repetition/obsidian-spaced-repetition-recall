@@ -22,14 +22,14 @@ let readme: string[];
 // let readme_tks: string[];
 if (local === "zh-cn" || local === "zh-tw") {
     README_LOC = README_ZH;
-    readme = README_LOC.match(/^(.|\r?\n)*(?=\r?\n## 下载)/gm);
+    readme = README_LOC.match(/^(.|\r?\n)*(?=\r?\n## 下载)/gm) ?? [];
     // readme_tks = README_LOC.match(/^(## Thanks(?:.|\r?\n)*)$/gm);
 } else {
     README_LOC = README;
-    readme = README_LOC.match(/^(.|\r?\n)*(?=\r?\n## How)/gm);
+    readme = README_LOC.match(/^(.|\r?\n)*(?=\r?\n## How)/gm) ?? [];
     // readme_tks = README_LOC.match(/^(## Thanks(?:.|\r?\n)*)$/gm);
 }
-const latestRelease = RELEASE_changelog.match(/## \[(?:.|\r?\n)*?(?=\r?\n## \[)/gm);
+const latestRelease: string[] = RELEASE_changelog.match(/## \[(?:.|\r?\n)*?(?=\r?\n## \[)/gm);
 let PLUGIN_VERSION: string;
 
 // https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/master/src/dialogs/ReleaseNotes.ts
@@ -62,7 +62,8 @@ export class ReleaseNotes extends Modal {
 
     createForm() {
         const FIRST_RUN = [readme[0]].join("\n\n---\n");
-        let instro: string = FIRST_RUN.match(/^(?:.|\r?\n)+?(?=\r?\n## Feat)/gm).join("\n\n---\n");
+        let instro: string =
+            FIRST_RUN.match(/^(?:.|\r?\n)+?(?=\r?\n## Feat)/gm)?.join("\n\n---\n") ?? "";
         // const release_note = await this.getReleaseNote();
         // const notes: string[] = [];
         // if (release_note == null) {
@@ -78,7 +79,8 @@ export class ReleaseNotes extends Modal {
         let message = this.version
             ? Object.values(latestRelease)
                   .filter((value: string) => {
-                      const ver = value.match(/(?:##\s+\[)([\d\w.]{6,})(?:\s|\])/m)[0];
+                      const match = value.match(/(?:##\s+\[)([\d\w.]{6,})(?:\s|\])/m);
+                      const ver = match?.[0] ?? "";
                       return isVersionNewerThanOther(ver, prevRelease);
                   })
                   // .map((key: string) => `${key==="Intro" ? "" : `# ${key}\n`}${RELEASE_NOTES[key]}`)

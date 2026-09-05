@@ -1,8 +1,11 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
         "paths": {
-            "src/*": ["src/*"]
+            "": ["./*"],
+            "README.md": ["./README.md"], // 新增：映射根目录的 README.md
+            "docs/*": ["./docs/*"],
+            ".github/*": ["./.github/*"],
+            "src/*": ["./src/*"]
         },
         "emitDecoratorMetadata": true, // optional, 使Reflect类可以添加或读取metadata
         "experimentalDecorators": true, // required
@@ -12,13 +15,16 @@
         "target": "ES2018",
         "allowJs": true,
         "noImplicitAny": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "esModuleInterop": true,
         "importHelpers": true,
+        "types": ["node", "jest"],
         "lib": ["dom", "dom.Iterable", "scripthost", "ES5", "ES6", "ES7", "ES2021"],
         "jsx": "react",
-        "jsxFactory": "h"
+        "jsxFactory": "h",
+        "noEmit": true
     },
     "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["build", "coverage", "node_modules"],
     "files": ["node_modules/jest-expect-message/types/index.d.ts"]
 }

@@ -57,6 +57,8 @@ export function createTabs(
     tabs: Tabs,
     activateTabId: string,
 ): TabStructure {
+    // 获取 Shadow Root
+    const root = containerElement.getRootNode() as ShadowRoot;
     const tabHeader = containerElement.createEl("div", {
         attr: { class: "sr-tab-header" },
     });
@@ -142,7 +144,7 @@ export function createTabs(
                 throw new Error("Tab button has no 'activateTab' HTML attribute! Murr!");
             }
             const activateTabId = activateTabAttribute.value;
-            const tabContent: HTMLElement | null = document.getElementById(activateTabId);
+            const tabContent: HTMLElement | null = root.getElementById(activateTabId);
             if (null === tabContent) {
                 throw new Error(
                     "No tab content was found with activate_tab_id '" + activateTabId + "'! Hmph!",

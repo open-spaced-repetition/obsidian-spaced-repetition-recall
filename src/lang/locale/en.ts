@@ -102,7 +102,8 @@ export default {
     BURY_SIBLINGS_TILL_NEXT_DAY: "Bury sibling cards until the next day",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Siblings are cards generated from the same card text i.e. cloze deletions",
-    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW: "Bury sibling cards until the next day by note review",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW:
+        "Bury sibling cards until the next day by note review",
     MULTI_CLOZE: "enable multi-cloze card?",
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "Show context in cards",
@@ -211,7 +212,6 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
-
     DATA_LOC: "Data Location",
     DATA_LOC_DESC: "Where to store the data file for spaced repetition items.",
     DATA_FOLDER: "Folder for `tracked_files.json`",
@@ -243,15 +243,14 @@ export default {
     REVLOG_TAGS: "Tags for output review log",
     REVLOG_TAGS_DESC:
         "Tags for output review log, could be flashcards tags or/and notes tags(e.g. #review #flashcards #tag1), default empty means it output to the review log file normally without filtered by tags",
-
     FLASHCARD_AGAIN_LABEL: "Again Button Text",
     FLASHCARD_BLACKOUT_LABEL: "Blackout Button Text",
     FLASHCARD_INCORRECT_LABEL: "Incorrect Button Text",
-    "FLASHCARD_INCORRECT (EASY)_LABEL": "Incorrect (Easy) Button Text",
+    _LABEL: "Incorrect (Easy) Button Text",
     FLASHCARD_AGAIN_DESC: 'Customize the label for the "Again" Button',
     FLASHCARD_BLACKOUT_DESC: 'Customize the label for the "Blackout" Button',
     FLASHCARD_INCORRECT_DESC: 'Customize the label for the "Incorrect" Button',
-    "FLASHCARD_INCORRECT (EASY)_DESC": 'Customize the label for the "Incorrect (Easy)" Button',
+    _DESC: 'Customize the label for the "Incorrect (Easy)" Button',
     UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
@@ -301,8 +300,13 @@ export default {
     CARD_BLOCK_ID: "Card Block ID",
     CARD_BLOCK_ID_DESC:
         "use Card Block ID instead of line number and text hash.<br>  <b>If set True, block id will append after card text. And block id will keep in note after reset to False again.</b>",
-    CARD_BLOCK_ID_CONFIRM:
-        "**If set True, block id will append after card text. And block id will keep in note after reset to False again. ** \n\nSuggestion： backup your vault before set True. Or try it in sandbox vault. \n\nAfter setting is turned on, blockid will be added after all cards. Even if it is turned off again, the added blockid will still remain in the note and will not be deleted.\n\nIt is recommended to **backup first** the note library, or try it in a sandbox library.",
+    CARD_BLOCK_ID_CONFIRM: `**If set True, block id will append after card text. And block id will keep in note after reset to False again. ** 
+
+Suggestion： backup your vault before set True. Or try it in sandbox vault. 
+
+After setting is turned on, blockid will be added after all cards. Even if it is turned off again, the added blockid will still remain in the note and will not be deleted.
+
+It is recommended to **backup first** the note library, or try it in a sandbox library.`,
 
     // mixQueueSetting.ts
     MIX_QUEUE: "Mix queue",
@@ -368,18 +372,19 @@ export default {
     ITEM_DATA_INFO: "Item.data info",
 
     // locationSetting.ts
-    DATA_LOCATION_WARNING_TO_NOTE:
-        "BE CAREFUL!!!\n  if you confirm this, it will convert all your scheduling informations in `tracked_files.json` to note, which will change lots of your note file in the same time.\n Please make sure the setting tags of flashcards and notes is what you are using.",
+    DATA_LOCATION_WARNING_TO_NOTE: `BE CAREFUL!!!
+  if you confirm this, it will convert all your scheduling informations in \`tracked_files.json\` to note, which will change lots of your note file in the same time.
+ Please make sure the setting tags of flashcards and notes is what you are using.`,
     DATA_LOCATION_WARNING_OTHER_ALGO:
         "if you want to save data on notefile, you **have to** use Default Algorithm.",
-    DATA_LOCATION_WARNING_TO_TRACKED:
-        "BE CAREFUL!!! \n if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO `tracked_files.json`.",
-
+    DATA_LOCATION_WARNING_TO_TRACKED: `BE CAREFUL!!! 
+ if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO \`tracked_files.json\`.`,
     POST_ISSUE_MODIFIED_PLUGIN:
         'Post an <a href="${issue_url}">issue</a> about this modified sr-plugin which has background color for settings.',
 
     // donation.ts
-    DONATION_TEXT: "This is a hobby project. If it helps you, you can buy me a drink or bubble tea~",
+    DONATION_TEXT:
+        "This is a hobby project. If it helps you, you can buy me a drink or bubble tea~",
 
     // locationSetting.ts
     FOLDER_PLACEHOLDER: "Example: folder1/folder2",
@@ -422,8 +427,8 @@ export default {
         "In folder ${folderPath}, ${totalRemoved} files are no longer tracked for repetition",
     DATA_ADDED_REMOVED_ITEMS: "Added ${totalAdded} new items, removed ${totalRemoved} items.",
     DATA_ADDED_REMOVED_ITEMS_SHORT: "Added ${added} new items, removed ${removed} items.",
-    DATA_FILE_UPDATE:
-        "${filePath} update - lineNo: ${lineNo}\nAdded: ${added} new card items, removed ${removed} card items.",
+    DATA_FILE_UPDATE: `\${filePath} update - lineNo: \${lineNo}
+Added: \${added} new card items, removed \${removed} card items.`,
     DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
 
     // reviewView.ts

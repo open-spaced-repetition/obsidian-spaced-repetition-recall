@@ -29,8 +29,8 @@ export default {
     REVIEW_CARDS: "复习卡片",
     REVIEW_DIFFICULTY_FILE_MENU: "复习：${difficulty}",
     REVIEW_NOTE_DIFFICULTY_CMD: "标记为“${difficulty}”",
-    REVIEW_ALL_CARDS: "复习所有笔记中的卡片",
     CRAM_ALL_CARDS: "选择要集中复习的卡组",
+    REVIEW_ALL_CARDS: "复习所有笔记中的卡片",
     REVIEW_CARDS_IN_NOTE: "复习此笔记中的卡片",
     CRAM_CARDS_IN_NOTE: "集中复习此笔记中的卡片",
     VIEW_STATS: "查看数据",
@@ -41,7 +41,8 @@ export default {
     PLEASE_TAG_NOTE: "请将需要复习的笔记中加入正确的标签（检查设置选项）。",
     RESPONSE_RECEIVED: "反馈已收到",
     NO_DECK_EXISTS: "没有 ${deckName} 卡组",
-    ALL_CAUGHT_UP: "都复习完啦，你真棒！\n去接触点新东西吧~",
+    ALL_CAUGHT_UP: `都复习完啦，你真棒！
+去接触点新东西吧~`,
 
     // scheduling.ts
     DAYS_STR_IVL: "${interval}天",
@@ -69,6 +70,8 @@ export default {
         'Visit the <a href="${discussionsUrl}">discussions</a> section for Q&A help, feedback, and general discussion.',
     GITHUB_ISSUES:
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
+    GITHUB_ISSUES_MODIFIED_PLUGIN:
+        'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
     GITHUB_SOURCE_CODE:
         'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
     CODE_CONTRIBUTION_INFO:
@@ -96,6 +99,8 @@ export default {
     INLINE_SCHEDULING_COMMENTS_DESC: "HTML注释不再破坏列表格式",
     BURY_SIBLINGS_TILL_NEXT_DAY: "将关联卡片隐藏至下一天",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC: "关联卡片是来自同一卡片的不同形式， 例如：完形填空卡片",
+    BURY_SIBLINGS_TILL_NEXT_DAY_BY_NOTE_REVIEW:
+        "Bury sibling cards until the next day by note review",
     MULTI_CLOZE: "允许多个完形填空?",
     MULTI_CLOZE_DESC: "将新/到期的关联卡片组合到一个卡片中.",
     SHOW_CARD_CONTEXT: "在卡片中显示上下文",
@@ -144,9 +149,6 @@ export default {
     OPEN_RANDOM_NOTE: "复习随机笔记",
     OPEN_RANDOM_NOTE_DESC: "关闭此选项，笔记将以重要度(PageRank)排序。",
     AUTO_NEXT_NOTE: "复习后自动打开下一个笔记",
-    ENABLE_FILE_MENU_REVIEW_OPTIONS: "请在文件菜单中启用复习选项（例如：复习：简单、良好、困难",
-    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
-        "如果您在文件菜单中禁用复习选项，您可以使用插件命令来复习笔记，如果您定义了相关快捷键，也可以使用它们。",
     MAX_N_DAYS_REVIEW_QUEUE: "右边栏中显示的最大天数",
     MIN_ONE_DAY: "天数最小值为1",
     VALID_NUMBER_WARNING: "请输入有效的数字。",
@@ -157,6 +159,9 @@ export default {
     SHOW_STATUS_BAR_DESC: "将此关闭以隐藏 Obsidian 状态栏中的卡片复习状态。",
     SHOW_RIBBON_ICON: "在功能区中显示图标",
     SHOW_RIBBON_ICON_DESC: "关闭此选项可隐藏 Obsidian 功能区栏中的插件图标",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS: "请在文件菜单中启用复习选项（例如：复习：简单、良好、困难",
+    ENABLE_FILE_MENU_REVIEW_OPTIONS_DESC:
+        "如果您在文件菜单中禁用复习选项，您可以使用插件命令来复习笔记，如果您定义了相关快捷键，也可以使用它们。",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE: "默认在列表中展开嵌套子牌组",
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "关闭此选项可折叠同一张卡片中的嵌套牌组。如果您的卡片属于同一文件中的许多套牌，则很有用。",
@@ -192,7 +197,6 @@ export default {
     EXPERIMENTAL: "Experimental",
     HELP: "Help",
     STORE_IN_NOTES: "In the notes",
-
     DATA_LOC: "数据位置",
     DATA_LOC_DESC: "间隔重复数据项的文件的保存位置.",
     DATA_FOLDER: "`tracked_files.json`的文件夹",
@@ -219,15 +223,14 @@ export default {
     REVLOG_TAGS: "输出到日志的标签",
     REVLOG_TAGS_DESC:
         "用于输出到日志的标签, 卡片或笔记的标签（如#review #flashcards #tag1）都行。默认留空则不按标签区分，都正常输出到日志表格",
-
     FLASHCARD_AGAIN_LABEL: "重来 按钮文本",
     FLASHCARD_BLACKOUT_LABEL: "忘记 按钮文本",
     FLASHCARD_INCORRECT_LABEL: "猜错 按钮文本",
-    "FLASHCARD_INCORRECT (EASY)_LABEL": "猜错（简单） 按钮文本",
+    _LABEL: "猜错（简单） 按钮文本",
     FLASHCARD_AGAIN_DESC: "自定义“重来”按钮的标签",
     FLASHCARD_BLACKOUT_DESC: "自定义“忘记”按钮的标签",
     FLASHCARD_INCORRECT_DESC: "自定义“猜错”按钮的标签",
-    "FLASHCARD_INCORRECT (EASY)_DESC": "自定义“猜错（简单）”按钮的标签",
+    _DESC: "自定义“猜错（简单）”按钮的标签",
     UNTRACK_WITH_REVIEWTAG: "UntrackWithReviewTag",
 
     // sidebar.ts
@@ -273,8 +276,154 @@ export default {
     REVIEWED_TODAY_SUMMARY: "总复习数: ${totalreviewedCount}",
     DATE: "日期",
 
+    // cardBlockIDSetting.ts
+    CARD_BLOCK_ID: "Card Block ID",
+    CARD_BLOCK_ID_DESC:
+        "use Card Block ID instead of line number and text hash.<br>  <b>If set True, block id will append after card text. And block id will keep in note after reset to False again.</b>",
+    CARD_BLOCK_ID_CONFIRM: `**If set True, block id will append after card text. And block id will keep in note after reset to False again. ** 
+
+Suggestion： backup your vault before set True. Or try it in sandbox vault. 
+
+After setting is turned on, blockid will be added after all cards. Even if it is turned off again, the added blockid will still remain in the note and will not be deleted.
+
+It is recommended to **backup first** the note library, or try it in a sandbox library.`,
+
+    // mixQueueSetting.ts
+    MIX_QUEUE: "Mix queue",
+    MIX_QUEUE_DESC:
+        "mix ondue and new notes when review. **first** slider for total count, second slider for ondue count. And new count is (total - ondue).",
+
+    // trackSetting.ts
+    UNTRACK_WITH_REVIEWTAG_DESC:
+        "When deleting the review tag in the note, synchronously untrack the operation, so that the note will no longer be reviewed<br><b>true</b>: synchronous untrack operation;<br><b>false</b>：After deleting the review tag, you need to untrack again before the note will no longer be reviewed. (same as previous version)",
+
+    // dataLocation.ts
+    DATA_LOCATION_PLUGIN_FOLDER: "In Plugin Folder",
+    DATA_LOCATION_ROOT_FOLDER: "In Vault Folder",
+    DATA_LOCATION_SPECIFIED_FOLDER: "In the folder specified below",
+    DATA_LOCATION_SAVE_ON_NOTE_FILE: "Save On Note File",
+
+    // fsrs.ts
+    FSRS_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://github.com/open-spaced-repetition/ts-fsrs">FSRS algorithm</a>.',
+    FSRS_W_PARAM_DESC:
+        'See <a href="https://github.com/open-spaced-repetition/fsrs4anki/wiki/The-Algorithm">FSRS V6 WIKI</a> and <a href="https://open-spaced-repetition.github.io/anki_fsrs_visualizer">FSRS w parameter visualization</a> to set various parameters.',
+
+    // anki.ts
+    ANKI_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html">Anki algorithm</a>.',
+    STARTING_EASE: "Starting Ease",
+    STARTING_EASE_DESC: "The initial ease given to an item.",
+    STARTING_EASE_ERROR: "Starting ease must be a positive number.",
+    STARTING_EASE_WARNING: "Starting ease lower than 1.3 is not recommended.",
+    EASY_BONUS_ANKI: "Easy Bonus",
+    EASY_BONUS_ANKI_DESC: "A bonus multiplier for items reviewed as easy.",
+    EASY_BONUS_ANKI_ERROR: "Easy bonus must be a number greater than or equal to 1.",
+    LAPSE_INTERVAL_MODIFIER: "Lapse Interval Modifier",
+    LAPSE_INTERVAL_MODIFIER_DESC:
+        "A factor to modify the review interval with when an item is reviewed as wrong.",
+    LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
+    GRADUATING_INTERVAL: "Graduating Interval",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
+    EASY_INTERVAL: "Easy Interval",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_ERROR: "Interval must be a positive number.",
+
+    // scheduling_default.ts
+    DEFAULT_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. For more information see <a href="https://www.stephenmwangi.com/obsidian-spaced-repetition/algorithms/">modified Anki algorithm</a>.',
+
+    // supermemo.ts
+    SM2_ALGORITHM_DESC:
+        'The algorithm used for spaced repetition. Currently shares the same parameters as the Anki algorithm (only the algorithm processing method is different). For more information see <a href="https://www.supermemo.com/en/archives1990-2015/english/ol/sm2">SM2 algorithm</a>.',
+
+    // info.ts
+    ITEM_INFO_TITLE: "Item info of",
+    CARDS_IN_NOTE: "Cards in this Note",
+    SAVE_ITEM_INFO: "Save",
+    SAVE_ITEM_INFO_TOOLTIP: "only save current note's item info",
+    CLOSE_ITEM_INFO: "Close",
+    LINE_NO: "LineNo:",
+    NEXT_REVIEW: "nextReivew:",
+    NEW_CARD: "NewCard",
+    ITEM_DATA_INFO: "Item.data info",
+
+    // locationSetting.ts
+    DATA_LOCATION_WARNING_TO_NOTE: `BE CAREFUL!!!
+  if you confirm this, it will convert all your scheduling informations in \`tracked_files.json\` to note, which will change lots of your note file in the same time.
+ Please make sure the setting tags of flashcards and notes is what you are using.`,
+    DATA_LOCATION_WARNING_OTHER_ALGO:
+        "if you want to save data on notefile, you **have to** use Default Algorithm.",
+    DATA_LOCATION_WARNING_TO_TRACKED: `BE CAREFUL!!! 
+ if you confirm this, it will converte all your scheduling informations on note(which will be deleted in the same time) TO \`tracked_files.json\`.`,
+    POST_ISSUE_MODIFIED_PLUGIN:
+        'Post an <a href="${issue_url}">issue</a> about this modified sr-plugin which has background color for settings.',
+
     // donation.ts
     DONATION_TEXT: "业余时间折腾的，如果对你有所帮助，可以请我喝瓶饮料或奶茶呀~",
+
+    // locationSetting.ts
+    FOLDER_PLACEHOLDER: "Example: folder1/folder2",
+    SAVE_BUTTON: "Save",
+    LOCATION_CHANGE_FINISHED: "Finished location change.",
+
+    // commands.ts
+    CMD_ITEM_INFO: "Item Info",
+    CMD_TRACK_NOTE: "Track Note",
+    CMD_UNTRACK_NOTE: "Untrack Note",
+    CMD_RESCHEDULE: "Reschedule",
+    CMD_POSTPONE_CARDS: "Postpone cards",
+    CMD_POSTPONE_NOTES: "Postpone notes",
+    CMD_POSTPONE_ALL: "Postpone All",
+    CMD_POSTPONE_NOTE_MANUAL: "Postpone this note after x days",
+    CMD_POSTPONE_CARDS_MANUAL: "Postpone cards in this note after x days",
+    CMD_BUILD_QUEUE: "Build Queue",
+    CMD_REVIEW: "Review",
+    CMD_PRINT_VIEW_STATE: "Print View State",
+    CMD_PRINT_EPHEMERAL_STATE: "Print Ephemeral State",
+    CMD_CLEAR_QUEUE: "Clear Queue",
+    CMD_QUEUE_ALL: "Queue All",
+    CMD_PRINT_DATA: "Print Data",
+    CMD_UPDATE_ITEMS: "Update Items",
+    CMD_INPUT_POSITIVE_NUMBER: "please input positive number",
+    CMD_NOTE_POSTPONED: "This note has been postponed ${days} days",
+
+    // trackFileEvents.ts
+    MENU_TRACK_ALL_NOTES: "Track All Notes",
+    MENU_UNTRACK_ALL_NOTES: "Untrack All Notes",
+    MENU_TRACK_NOTE: "Track Note",
+    MENU_UNTRACK_NOTE: "Untrack Note",
+
+    // data.ts
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
+    DATA_UNABLE_TO_SAVE: "Unable to save data file!",
+    DATA_FOLDER_UNTRACKED:
+        "In folder ${folderPath}, ${totalRemoved} files are no longer tracked for repetition",
+    DATA_ADDED_REMOVED_ITEMS: "Added ${totalAdded} new items, removed ${totalRemoved} items.",
+    DATA_ADDED_REMOVED_ITEMS_SHORT: "Added ${added} new items, removed ${removed} items.",
+    DATA_FILE_UPDATE: `\${filePath} update - lineNo: \${lineNo}
+Added: \${added} new card items, removed \${removed} card items.`,
+    DATA_ALL_ITEMS_UPDATED: "all items have been updated.",
+
+    // reviewView.ts
+    NEXT_REVIEW_MINUTES: "You can review in ${interval} minutes",
+    NEXT_REVIEW_HOURS: "You can review in ${interval} hours",
+
+    // location_switch.ts
+    DATA_FILE_MOVED_SUCCESS: "Successfully moved data file!",
+    DATA_FILE_DELETE_OLD_FAILED: "Unable to delete old data file, please delete it manually.",
+    DATA_FILE_MOVE_FAILED: "Unable to move data file!",
+    DATA_LOST_WARNING: "have some data lost, see console for details.",
+
+    // algorithms_switch.ts
+    ALGORITHM_SWITCH_FAILED: "conversion failed, old algorithm and data restored, please issue it.",
+    ALGORITHM_SWITCH_SUCCESS:
+        "conversion completed, due to different algorithm parameters, subsequent review intervals will be adjusted",
 
     // fsrs-optimizer
     FSRS_OPTIMIZER: "FSRS 优化器",

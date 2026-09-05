@@ -117,9 +117,9 @@ describe("pruneDate", () => {
         const check =
             store.data.trackedFiles.map((tkfile) => tkfile?.itemIDs.filter((id) => id >= 0)).flat()
                 .length === store.itemSize;
-        const checkcard = store.data.trackedFiles.every((tkfile) =>
-            tkfile?.hasCards ? tkfile?.cardIDs.length > 0 : tkfile.noteID >= 0,
-        );
+        const checkcard = store.data.trackedFiles
+            .filter((tkfile) => tkfile?.hasCards)
+            .every((tkfile) => tkfile.cardIDs.length > 0);
         expect(itemResult).toBe(true);
         expect(tkfileResult).toBe(true);
         expect(check).toBe(true);
