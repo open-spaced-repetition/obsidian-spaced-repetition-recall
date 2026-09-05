@@ -71,9 +71,12 @@ export default {
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_ISSUES_MODIFIED_PLUGIN:
         'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
-    GITHUB_SOURCE_CODE: "The project's source code is available on <a href=\"${githubProjectUrl}\">GitHub</a>.",
-    CODE_CONTRIBUTION_INFO: "<a href=\"${codeContributionUrl}\">Here's</a> how to contribute code to the plugin.",
-    TRANSLATION_CONTRIBUTION_INFO: "<a href=\"${translationContributionUrl}\">Here's</a> how to translate the plugin to another language.",
+    GITHUB_SOURCE_CODE:
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+    CODE_CONTRIBUTION_INFO:
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+    TRANSLATION_CONTRIBUTION_INFO:
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "무시할 폴더들",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
@@ -88,7 +91,8 @@ export default {
     REVIEW_BUTTON_DELAY: "Button Press Delay (ms)",
     REVIEW_BUTTON_DELAY_DESC: "Add a delay to the review buttons before they can be pressed again.",
     FLASHCARD_TAGS: "플래시카드 태그",
-    FLASHCARD_TAGS_DESC: "태그를 공백 또는 빈 줄로 구분해서 입력해주세요. 예) '#flashcards #deck2 #deck3'",
+    FLASHCARD_TAGS_DESC:
+        "태그를 공백 또는 빈 줄로 구분해서 입력해주세요. 예) '#flashcards #deck2 #deck3'",
     CONVERT_FOLDERS_TO_DECKS: "폴더를 덱과 서브덱으로 사용할까요?",
     CONVERT_FOLDERS_TO_DECKS_DESC: "이 기능은 위의 플래시카드 태그 옵션을 대체합니다.",
     INLINE_SCHEDULING_COMMENTS:
@@ -103,7 +107,8 @@ export default {
     MULTI_CLOZE: "enable multi-cloze card?",
     MULTI_CLOZE_DESC: "Combine new/ondue sibling clozes into one card.",
     SHOW_CARD_CONTEXT: "카드의 문맥(context)을 표시하시겠습니까?",
-    SHOW_CARD_CONTEXT_DESC: "카드에서 'Title > Heading 1 > Subheading > ... > Subheading' 의 표시를 할지 설정합니다.",
+    SHOW_CARD_CONTEXT_DESC:
+        "카드에서 'Title > Heading 1 > Subheading > ... > Subheading' 의 표시를 할지 설정합니다.",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS: "Show next review time in the review buttons",
     SHOW_INTERVAL_IN_REVIEW_BUTTONS_DESC:
         "Useful to know how far in the future your cards are being pushed.",
@@ -149,7 +154,8 @@ export default {
     NOTE: "Note",
     REVIEW_PANE_ON_STARTUP: "Enable note review pane on startup",
     TAGS_TO_REVIEW: "리뷰에 사용할 태그",
-    TAGS_TO_REVIEW_DESC: "태그를 공백 또는 빈 줄로 구분해서 입력해주세요. 예) '#review #tag2 #tag3'",
+    TAGS_TO_REVIEW_DESC:
+        "태그를 공백 또는 빈 줄로 구분해서 입력해주세요. 예) '#review #tag2 #tag3'",
     OPEN_RANDOM_NOTE: "리뷰를 위해 랜덤 노트를 엽니다.",
     OPEN_RANDOM_NOTE_DESC: "이 옵션이 꺼져있으면, 노트는 중요도(페이지 랭크)에 따라 정렬됩니다.",
     AUTO_NEXT_NOTE: "리뷰 후에 다음 노트를 자동으로 엽니다.",
@@ -160,7 +166,8 @@ export default {
     OPEN_IN_TAB: "Open in new tab",
     OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
-    SHOW_STATUS_BAR_DESC: "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     ENABLE_FILE_MENU_REVIEW_OPTIONS:
@@ -336,10 +343,12 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
         "A factor to modify the review interval with when an item is reviewed as wrong.",
     LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
     GRADUATING_INTERVAL: "Graduating Interval",
-    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
     GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
     EASY_INTERVAL: "Easy Interval",
-    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
     EASY_INTERVAL_ERROR: "Interval must be a positive number.",
 
     // scheduling_default.ts
@@ -409,7 +418,8 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
     MENU_UNTRACK_NOTE: "Untrack Note",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
     DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
     DATA_UNABLE_TO_SAVE: "Unable to save data file!",
     DATA_FOLDER_UNTRACKED:

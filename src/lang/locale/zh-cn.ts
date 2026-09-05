@@ -72,9 +72,12 @@ export default {
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_ISSUES_MODIFIED_PLUGIN:
         'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
-    GITHUB_SOURCE_CODE: "The project's source code is available on <a href=\"${githubProjectUrl}\">GitHub</a>.",
-    CODE_CONTRIBUTION_INFO: "<a href=\"${codeContributionUrl}\">Here's</a> how to contribute code to the plugin.",
-    TRANSLATION_CONTRIBUTION_INFO: "<a href=\"${translationContributionUrl}\">Here's</a> how to translate the plugin to another language.",
+    GITHUB_SOURCE_CODE:
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+    CODE_CONTRIBUTION_INFO:
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+    TRANSLATION_CONTRIBUTION_INFO:
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "忽略此文件夹",
     FOLDERS_TO_IGNORE_DESC:
         "在单独一行中输入文件夹路径或全局模式，例如 Templates/Scripts 或 .excalidraw.md。此设置对闪存卡和笔记都通用。",
@@ -321,10 +324,12 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
         "A factor to modify the review interval with when an item is reviewed as wrong.",
     LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
     GRADUATING_INTERVAL: "Graduating Interval",
-    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
     GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
     EASY_INTERVAL: "Easy Interval",
-    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
     EASY_INTERVAL_ERROR: "Interval must be a positive number.",
 
     // scheduling_default.ts
@@ -393,7 +398,8 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
     MENU_UNTRACK_NOTE: "Untrack Note",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
     DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
     DATA_UNABLE_TO_SAVE: "Unable to save data file!",
     DATA_FOLDER_UNTRACKED:

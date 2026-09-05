@@ -34,7 +34,8 @@ export default {
     REVIEW_CARDS_IN_NOTE: "Apprendre les flashcards dans cette note",
     CRAM_CARDS_IN_NOTE: "Réviser les flashcards dans cette note",
     VIEW_STATS: "Voir les statistiques",
-    OPEN_REVIEW_QUEUE_VIEW: "Ouvrir la file d'attente des notes à apprendre dans la barre verticale",
+    OPEN_REVIEW_QUEUE_VIEW:
+        "Ouvrir la file d'attente des notes à apprendre dans la barre verticale",
     STATUS_BAR: "Apprentissage : ${dueNotesCount} note(s), ${dueFlashcardsCount} carte(s) dues",
     SYNC_TIME_TAKEN: "Synchronisé en ${t}ms",
     NOTE_IN_IGNORED_FOLDER: "La note est dans un dossier ignoré (voir paramètres).",
@@ -64,7 +65,7 @@ export default {
     GROUP_DATA_STORAGE_DESC: "Choose where to store the scheduling data",
     GROUP_FLASHCARDS_NOTES: "Flashcards & Notes",
     GROUP_CONTRIBUTING: "Contribuer",
-    CHECK_WIKI: "Pour plus d'informations, visitez le <a href=\"${wikiUrl}\">wiki</a>.",
+    CHECK_WIKI: 'Pour plus d\'informations, visitez le <a href="${wikiUrl}">wiki</a>.',
     GITHUB_DISCUSSIONS:
         'Visitez les <a href="${discussionsUrl}">discussions</a> pour des questions-réponses, des retours ou une discussion généraliste.',
     GITHUB_ISSUES:
@@ -167,7 +168,8 @@ export default {
     OPEN_IN_TAB: "Open in new tab",
     OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
-    SHOW_STATUS_BAR_DESC: "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     ENABLE_FILE_MENU_REVIEW_OPTIONS:
@@ -179,22 +181,26 @@ export default {
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Désactivez pour réduire les paquets dans la même carte. Ce réglage est utile si vous avez des cartes qui appartiennent à beaucoup de paquets à la fois.",
     ALGORITHM: "Algorithme",
-    CHECK_ALGORITHM_WIKI: "Pour en savoir plus, lisez l'<a href=\"${algoUrl}\">implémentation de l'algorithme</a>.",
+    CHECK_ALGORITHM_WIKI:
+        "Pour en savoir plus, lisez l'<a href=\"${algoUrl}\">implémentation de l'algorithme</a>.",
     SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "Facilité de base",
     BASE_EASE_DESC: "minimum = 130, recommandé = vers 250.",
     BASE_EASE_MIN_WARNING: "La facilité de base doit être supérieure à 130.",
-    LAPSE_INTERVAL_CHANGE: "Changement d'intervalle quand vous indiquez qu'une flashcard/note a été difficile",
+    LAPSE_INTERVAL_CHANGE:
+        "Changement d'intervalle quand vous indiquez qu'une flashcard/note a été difficile",
     LAPSE_INTERVAL_CHANGE_DESC: "nouvelIntervalle = ancienIntervalle * changementIntervalle / 100.",
     EASY_BONUS: "Bonus Facile",
-    EASY_BONUS_DESC: "Le bonus Facile vous permet d'augmenter l'intervalle entre une réponse Correct et une réponse Facile sur une flashcard/note (minimum = 100%).",
+    EASY_BONUS_DESC:
+        "Le bonus Facile vous permet d'augmenter l'intervalle entre une réponse Correct et une réponse Facile sur une flashcard/note (minimum = 100%).",
     EASY_BONUS_MIN_WARNING: "Le bonus Facile doit être au moins 100.",
     LOAD_BALANCE: "Enable load balancer",
     LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
         It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
         It's turned off for small intervals.`,
     MAX_INTERVAL: "Intervalle maximum (en jours)",
-    MAX_INTERVAL_DESC: "Vous permet de mettre une limite maximale sur l'intervalle (par défaut, 100 ans).",
+    MAX_INTERVAL_DESC:
+        "Vous permet de mettre une limite maximale sur l'intervalle (par défaut, 100 ans).",
     MAX_INTERVAL_MIN_WARNING: "L'intervalle maximum doit être au moins 1 jour.",
     MAX_LINK_CONTRIB: "Contribution maximum des liens",
     MAX_LINK_CONTRIB_DESC:
@@ -346,10 +352,12 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
         "A factor to modify the review interval with when an item is reviewed as wrong.",
     LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
     GRADUATING_INTERVAL: "Graduating Interval",
-    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
     GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
     EASY_INTERVAL: "Easy Interval",
-    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
     EASY_INTERVAL_ERROR: "Interval must be a positive number.",
 
     // scheduling_default.ts
@@ -419,7 +427,8 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
     MENU_UNTRACK_NOTE: "Untrack Note",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
     DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
     DATA_UNABLE_TO_SAVE: "Unable to save data file!",
     DATA_FOLDER_UNTRACKED:

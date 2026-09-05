@@ -71,9 +71,12 @@ export default {
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_ISSUES_MODIFIED_PLUGIN:
         'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
-    GITHUB_SOURCE_CODE: "The project's source code is available on <a href=\"${githubProjectUrl}\">GitHub</a>.",
-    CODE_CONTRIBUTION_INFO: "<a href=\"${codeContributionUrl}\">Here's</a> how to contribute code to the plugin.",
-    TRANSLATION_CONTRIBUTION_INFO: "<a href=\"${translationContributionUrl}\">Here's</a> how to translate the plugin to another language.",
+    GITHUB_SOURCE_CODE:
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+    CODE_CONTRIBUTION_INFO:
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+    TRANSLATION_CONTRIBUTION_INFO:
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "忽略此資料夾",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
@@ -153,7 +156,8 @@ export default {
     OPEN_IN_TAB: "Open in new tab",
     OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
-    SHOW_STATUS_BAR_DESC: "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     ENABLE_FILE_MENU_REVIEW_OPTIONS: "請在檔案選單中啟用檢視選項（例如：檢視：簡單、記得、較難）",

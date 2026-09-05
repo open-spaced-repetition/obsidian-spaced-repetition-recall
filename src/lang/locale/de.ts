@@ -74,9 +74,12 @@ export default {
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_ISSUES_MODIFIED_PLUGIN:
         'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
-    GITHUB_SOURCE_CODE: "The project's source code is available on <a href=\"${githubProjectUrl}\">GitHub</a>.",
-    CODE_CONTRIBUTION_INFO: "<a href=\"${codeContributionUrl}\">Here's</a> how to contribute code to the plugin.",
-    TRANSLATION_CONTRIBUTION_INFO: "<a href=\"${translationContributionUrl}\">Here's</a> how to translate the plugin to another language.",
+    GITHUB_SOURCE_CODE:
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+    CODE_CONTRIBUTION_INFO:
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+    TRANSLATION_CONTRIBUTION_INFO:
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "Ausgeschlossene Ordner",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
@@ -175,7 +178,8 @@ export default {
     OPEN_IN_TAB: "Öffne im neuen Tab",
     OPEN_IN_TAB_DESC: "Schalte dies aus, um die Notizen in einem Modalfenster zu öffnen",
     SHOW_STATUS_BAR: "Show status bar",
-    SHOW_STATUS_BAR_DESC: "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     ENABLE_FILE_MENU_REVIEW_OPTIONS:
@@ -193,10 +197,12 @@ export default {
     BASE_EASE: "Basis der Schwierigkeit",
     BASE_EASE_DESC: "Minimum ist 130. Empfohlen wird ca. 250.",
     BASE_EASE_MIN_WARNING: "Basis der Schwierigkeit muss mindestens 130 sein.",
-    LAPSE_INTERVAL_CHANGE: "Anpassungsfaktor des Intervalls wenn eine Notiz / Karte 'Schwer' abgeschlossen wird",
+    LAPSE_INTERVAL_CHANGE:
+        "Anpassungsfaktor des Intervalls wenn eine Notiz / Karte 'Schwer' abgeschlossen wird",
     LAPSE_INTERVAL_CHANGE_DESC: "neuesIntervall = altesIntervall * anpassungsfaktor / 100.",
     EASY_BONUS: "Einfachheit-Bonus",
-    EASY_BONUS_DESC: "Der Einfachheit-Bonus gibt an um welchen Faktor (in Prozent) das Intervall länger sein soll, wenn eine Notiz / Karte 'Einfach' statt 'Gut' abgeschlossen wird. Minimum ist 100%.",
+    EASY_BONUS_DESC:
+        "Der Einfachheit-Bonus gibt an um welchen Faktor (in Prozent) das Intervall länger sein soll, wenn eine Notiz / Karte 'Einfach' statt 'Gut' abgeschlossen wird. Minimum ist 100%.",
     EASY_BONUS_MIN_WARNING: "Der Einfachheit-Bonus muss mindestens 100 sein.",
     LOAD_BALANCE: "Enable load balancer",
     LOAD_BALANCE_DESC: `Slightly tweaks the interval so that the number of reviews per day is more consistent.
@@ -353,10 +359,12 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
         "A factor to modify the review interval with when an item is reviewed as wrong.",
     LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
     GRADUATING_INTERVAL: "Graduating Interval",
-    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
     GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
     EASY_INTERVAL: "Easy Interval",
-    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
     EASY_INTERVAL_ERROR: "Interval must be a positive number.",
 
     // scheduling_default.ts
@@ -426,7 +434,8 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
     MENU_UNTRACK_NOTE: "Untrack Note",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
     DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
     DATA_UNABLE_TO_SAVE: "Unable to save data file!",
     DATA_FOLDER_UNTRACKED:

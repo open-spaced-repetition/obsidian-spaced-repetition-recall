@@ -72,9 +72,12 @@ export default {
         'Raise an issue <a href="${issuesUrl}">here</a> if you have a feature request or a bug report.',
     GITHUB_ISSUES_MODIFIED_PLUGIN:
         'Raise an <a href="${issuesUrl}">issue</a> about this modified sr-plugin if you have a feature request or a bug report.',
-    GITHUB_SOURCE_CODE: "The project's source code is available on <a href=\"${githubProjectUrl}\">GitHub</a>.",
-    CODE_CONTRIBUTION_INFO: "<a href=\"${codeContributionUrl}\">Here's</a> how to contribute code to the plugin.",
-    TRANSLATION_CONTRIBUTION_INFO: "<a href=\"${translationContributionUrl}\">Here's</a> how to translate the plugin to another language.",
+    GITHUB_SOURCE_CODE:
+        'The project\'s source code is available on <a href="${githubProjectUrl}">GitHub</a>.',
+    CODE_CONTRIBUTION_INFO:
+        '<a href="${codeContributionUrl}">Here\'s</a> how to contribute code to the plugin.',
+    TRANSLATION_CONTRIBUTION_INFO:
+        '<a href="${translationContributionUrl}">Here\'s</a> how to translate the plugin to another language.',
     FOLDERS_TO_IGNORE: "Cartelle da ignorare",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
@@ -92,9 +95,12 @@ export default {
     FLASHCARD_TAGS_DESC:
         "Inserire etichette separate da spazi o a capi, per esempio #flashcards #deck2 #deck3.",
     CONVERT_FOLDERS_TO_DECKS: "Trasformare cartelle in mazzi e sotto-mazzi?",
-    CONVERT_FOLDERS_TO_DECKS_DESC: "Questa è un'alternativa all'opzione delle etichette delle schede sopra.",
-    INLINE_SCHEDULING_COMMENTS: "Salvare il commento per l'orario sulla stessa linea dell'ultimna linea della scheda?",
-    INLINE_SCHEDULING_COMMENTS_DESC: "Attivando quest'impostazione farò sì che i commento HTML non rompino la formattazione delle liste.",
+    CONVERT_FOLDERS_TO_DECKS_DESC:
+        "Questa è un'alternativa all'opzione delle etichette delle schede sopra.",
+    INLINE_SCHEDULING_COMMENTS:
+        "Salvare il commento per l'orario sulla stessa linea dell'ultimna linea della scheda?",
+    INLINE_SCHEDULING_COMMENTS_DESC:
+        "Attivando quest'impostazione farò sì che i commento HTML non rompino la formattazione delle liste.",
     BURY_SIBLINGS_TILL_NEXT_DAY: "Sotterrare schede sorelle fino al giorno dopo?",
     BURY_SIBLINGS_TILL_NEXT_DAY_DESC:
         "Le schede sorelle sono schede generate dallo stesso testo della scheda, per esempio i.e. cloze deletions",
@@ -114,7 +120,8 @@ export default {
     RESET_DEFAULT: "Reimposta alle impostazioni iniziali",
     CARD_MODAL_WIDTH_PERCENT: "Percentuale di larghezza delle schede",
     RANDOMIZE_CARD_ORDER: "Rendere casuale l'ordine delle schede durante la revisione?",
-    REVIEW_CARD_ORDER_WITHIN_DECK: "L'ordine in cui le schede saranno visualizzate all'interno del mazzo",
+    REVIEW_CARD_ORDER_WITHIN_DECK:
+        "L'ordine in cui le schede saranno visualizzate all'interno del mazzo",
     REVIEW_CARD_ORDER_NEW_FIRST_SEQUENTIAL: "Sequenzialmente dentro il mazzo (prima schede nuove)",
     REVIEW_CARD_ORDER_DUE_FIRST_SEQUENTIAL:
         "Sequenzialmente dentro il mazzo (prima schede in ritardo)",
@@ -164,7 +171,8 @@ export default {
     OPEN_IN_TAB: "Open in new tab",
     OPEN_IN_TAB_DESC: "Turn this off to open the plugin in a modal window",
     SHOW_STATUS_BAR: "Show status bar",
-    SHOW_STATUS_BAR_DESC: "Turn this off to hide the flashcard's review status in Obsidian's status bar",
+    SHOW_STATUS_BAR_DESC:
+        "Turn this off to hide the flashcard's review status in Obsidian's status bar",
     SHOW_RIBBON_ICON: "Show icon in the ribbon bar",
     SHOW_RIBBON_ICON_DESC: "Turn this off to hide the plugin icon from Obsidian's ribbon bar",
     ENABLE_FILE_MENU_REVIEW_OPTIONS:
@@ -176,7 +184,8 @@ export default {
     INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC:
         "Disabilitami per collassare mazzi annidati nella stessa scheda. Utile se hai schede che appartengono a più mazzi nello stesso file.",
     ALGORITHM: "Algoritmo",
-    CHECK_ALGORITHM_WIKI: "Per maggiori informazioni, visita <a href='${algoUrl}'>l'implementazione dell'algoritmo</a>.",
+    CHECK_ALGORITHM_WIKI:
+        "Per maggiori informazioni, visita <a href='${algoUrl}'>l'implementazione dell'algoritmo</a>.",
     SM2_OSR_VARIANT: "OSR's variant of SM-2",
     BASE_EASE: "Difficoltà base",
     BASE_EASE_DESC: "mino = 130, preferibilmente circa 250.",
@@ -192,7 +201,8 @@ export default {
         It's like Anki's fuzz but instead of being random, it picks the day with the least amount of reviews.
         It's turned off for small intervals.`,
     MAX_INTERVAL: "Intervallo massimo in giorni",
-    MAX_INTERVAL_DESC: "Ti permette di mettere un limite massimo all'intervallo (default 100 anni).",
+    MAX_INTERVAL_DESC:
+        "Ti permette di mettere un limite massimo all'intervallo (default 100 anni).",
     MAX_INTERVAL_MIN_WARNING: "L'intervallo massimo deve essere di almeno 1 giorno.",
     MAX_LINK_CONTRIB: "Contributo massimo delle note collegate",
     MAX_LINK_CONTRIB_DESC:
@@ -344,10 +354,12 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
         "A factor to modify the review interval with when an item is reviewed as wrong.",
     LAPSE_INTERVAL_ERROR: "Lapse interval must be a positive number.",
     GRADUATING_INTERVAL: "Graduating Interval",
-    GRADUATING_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Good'.",
+    GRADUATING_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Good'.",
     GRADUATING_INTERVAL_ERROR: "Interval must be a positive number.",
     EASY_INTERVAL: "Easy Interval",
-    EASY_INTERVAL_DESC: "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
+    EASY_INTERVAL_DESC:
+        "The interval (in days) to the next review after reviewing a new item as 'Easy'.",
     EASY_INTERVAL_ERROR: "Interval must be a positive number.",
 
     // scheduling_default.ts
@@ -417,7 +429,8 @@ It is recommended to **backup first** the note library, or try it in a sandbox l
     MENU_UNTRACK_NOTE: "Untrack Note",
 
     // data.ts
-    DATA_TAGGED_FILE_CANT_UNTRACK: "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
+    DATA_TAGGED_FILE_CANT_UNTRACK:
+        "it is taged file, can't untrack by this. You can delete the #review tag in note file.",
     DATA_UNTRACKED_ITEMS: "Untracked ${numItems} items${nulrstr}",
     DATA_UNABLE_TO_SAVE: "Unable to save data file!",
     DATA_FOLDER_UNTRACKED:

@@ -54,12 +54,12 @@ This single {{question}} turns into {{3 separate}} {{cards}}
     });
 });
 
-function createTagCacheObj(tag: string, line: number): any {
+function createTagCacheObj(tag: string, line: number): TagCache {
     return {
         tag: tag,
         position: {
             start: { line: line, col: null, offset: null },
             end: { line: line, col: null, offset: null },
         },
-    };
+    } as unknown as TagCache;
 }
