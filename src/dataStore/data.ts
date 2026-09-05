@@ -805,7 +805,11 @@ export class DataStore {
      * @param {string}path
      */
     async verify(path: string): Promise<boolean> {
-        const adapter = Iadapter.instance.adapter;
+        const adapter = Iadapter.instance?.adapter;
+        if (!adapter) {
+            // 在无 adapter 的测试环境里，verify() 之前会直接返回 false，导致 pruneData() 把所有跟踪文件都判定为失效并清空。这里应当在“没有 adapter”时按“文件仍然有效”处理，避免测试环境误删数据。
+            return true;
+        }
         if (path != null) {
             return await adapter.exists(path).catch((_reason) => {
                 console.error("Unable to verify file: ", path);

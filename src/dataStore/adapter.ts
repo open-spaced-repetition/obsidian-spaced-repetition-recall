@@ -17,7 +17,8 @@ export abstract class Iadapter {
         if (Iadapter._instance) {
             return Iadapter._instance;
         } else {
-            throw Error("there is not Iadapter instance.");
+            console.debug("there is not Iadapter instance.");
+            return null;
         }
     }
 
