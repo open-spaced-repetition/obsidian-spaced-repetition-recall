@@ -5,9 +5,14 @@ import { MiscUtils } from "src/util/utils_recall";
 import { t } from "src/lang/helpers";
 
 export async function loadData(store: DataStore, path = store.dataPath) {
-    try {
-        const adapter = Iadapter.instance.adapter;
+    const adapter = Iadapter.instance?.adapter;
+    if (!adapter) {
+        store.data = Object.assign({}, DEFAULT_SRS_DATA);
+        store.toInstances();
+        return;
+    }
 
+    try {
         if (await adapter.exists(path)) {
             const data = await adapter.read(path);
             if (data == null) {
@@ -40,8 +45,13 @@ export async function reloadData(store: DataStore) {
 }
 
 export async function saveData(store: DataStore, path = store.dataPath) {
+    const adapter = Iadapter.instance?.adapter;
+    if (!adapter) {
+        return;
+    }
+
     try {
-        await Iadapter.instance.adapter.write(path, JSON.stringify(store.data));
+        await adapter.write(path, JSON.stringify(store.data));
         store.data.mtime = await getmtime(store, path);
     } catch (error) {
         MiscUtils.notice(t("DATA_UNABLE_TO_SAVE"));
@@ -51,7 +61,11 @@ export async function saveData(store: DataStore, path = store.dataPath) {
 }
 
 export async function getmtime(store: DataStore, path = store.dataPath) {
-    const adapter = Iadapter.instance.adapter;
+    const adapter = Iadapter.instance?.adapter;
+    if (!adapter) {
+        return 0;
+    }
+
     const stat = await adapter.stat(path.normalize());
     return stat != null ? stat.mtime : 0;
 }
@@ -77,29 +91,49 @@ export async function pruneData(store: DataStore) {
 
     store.data = MiscUtils.assignOnly(DEFAULT_SRS_DATA, store.data);
 
-    store.data.trackedFiles = store.data.trackedFiles.filter(async (tkfile, _idx) => {
-        if (tkfile == null || !tkfile.isTracked) {
-            return false;
-        }
-        const hasFileIdx =
-            store.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0;
-        return hasFileIdx && (await verifyData(store, tkfile.path));
-    });
+    const adapter = Iadapter.instance?.adapter;
+    const keptTrackedFiles: typeof store.data.trackedFiles = [];
 
-    store.data.items = store.data.trackedFiles
-        .map((tkfile, idx) => {
-            return store
-                .getItems(tkfile.itemIDs)
-                .filter((item) => item != null)
-                .filter((item) => {
-                    item.fileIndex = idx;
-                    return true;
-                });
-        })
-        .flat();
+    if (!adapter) {
+        for (const tkfile of store.data.trackedFiles) {
+            if (tkfile == null || !tkfile.isTracked) {
+                continue;
+            }
+            const hasFileIdx =
+                store.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0;
+            if (hasFileIdx) {
+                keptTrackedFiles.push(tkfile);
+            }
+        }
+    } else {
+        for (const tkfile of store.data.trackedFiles) {
+            if (tkfile == null || !tkfile.isTracked) {
+                continue;
+            }
+            const hasFileIdx =
+                store.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0;
+            if (hasFileIdx && (await verifyData(store, tkfile.path))) {
+                keptTrackedFiles.push(tkfile);
+            }
+        }
+    }
+
+    store.data.trackedFiles = keptTrackedFiles;
+    const rebuiltItems = [];
+    for (const [idx, tkfile] of store.data.trackedFiles.entries()) {
+        const validItems = store
+            .getItems(tkfile.itemIDs)
+            .filter((item) => item != null)
+            .map((item) => {
+                item.fileIndex = idx;
+                return item;
+            });
+        rebuiltItems.push(...validItems);
+    }
+    store.data.items = rebuiltItems;
 
     removedtkfiles = removedtkfiles - store.data.trackedFiles.length;
-    removedItems = removedItems - store.itemSize;
+    removedItems = removedItems - store.data.items.length;
     store.data.queues.clearQueue();
     await saveData(store, store.dataPath);
 

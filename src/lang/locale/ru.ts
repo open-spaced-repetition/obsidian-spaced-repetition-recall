@@ -79,6 +79,9 @@ export default {
     FOLDERS_TO_IGNORE: "Игнорируемые папки",
     FOLDERS_TO_IGNORE_DESC:
         "Введите пути к папкам или глобальным шаблонам на отдельных строках, например: Templates/Scripts или **/*.excalidraw.md. Эта настройка общая для карточек и заметок.",
+    TAGS_TO_IGNORE: "Tags to ignore",
+    TAGS_TO_IGNORE_DESC:
+        "Enter tags separated by new lines. Matching notes or cards will be skipped during review.",
     OBSIDIAN_INTEGRATION: "Интеграция с Obsidian",
     FLASHCARDS: "Карточки",
     FLASHCARD_EASY_LABEL: 'Текст кнопки "Легко"',
