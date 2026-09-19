@@ -18,6 +18,10 @@ import {
     findCardInfoByBlockID as findCardInfoByBlockIDInIndex,
     rebuildBlockIdIndex as rebuildCardBlockIdIndex,
 } from "./cardMigration";
+import {
+    trackFilesInFolder as trackFilesInFolderHelper,
+    untrackFilesInFolder as untrackFilesInFolderHelper,
+} from "./fileTracking";
 
 /**
  * SrsData.
@@ -387,26 +391,8 @@ export class DataStore {
      * @param {boolean} recursive
      */
     untrackFilesInFolder(folder: TFolder, recursive?: boolean) {
-        let firstCalled = false;
-        if (recursive == null) {
-            recursive = true;
-            firstCalled = true;
-        }
-
-        let totalRemoved = 0;
-        folder.children.forEach((child) => {
-            if (child instanceof TFolder) {
-                if (recursive) {
-                    totalRemoved += this.untrackFilesInFolder(child, recursive);
-                }
-            } else if (child instanceof TFile) {
-                if (this.getTrackedFile(child.path)?.isTrackedNote) {
-                    const removed = this.untrackFile(child.path, false);
-                    totalRemoved += removed;
-                }
-            }
-        });
-        if (firstCalled) {
+        const totalRemoved = untrackFilesInFolderHelper(this, folder, recursive);
+        if (recursive == null || recursive === true) {
             const msg = t("DATA_FOLDER_UNTRACKED", {
                 folderPath: folder.path,
                 totalRemoved: totalRemoved,
@@ -438,27 +424,11 @@ export class DataStore {
      * @param {boolean} recursive
      */
     trackFilesInFolder(folder: TFolder, recursive?: boolean) {
-        if (recursive == null) recursive = true;
-
-        let totalAdded = 0;
-        let totalRemoved = 0;
-        folder.children.forEach((child) => {
-            if (child instanceof TFolder) {
-                if (recursive) {
-                    this.trackFilesInFolder(child, recursive);
-                }
-            } else if (child instanceof TFile && child.extension === "md") {
-                if (!this.getTrackedFile(child.path)?.isTrackedNote) {
-                    const { added, removed } = this.trackFile(child.path, RPITEMTYPE.NOTE, false);
-                    totalAdded += added;
-                    totalRemoved += removed;
-                }
-            }
-        });
-
+        const { added, removed } = trackFilesInFolderHelper(this, folder, recursive);
         MiscUtils.notice(
-            t("DATA_ADDED_REMOVED_ITEMS", { totalAdded: totalAdded, totalRemoved: totalRemoved }),
+            t("DATA_ADDED_REMOVED_ITEMS", { totalAdded: added, totalRemoved: removed }),
         );
+        return { added, removed };
     }
 
     /**
