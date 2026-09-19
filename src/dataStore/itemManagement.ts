@@ -15,7 +15,7 @@ export function updateItem(
     deckName: string,
 ): number {
     if (id != null && id < 0) return;
-    let item: RepetitionItem;
+    // `item` will be retrieved later when needed; declare at point of use to satisfy eslint
     const algorithm = SrsAlgorithm.getInstance();
 
     const newItem = new RepetitionItem(
@@ -32,7 +32,7 @@ export function updateItem(
         return newItem.ID;
     }
 
-    item = store.getItembyID(id);
+    const item = store.getItembyID(id);
     if (item != null) {
         item.setTracked(fileIndex);
         item.itemType = itemType;
