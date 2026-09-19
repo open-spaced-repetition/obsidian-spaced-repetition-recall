@@ -22,6 +22,13 @@ import {
     trackFilesInFolder as trackFilesInFolderHelper,
     untrackFilesInFolder as untrackFilesInFolderHelper,
 } from "./fileTracking";
+import {
+    updateCardItems as updateCardItemsHelper,
+    updateItem as updateItemHelper,
+    updateItems as updateItemsHelper,
+    updateReviewedCounts as updateReviewedCountsHelper,
+    verifyItems as verifyItemsHelper,
+} from "./itemManagement";
 
 /**
  * SrsData.
@@ -118,7 +125,7 @@ export class DataStore {
         this.rebuildBlockIdIndex();
     }
 
-    private rebuildBlockIdIndex() {
+    rebuildBlockIdIndex() {
         rebuildCardBlockIdIndex(this.data.trackedFiles, this.blockIDIndex);
     }
 
@@ -557,35 +564,7 @@ export class DataStore {
         itemType: RPITEMTYPE,
         deckName: string,
     ): number {
-        if (id < 0) return;
-        let item: RepetitionItem;
-        const algorithm = SrsAlgorithm.getInstance();
-
-        const newItem = new RepetitionItem(
-            id,
-            fileIndex,
-            itemType,
-            deckName,
-            algorithm.defaultData(),
-        );
-
-        if (id == undefined) {
-            newItem.ID = this.maxItemId + 1;
-            this.data.items.push(newItem);
-        } else {
-            item = this.getItembyID(id);
-            if (item != null) {
-                item.setTracked(fileIndex);
-                item.itemType = itemType;
-                item.data = Object.assign(algorithm.defaultData(), item.data);
-            } else {
-                this.data.items.push(newItem);
-            }
-        }
-
-        return newItem.ID;
-
-        // console.debug(`update items[${id}]:`, newItem);
+        return updateItemHelper(this, id, fileIndex, itemType, deckName);
     }
 
     /**
@@ -603,47 +582,7 @@ export class DataStore {
         dname: string,
         notice?: boolean,
     ): { added: number; removed: number } | null {
-        if (notice == null) notice = true;
-
-        const ind = this.getFileIndex(path);
-        if (ind == -1) {
-            console.log("Attempt to update untracked file: " + path);
-            return;
-        }
-        const trackedFile = this.getFileByIndex(ind);
-
-        let added = 0;
-        let removed = 0;
-
-        const newItems: Record<string, number> = {};
-        if ("file" in trackedFile.items && trackedFile.noteID > 0) {
-            newItems["file"] = trackedFile.items["file"];
-            this.getItembyID(trackedFile.noteID).setTracked(ind);
-        } else if (type === RPITEMTYPE.NOTE) {
-            const ID = this._updateItem(undefined, ind, type, dname);
-            newItems["file"] = ID;
-            added += 1;
-        } else {
-            newItems["file"] = -1;
-        }
-
-        for (const key in trackedFile.items) {
-            if (!(key in newItems)) {
-                const itemInd = trackedFile.items[key];
-                this.unTrackItem(itemInd);
-                console.debug("null item:" + itemInd);
-                removed += 1;
-            }
-        }
-        trackedFile.items = newItems;
-        // this.save();     // will be used when plugin.sync_Algo(), which shouldn't
-
-        if (notice) {
-            MiscUtils.notice(
-                t("DATA_ADDED_REMOVED_ITEMS_SHORT", { added: added, removed: removed }),
-            );
-        }
-        return { added, removed };
+        return updateItemsHelper(this, path, type, dname, notice);
     }
 
     updateCardItems(
@@ -653,109 +592,15 @@ export class DataStore {
         deckName: string,
         notice?: boolean,
     ): { added: number; removed: number } | null {
-        if (notice == null) notice = false;
-        const idsLen = cardinfo.itemIds.length;
-        const ind = this.getFileIndex(trackedFile.path);
-        this.getItems(cardinfo.itemIds).filter((item, _idx) => {
-            if (_idx < count) {
-                item.setTracked(ind);
-                item.updateDeckName(deckName, true);
-                return true;
-            }
-        });
-        if (idsLen === count) {
-            return;
-        }
-
-        let added = 0;
-        let removed = 0;
-
-        const newitemIds: number[] = cardinfo.itemIds.slice();
-
-        if (count < idsLen) {
-            const untrackExtraItems = () => {
-                const rmvIds = newitemIds.slice(count);
-                rmvIds.forEach((id) => {
-                    this.unTrackItem(id);
-                    removed++;
-                });
-                newitemIds.splice(count, idsLen - count);
-                console.debug("delete %d ids:", removed, rmvIds);
-            };
-            untrackExtraItems();
-            // len = newitemIds.length;
-        } else {
-            // count > len
-            // add new card data
-            for (let i = 0; i < count - idsLen; i++) {
-                const cardId = this._updateItem(undefined, ind, RPITEMTYPE.CARD, deckName);
-                newitemIds.push(cardId);
-                added += 1;
-            }
-            // console.debug("add %d ids:", added, newitemIds);
-        }
-
-        newitemIds.sort((a: number, b: number) => a - b);
-        cardinfo.itemIds = newitemIds;
-        // this.save();
-
-        const msg = t("DATA_FILE_UPDATE", {
-            filePath: trackedFile.path,
-            lineNo: cardinfo.lineNo,
-            added: added,
-            removed: removed,
-        });
-        this.rebuildBlockIdIndex();
-        console.debug(msg);
-        if (notice) {
-            MiscUtils.notice(msg);
-        }
-        return { added, removed };
+        return updateCardItemsHelper(this, trackedFile, cardinfo, count, deckName, notice);
     }
 
     async verifyItems() {
-        const items = this.data.items;
-        await Promise.all(
-            items.map(async (item, _idx) => {
-                if (item != null && item.isTracked) {
-                    // console.debug("verifyItems:", item, id);
-                    const itemType = !this.isCardItem(item.ID) ? RPITEMTYPE.NOTE : RPITEMTYPE.CARD;
-                    this._updateItem(item.ID, item.fileIndex, itemType, item.deckName);
-                }
-            }),
-        );
-        MiscUtils.notice(t("DATA_ALL_ITEMS_UPDATED"));
+        await verifyItemsHelper(this);
     }
 
     updateReviewedCounts(id: number, type: RPITEMTYPE = RPITEMTYPE.NOTE) {
-        let rc = this.data.reviewedCounts;
-        if (type === RPITEMTYPE.NOTE) {
-            rc = this.data.reviewedCounts;
-        } else {
-            rc = this.data.reviewedCardCounts;
-        }
-        // const date = new Date().toLocaleDateString();
-        const date = window.moment(new Date()).format("YYYY-MM-DD");
-        if (!(date in rc)) {
-            rc[date] = { due: 0, new: 0 };
-        }
-        const item = this.getItembyID(id);
-        if (item.isDue) {
-            if (this.settings.algorithm === algorithmNames.Fsrs) {
-                const data: FsrsData = item.data as FsrsData;
-                if (new Date(data.last_review) < new Date(date)) {
-                    rc[date].due++;
-                }
-            } else {
-                const data: AnkiData = item.data as AnkiData;
-                if (data.lastInterval >= 1) {
-                    rc[date].due++;
-                }
-            }
-        } else {
-            rc[date].new++;
-            console.debug("new:", rc[date].new);
-        }
+        updateReviewedCountsHelper(this, id, type);
     }
 
     findMovedFile(path: string): string {
