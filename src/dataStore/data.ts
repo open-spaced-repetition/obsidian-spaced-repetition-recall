@@ -14,6 +14,10 @@ import { RPITEMTYPE, RepetitionItem, ReviewResult } from "./repetitionItem";
 import { DEFAULT_QUEUE_DATA, Queue } from "./queue";
 import { Iadapter } from "./adapter";
 import { t } from "src/lang/helpers";
+import {
+    findCardInfoByBlockID as findCardInfoByBlockIDInIndex,
+    rebuildBlockIdIndex as rebuildCardBlockIdIndex,
+} from "./cardMigration";
 
 /**
  * SrsData.
@@ -111,22 +115,7 @@ export class DataStore {
     }
 
     private rebuildBlockIdIndex() {
-        this.blockIDIndex.clear();
-
-        for (const trackedFile of this.data.trackedFiles) {
-            if (trackedFile == null || !trackedFile.hasCards || trackedFile.cardItems == null) {
-                continue;
-            }
-
-            for (let i = 0; i < trackedFile.cardItems.length; i++) {
-                const blockID = trackedFile.cardItems[i]?.blockID;
-                if (!blockID) continue;
-
-                const matches = this.blockIDIndex.get(blockID) ?? [];
-                matches.push({ trackedFile, cardIndex: i });
-                this.blockIDIndex.set(blockID, matches);
-            }
-        }
+        rebuildCardBlockIdIndex(this.data.trackedFiles, this.blockIDIndex);
     }
 
     /**
@@ -828,26 +817,7 @@ export class DataStore {
         blockID: string,
         excludePath?: string,
     ): { trackedFile: TrackedFile; cardInfo: CardInfo; cardIndex: number } | null {
-        if (!blockID) return null;
-
-        const matches = this.blockIDIndex.get(blockID) ?? [];
-        const candidates = matches.filter((match) => match.trackedFile.path !== excludePath);
-
-        if (candidates.length > 1) {
-            return null;
-        }
-
-        if (candidates.length === 0) {
-            return null;
-        }
-
-        const { trackedFile, cardIndex } = candidates[0];
-        const cardInfo = trackedFile.cardItems[cardIndex];
-        if (cardInfo == null) {
-            return null;
-        }
-
-        return { trackedFile, cardInfo, cardIndex };
+        return findCardInfoByBlockIDInIndex(blockID, excludePath, this.blockIDIndex);
     }
 
     /**
