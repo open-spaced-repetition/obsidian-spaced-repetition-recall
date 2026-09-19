@@ -23,6 +23,16 @@ import {
     untrackFilesInFolder as untrackFilesInFolderHelper,
 } from "./fileTracking";
 import {
+    findMovedFile as findMovedFileHelper,
+    getFileIndex as getFileIndexHelper,
+    getFilePath as getFilePathHelper,
+    getItemsOfFile as getItemsOfFileHelper,
+    getTrackedFile as getTrackedFileHelper,
+    isInTrackedFiles as isInTrackedFilesHelper,
+    isTrackedCardfile as isTrackedCardfileHelper,
+    updateMovedFile as updateMovedFileHelper,
+} from "./fileQueries";
+import {
     updateCardItems as updateCardItemsHelper,
     updateItem as updateItemHelper,
     updateItems as updateItemsHelper,
@@ -191,17 +201,11 @@ export class DataStore {
      * @returns {number} ind | -1
      */
     getFileIndex(path: string): number {
-        return this.data.trackedFiles.findIndex((val, _ind, _obj) => {
-            return val != null && val.path == path;
-        });
+        return getFileIndexHelper(this, path);
     }
 
     getTrackedFile(path: string): TrackedFile {
-        const ind = this.getFileIndex(path);
-        if (ind < 0) {
-            return null;
-        }
-        return this.data.trackedFiles[ind];
+        return getTrackedFileHelper(this, path);
     }
 
     /**
@@ -210,7 +214,7 @@ export class DataStore {
      * @returns {boolean}
      */
     isInTrackedFiles(path: string): boolean {
-        return this.getFileIndex(path) >= 0;
+        return isInTrackedFilesHelper(this, path);
     }
 
     /**
@@ -220,7 +224,7 @@ export class DataStore {
      * @returns {boolean}
      */
     isTrackedCardfile(path: string): boolean {
-        return this.getTrackedFile(path)?.hasCards ?? false;
+        return isTrackedCardfileHelper(this, path);
     }
 
     isCardItem(id: number) {
@@ -269,8 +273,7 @@ export class DataStore {
      * @returns {RepetitionItem[]}
      */
     getItemsOfFile(path: string): RepetitionItem[] {
-        const file = this.getTrackedFile(path);
-        return file?.isTracked ? this.getItems(file.itemIDs) : [];
+        return getItemsOfFileHelper(this, path);
     }
     getItems = (ids: number[]): RepetitionItem[] => {
         return ids.map(this.getItembyID.bind(this));
@@ -300,9 +303,7 @@ export class DataStore {
      * @returns {string | null}
      */
     getFilePath(item: RepetitionItem): string | null {
-        const trackedFile = this.data.trackedFiles[item.fileIndex];
-
-        return trackedFile?.path ?? null;
+        return getFilePathHelper(this, item);
     }
 
     getReviewedCounts() {
@@ -568,20 +569,7 @@ export class DataStore {
     }
 
     findMovedFile(path: string): string {
-        const pathArr = path.split("/");
-        const name = pathArr.last().replace(".md", "");
-        const notes: TFile[] = Iadapter.instance.vault.getMarkdownFiles();
-        const result: string[] = [];
-        notes.some((note: TFile) => {
-            if (note.basename.includes(name) || name.includes(note.basename)) {
-                result.push(note.path);
-            }
-        });
-        if (result.length > 0) {
-            console.debug("find file: %s has been moved. %d", path, result.length);
-            return result[0];
-        }
-        return null;
+        return findMovedFileHelper(this, path);
     }
 
     /**
@@ -659,12 +647,7 @@ export class DataStore {
     }
 
     updateMovedFile(trackedFile: TrackedFile): boolean {
-        const newpath = this.findMovedFile(trackedFile.path);
-        if (newpath !== null) {
-            trackedFile.rename(newpath);
-            return true;
-        }
-        return false;
+        return updateMovedFileHelper(this, trackedFile);
     }
 
     /**
