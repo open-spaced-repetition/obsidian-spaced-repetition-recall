@@ -51,7 +51,7 @@ jobs:
             - name: Prettify code
               uses: creyD/prettier_action@v4.6
               with:
-                  prettier_version: ^3.1.1
+                  # prettier_version: ^3.1.1
                   # This part is also where you can pass other options, for example:
                   # prettier_options: --write *.ts *.json src test --ignore-path package-lock.json
                   # --config .prettierrc.json --ignore-path package-lock.json pnpm-lock.yaml
