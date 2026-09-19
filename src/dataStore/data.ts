@@ -29,6 +29,14 @@ import {
     updateReviewedCounts as updateReviewedCountsHelper,
     verifyItems as verifyItemsHelper,
 } from "./itemManagement";
+import {
+    getmtime as getmtimeHelper,
+    loadData as loadDataHelper,
+    pruneData as pruneDataHelper,
+    reloadData as reloadDataHelper,
+    saveData as saveDataHelper,
+    verifyData as verifyDataHelper,
+} from "./dataPersistence";
 
 /**
  * SrsData.
@@ -133,45 +141,14 @@ export class DataStore {
      * load.
      */
     async load(path = this.dataPath) {
-        try {
-            const adapter = Iadapter.instance.adapter;
-
-            if (await adapter.exists(path)) {
-                const data = await adapter.read(path);
-                if (data == null) {
-                    console.log("Unable to read SRS data!");
-                    this.data = Object.assign({}, DEFAULT_SRS_DATA);
-                } else {
-                    console.log("Reading tracked files...");
-                    this.data = Object.assign(
-                        Object.assign({}, DEFAULT_SRS_DATA),
-                        JSON.parse(data),
-                    );
-                    this.data.mtime = await this.getmtime();
-                }
-            } else {
-                console.log("Tracked files not found! Creating new file...");
-                this.data = Object.assign({}, DEFAULT_SRS_DATA);
-                await this.save();
-            }
-        } catch (error) {
-            console.log(error + "Tracked files not found! Creating new file...");
-            this.data = Object.assign({}, DEFAULT_SRS_DATA);
-            await this.save();
-        }
-        this.toInstances();
+        await loadDataHelper(this, path);
     }
 
     /**
      * re load if tracked_files.json updated by other device.
      */
     async reLoad() {
-        // const now: Date = new Date().getTime();
-        const mtime = await this.getmtime();
-        if (mtime - this.data.mtime > 10) {
-            console.debug("reload newer tracked_files.json: ", mtime, mtime - this.data.mtime);
-            await this.load();
-        }
+        await reloadDataHelper(this);
     }
     setdataPath(path = this.dataPath) {
         this.dataPath = path;
@@ -180,14 +157,7 @@ export class DataStore {
      * save.
      */
     async save(path = this.dataPath) {
-        try {
-            await Iadapter.instance.adapter.write(path, JSON.stringify(this.data));
-            this.data.mtime = await this.getmtime();
-        } catch (error) {
-            MiscUtils.notice(t("DATA_UNABLE_TO_SAVE"));
-            console.log(error);
-            return;
-        }
+        await saveDataHelper(this, path);
     }
 
     /**
@@ -196,13 +166,7 @@ export class DataStore {
      * @returns
      */
     async getmtime(path = this.dataPath) {
-        const adapter = Iadapter.instance.adapter;
-        const stat = await adapter.stat(path.normalize());
-        if (stat != null) {
-            return stat.mtime;
-        } else {
-            return 0;
-        }
+        return await getmtimeHelper(this, path);
     }
 
     /**
@@ -709,18 +673,7 @@ export class DataStore {
      * @param {string}path
      */
     async verify(path: string): Promise<boolean> {
-        const adapter = Iadapter.instance?.adapter;
-        if (!adapter) {
-            // 在无 adapter 的测试环境里，verify() 之前会直接返回 false，导致 pruneData() 把所有跟踪文件都判定为失效并清空。这里应当在“没有 adapter”时按“文件仍然有效”处理，避免测试环境误删数据。
-            return true;
-        }
-        if (path != null) {
-            return await adapter.exists(path).catch((_reason) => {
-                console.error("Unable to verify file: ", path);
-                return false;
-            });
-        }
-        return false;
+        return await verifyDataHelper(this, path);
     }
 
     /**
@@ -736,44 +689,6 @@ export class DataStore {
      * @returns
      */
     async pruneData() {
-        const tracked_files = this.data.trackedFiles;
-        let removedItems = this.itemSize;
-        let removedtkfiles = tracked_files.length;
-
-        this.data = MiscUtils.assignOnly(DEFAULT_SRS_DATA, this.data);
-
-        this.data.trackedFiles = this.data.trackedFiles.filter(async (tkfile, _idx) => {
-            if (tkfile == null || !tkfile.isTracked) {
-                return false;
-            }
-            const hasFileIdx =
-                this.getItems(tkfile.itemIDs).filter((item) => item?.isTracked).length > 0; // this tkfile has tracked items
-            return hasFileIdx && (await this.verify(tkfile.path));
-        });
-
-        this.data.items = this.data.trackedFiles
-            .map((tkfile, idx) => {
-                return this.getItems(tkfile.itemIDs)
-                    .filter((item) => item != null) //dont have to tkfile already have filtered.
-                    .filter((item) => {
-                        item.fileIndex = idx;
-                        return true;
-                    });
-            })
-            .flat();
-
-        removedtkfiles = removedtkfiles - this.data.trackedFiles.length;
-        removedItems = removedItems - this.itemSize;
-        this.data.queues.clearQueue();
-        this.save();
-
-        console.log(
-            "removed " +
-                removedtkfiles +
-                " nullTrackedfile(s), removed " +
-                removedItems +
-                " nullitem(s).",
-        );
-        return;
+        await pruneDataHelper(this);
     }
 }
