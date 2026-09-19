@@ -25,7 +25,6 @@ jobs:
               uses: actions/setup-node@v6
               with:
                   node-version: "22"
-                  cache: "pnpm"
 
             - name: Install Dependencies
               run: npm install -g pnpm && pnpm install
@@ -69,7 +68,6 @@ jobs:
               uses: actions/setup-node@v6
               with:
                   node-version: "22"
-                  cache: "pnpm"
 
             - name: Install Dependencies
               run: npm install -g pnpm && pnpm install
@@ -79,3 +77,8 @@ jobs:
 
             - name: Test
               run: pnpm test
+
+            - name: Upload coverage
+              uses: codecov/codecov-action@v4
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
