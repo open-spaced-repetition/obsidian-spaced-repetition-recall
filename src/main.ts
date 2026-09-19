@@ -597,13 +597,11 @@ export default class SRPlugin extends Plugin {
             }
 
             // file has no scheduling information
-            if (
-                !(
-                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
-                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
-                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
-                )
-            ) {
+            if (!(
+                Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
+                Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
+                Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
+            )) {
                 for (const matchedNoteTag of matchedNoteTags) {
                     this.reviewDecks[matchedNoteTag].newNotes.push({ note: noteFile });
                 }
