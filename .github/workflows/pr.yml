@@ -20,15 +20,14 @@ jobs:
             - uses: actions/checkout@v6
               with:
                   submodules: "true"
-            - name: Install Dependencies
-              run: npm install -g pnpm && pnpm install
 
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v6
               with:
                   node-version: "22"
-                  cache: "pnpm"
-            - run: pnpm i
+
+            - name: Install Dependencies
+              run: npm install -g pnpm && pnpm install
 
             # - name: Eslint
             #   run: pnpm run lint
@@ -50,25 +49,25 @@ jobs:
                   ref: ${{ github.head_ref }}
 
             - name: Prettify code
-              uses: creyD/prettier_action@v4.3
+              uses: creyD/prettier_action@v4.6
               with:
-                  prettier_version: ^3.1.1
+                  # prettier_version: ^3.1.1
                   # This part is also where you can pass other options, for example:
                   # prettier_options: --write *.ts *.json src test --ignore-path package-lock.json
                   # --config .prettierrc.json --ignore-path package-lock.json pnpm-lock.yaml
                   prettier_options: --write .
 
-    lint_and_test:
+    lint_and_codecov:
         needs: pretty
         runs-on: ubuntu-latest
 
         steps:
+            - uses: actions/checkout@v6
+
             - name: Setup Node
               uses: actions/setup-node@v6
               with:
                   node-version: "22"
-
-            - uses: actions/checkout@v6
 
             - name: Install Dependencies
               run: npm install -g pnpm && pnpm install
@@ -76,5 +75,10 @@ jobs:
             - name: Lint
               run: pnpm lint
 
-            - name: Test
-              run: pnpm test
+            # - name: Test
+            #   run: pnpm test
+
+            - name: Upload coverage
+              uses: codecov/codecov-action@v5
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}

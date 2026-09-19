@@ -98,7 +98,7 @@ export abstract class IReviewNote {
         ease: number,
     ): Promise<TrespResult>;
 
-    static recallReviewResponse(itemId: number, response: string) {
+    static recallReviewResponse(itemId: number, response: string | number) {
         const store = DataStore.getInstance();
         const item = store.getItembyID(itemId);
         // console.debug("itemId: ", itemId);

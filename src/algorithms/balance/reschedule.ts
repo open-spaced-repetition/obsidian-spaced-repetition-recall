@@ -40,7 +40,7 @@ function reschedule_fsrs(items: RepetitionItem[]) {
     items.map((item) => {
         if (!item.isTracked) return;
         const data = item.data as FsrsData;
-        const newitvl = fsrs.next_interval(data.stability);
+        const newitvl = fsrs.next_interval(data.stability, data.elapsed_days ?? 0);
         if (newitvl !== data.scheduled_days) {
             reCnt++;
             item.updateDueByInterval(newitvl);

@@ -3,6 +3,7 @@ import { DataLocation } from "src/dataStore/dataLocation";
 import { CardInfo, TrackedFile } from "src/dataStore/trackedFile";
 import { RPITEMTYPE, RepetitionItem } from "src/dataStore/repetitionItem";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
+import { DEFAULT_SRS_DATA } from "src/dataStore/data";
 import { SrsAlgorithm, algorithmNames } from "src/algorithms/algorithms";
 import { DefaultAlgorithm } from "src/algorithms/scheduling_default";
 
@@ -15,14 +16,8 @@ function createStoreWithTwoFiles(): DataStore {
     algo.updateSettings(settings.algorithmSettings[algorithmNames.Default]);
 
     const store = new DataStore(settings, "./");
-    store.data = {
-        queues: { newQueue: {}, dueQueue: {}, repeatQueue: {} } as any,
-        reviewedCounts: {},
-        reviewedCardCounts: {},
-        items: [],
-        trackedFiles: [],
-        mtime: 0,
-    };
+    // initialize with DEFAULT_SRS_DATA to match expected structure/types
+    store.data = { ...DEFAULT_SRS_DATA, items: [], trackedFiles: [], mtime: 0 };
 
     // Track File A with a card that has a blockID
     store.trackFile("folder/noteA.md", RPITEMTYPE.CARD, false);

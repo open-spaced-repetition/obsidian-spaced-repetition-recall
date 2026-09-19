@@ -40,7 +40,7 @@ export class reviewResponseModal {
     private options: string[];
     private _reviewMode: FlashcardReviewMode;
 
-    respCallback: (resp: number) => void;
+    respCallback: (resp: number) => void | Promise<void>;
     showAnsCB: () => void;
     public cardtotalCB: () => number;
     public notetotalCB: () => number;
@@ -66,7 +66,7 @@ export class reviewResponseModal {
 
     public display(
         item?: RepetitionItem,
-        callback?: (resp: number) => Promise<void>,
+        callback?: (resp: number) => void | Promise<void>,
         front?: boolean,
     ): void {
         const settings = this.settings;
@@ -516,6 +516,10 @@ export class reviewResponseModal {
             }
             rrBar.remove();
         }
+    }
+
+    selfDestruct() {
+        this.close();
     }
 
     private _autoClose() {

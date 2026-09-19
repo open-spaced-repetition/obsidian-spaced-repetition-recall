@@ -80,6 +80,9 @@ export default {
     FOLDERS_TO_IGNORE: "Ignorované složky",
     FOLDERS_TO_IGNORE_DESC:
         "Enter folder paths or glob patterns on separate lines e.g. Templates/Scripts or **/*.excalidraw.md. This setting is common to both flashcards and notes.",
+    TAGS_TO_IGNORE: "Tags to ignore",
+    TAGS_TO_IGNORE_DESC:
+        "Enter tags separated by new lines. Matching notes or cards will be skipped during review.",
     OBSIDIAN_INTEGRATION: "Integration into Obsidian",
     FLASHCARDS: "Kartičky",
     FLASHCARD_EASY_LABEL: "Easy Button Text",
