@@ -146,6 +146,22 @@ export class ItemTrans {
             const scheduling: RegExpMatchArray[] = [];
             let cardinfo = trackedFile.getSyncCardInfo(lineNo, cardTextHash, blockID);
 
+            // Cross-file blockID lookup: if card not found in current file but has a blockID,
+            // search all tracked files for the card (handles card moved between notes)
+            if (cardinfo == null && blockID && settings.cardBlockID) {
+                const found = store.findCardInfoByBlockID(blockID, noteFile.path);
+                if (found != null) {
+                    cardinfo = store.migrateCardInfo(
+                        found.trackedFile,
+                        found.cardIndex,
+                        trackedFile,
+                        lineNo,
+                        cardTextHash,
+                        blockID,
+                    );
+                }
+            }
+
             if (cardinfo != null) {
                 cardinfo.itemIds
                     .map((id: number) => store.getItembyID(id).getSched())
