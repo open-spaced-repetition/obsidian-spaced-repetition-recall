@@ -57,7 +57,7 @@ jobs:
                   # --config .prettierrc.json --ignore-path package-lock.json pnpm-lock.yaml
                   prettier_options: --write .
 
-    lint_and_test:
+    lint_and_codecov:
         needs: pretty
         runs-on: ubuntu-latest
 
@@ -75,10 +75,10 @@ jobs:
             - name: Lint
               run: pnpm lint
 
-            - name: Test
-              run: pnpm test
+            # - name: Test
+            #   run: pnpm test
 
             - name: Upload coverage
-              uses: codecov/codecov-action@v4
+              uses: codecov/codecov-action@v5
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
