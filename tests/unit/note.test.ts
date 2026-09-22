@@ -11,8 +11,7 @@ import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 const parser: NoteParser = new NoteParser(DEFAULT_SETTINGS);
 const noteFileLoader: NoteFileLoader = new NoteFileLoader(DEFAULT_SETTINGS);
 
-beforeAll(() => {
-});
+beforeAll(() => {});
 
 describe("appendCardsToDeck", () => {
     test("Multiple questions, single card per question", async () => {

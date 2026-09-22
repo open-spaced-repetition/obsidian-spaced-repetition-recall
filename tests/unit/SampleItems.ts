@@ -71,7 +71,11 @@ Q3::A3`;
     ): Promise<Deck> {
         const deck: Deck = new Deck("Root", null);
         const noteParser: NoteParser = createTest_NoteParser();
-        const note: Note = await noteParser.parse(file as unknown as import("src/file").ISRFile, TextDirection.Ltr, folderTopicPath);
+        const note: Note = await noteParser.parse(
+            file as unknown as import("src/file").ISRFile,
+            TextDirection.Ltr,
+            folderTopicPath,
+        );
         note.appendCardsToDeck(deck);
         return deck;
     }

@@ -258,7 +258,6 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
                 // Update the source file with the updated schedule
                 // await DataStore.getInstance().questionWriteSchedule(this.currentQuestion);
                 await this.currentQuestion.writeQuestion(this.settings);
-
             }
         }
 
