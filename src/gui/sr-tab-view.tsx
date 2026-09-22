@@ -131,6 +131,7 @@ export class SRTabView extends ItemView {
                     this.reviewSequencer,
                     this.reviewMode,
                     this.viewContentEl.createDiv(),
+                    this.viewContentEl,
                     this._showDecksList.bind(this),
                     this._doEditQuestionText.bind(this),
                 );
@@ -173,7 +174,7 @@ export class SRTabView extends ItemView {
 
     private _showFlashcard(deck: Deck): void {
         this._hideDecksList();
-        this.flashcardView.show(deck);
+        this.flashcardView.show();
     }
 
     private _hideFlashcard(): void {
