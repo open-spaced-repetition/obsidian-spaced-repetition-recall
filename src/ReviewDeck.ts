@@ -2,7 +2,7 @@ import { TFile } from "obsidian";
 
 import { t } from "src/lang/helpers";
 import { RepetitionItem } from "./dataStore/repetitionItem";
-import { globalDateProvider } from "./util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 
 export interface SchedNote {
     note: TFile;

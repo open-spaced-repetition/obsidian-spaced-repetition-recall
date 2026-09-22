@@ -1,14 +1,18 @@
-import { NoteParser } from "src/NoteParser";
-import { TopicPath } from "src/topic-path";
-import { Deck } from "src/Deck";
-import { Note } from "src/Note";
-import { DEFAULT_SETTINGS } from "src/settings";
+import { Deck } from "src/deck";
+import { Note } from "src/note";
 import { NoteFileLoader } from "src/NoteFileLoader";
-import { TextDirection } from "src/util/TextDirection";
+import { NoteParser } from "src/NoteParser";
+import { DEFAULT_SETTINGS } from "src/settings";
+import { TopicPath } from "src/topic-path";
+import { TextDirection } from "src/utils/strings";
+
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 
 const parser: NoteParser = new NoteParser(DEFAULT_SETTINGS);
 const noteFileLoader: NoteFileLoader = new NoteFileLoader(DEFAULT_SETTINGS);
+
+beforeAll(() => {
+});
 
 describe("appendCardsToDeck", () => {
     test("Multiple questions, single card per question", async () => {

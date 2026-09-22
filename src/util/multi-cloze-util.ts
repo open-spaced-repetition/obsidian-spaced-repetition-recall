@@ -1,4 +1,4 @@
-import { Card } from "src/Card";
+import { Card } from "src/card";
 import { SRSettings } from "src/settings";
 
 export * as Multi_cloze from "./multi-cloze-util";

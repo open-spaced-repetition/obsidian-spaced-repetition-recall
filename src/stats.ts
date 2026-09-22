@@ -1,4 +1,4 @@
-import { CardListType } from "./Deck";
+import { CardListType } from "./deck";
 import { RepetitionItem } from "./dataStore/repetitionItem";
 import { ValueCountDict } from "./util/NumberCountDict";
 import { DateUtils } from "./util/utils_recall";

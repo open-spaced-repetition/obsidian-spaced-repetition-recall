@@ -1,11 +1,12 @@
-import { Question } from "./Question";
-import { CardScheduleInfo } from "./CardSchedule";
-import { CardListType } from "./Deck";
-import { IQuestionPostponementList } from "./QuestionPostponementList";
-import { globalDateProvider } from "./util/DateProvider";
-import { Queue } from "./dataStore/queue";
+import { CardScheduleInfo as RepItemScheduleInfo } from "./CardSchedule";
+import { CardListType } from "src/deck";
+import { Question } from "src/question";
+import { IQuestionPostponementList } from "src/question-postponement-list";
+import { RepetitionItem } from "src/dataStore/repetitionItem";
+import { Queue } from "src/dataStore/queue";
+import { globalDateProvider } from "src/utils/dates";
 
-export class Card {
+export class Card extends RepetitionItem {
     question: Question;
     cardIdx: number;
     Id?: number;
@@ -15,13 +16,13 @@ export class Card {
     get hasSchedule(): boolean {
         return this.scheduleInfo != null;
     }
-    scheduleInfo?: CardScheduleInfo;
-
+    scheduleInfo?: RepItemScheduleInfo;
     // visuals
     front: string;
     back: string;
 
     constructor(init?: Partial<Card>) {
+        super();
         Object.assign(this, init);
     }
 

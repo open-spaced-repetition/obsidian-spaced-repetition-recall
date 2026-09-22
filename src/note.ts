@@ -1,7 +1,8 @@
-import { SRSettings } from "./settings";
-import { Deck } from "./Deck";
-import { Question } from "./Question";
-import { ISRFile } from "./SRFile";
+import { Deck } from "src/deck";
+import { ISRFile } from "src/file";
+import { Question } from "src/question";
+import { SRSettings } from "src/settings";
+
 import { Multi_cloze } from "src/util/multi-cloze-util";
 
 export class Note {
@@ -56,7 +57,7 @@ export class Note {
         let fileText: string = await this.file.read();
         for (const question of this.questionList) {
             if (question.hasChanged) {
-                fileText = question.updateQuestionText(fileText, settings);
+                fileText = question.updateQuestionWithinNoteText(fileText, settings);
             }
         }
         await this.file.write(fileText);

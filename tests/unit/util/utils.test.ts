@@ -1,11 +1,10 @@
 import { YAML_FRONT_MATTER_REGEX } from "src/constants";
+import { extractFrontmatter, isEqualOrSubPath } from "src/util/utils";
 import {
     convertToStringOrEmpty,
-    extractFrontmatter,
     findLineIndexOfSearchStringIgnoringWs,
-    isEqualOrSubPath,
     literalStringReplace,
-} from "src/util/utils";
+} from "src/utils/strings";
 
 describe("literalStringReplace", () => {
     test("Replacement string doesn't have any dollar signs", async () => {

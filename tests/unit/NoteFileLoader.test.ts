@@ -1,8 +1,8 @@
-import { Note } from "src/Note";
+import { Note } from "src/note";
 import { NoteFileLoader } from "src/NoteFileLoader";
 import { TopicPath } from "src/topic-path";
 import { DEFAULT_SETTINGS } from "src/settings";
-import { TextDirection } from "src/util/TextDirection";
+import { TextDirection } from "src/utils/strings";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 
 const noteFileLoader: NoteFileLoader = new NoteFileLoader(DEFAULT_SETTINGS);
