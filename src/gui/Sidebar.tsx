@@ -6,7 +6,7 @@ import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { t } from "src/lang/helpers";
 import { DataLocation } from "src/dataStore/dataLocation";
 import { DateUtils } from "src/util/utils_recall";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 
 export const REVIEW_QUEUE_VIEW_TYPE = "review-queue-list-view";
 

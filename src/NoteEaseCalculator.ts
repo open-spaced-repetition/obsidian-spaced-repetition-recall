@@ -1,4 +1,4 @@
-import { Note } from "./Note";
+import { Note } from "./note";
 import { SRSettings } from "./settings";
 
 export class NoteEaseCalculator {
@@ -10,7 +10,10 @@ export class NoteEaseCalculator {
             question.cards
                 .filter((card) => card.hasSchedule)
                 .forEach((card) => {
-                    totalEase += card.scheduleInfo.ease;
+                    const scheduleInfo = card.scheduleInfo;
+                    if (scheduleInfo !== undefined) {
+                        totalEase += scheduleInfo.ease;
+                    }
                     scheduledCount++;
                 });
         });

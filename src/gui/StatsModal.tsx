@@ -24,7 +24,7 @@ import { ReviewedCounts } from "src/dataStore/data";
 import { State } from "ts-fsrs";
 import { algorithmNames } from "src/algorithms/algorithms";
 import { Stats } from "src/stats";
-import { CardListType } from "src/Deck";
+import { CardListType } from "src/deck";
 import { RPITEMTYPE } from "src/dataStore/repetitionItem";
 
 Chart.register(

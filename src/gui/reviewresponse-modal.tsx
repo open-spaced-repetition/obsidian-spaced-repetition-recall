@@ -11,7 +11,7 @@ import { TouchOnMobile } from "src/Events/touchEvent";
 import { Iadapter } from "src/dataStore/adapter";
 import SRPlugin from "src/main";
 import { MixQueSet } from "src/dataStore/mixQueSet";
-import { FlashcardReviewMode } from "src/FlashcardReviewSequencer";
+import { FlashcardReviewMode } from "src/flashcard-review-sequencer";
 
 export class reviewResponseModal {
     private static instance: reviewResponseModal;
