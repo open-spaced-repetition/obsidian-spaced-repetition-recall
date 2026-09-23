@@ -1024,9 +1024,7 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
                 text,
             );
             await c.setSequencerDeckTreeFromOriginalText();
-            expect(c.getDeckStats("#flashcards")).toEqual(
-                new DeckStats(4, 1, 3, 4, 0, 0, 0, 1, 1),
-            );
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 0, 0, 0, 1, 1));
         });
     });
 
@@ -1045,7 +1043,7 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
                 text,
             );
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(1, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1));
         });
 
         test("Reduction in due count after skipping card", async () => {
@@ -1064,10 +1062,10 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
 
             expect(c.reviewSequencer.currentCard.front).toEqual("Q4"); // This is the first card as we are using order_DueFirst_Sequential
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(1, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1));
             c.reviewSequencer.skipCurrentCard();
             // One less due card
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(0, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 0, 3, 3, 0, 3, 3, 0, 1));
         });
 
         test("Change in stats after reviewing each card", async () => {
@@ -1086,9 +1084,9 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
 
             await checkStats(c, "#flashcards", [
-                [new DeckStats(1, 3, 4), "Q4", ReviewResponse.Easy], // This is the first card as we are using order_DueFirst_Sequential
-                [new DeckStats(0, 3, 4), "Q1", ReviewResponse.Easy], // Iterated through all the due cards, now the new ones
-                [new DeckStats(0, 2, 4), "Q2", ReviewResponse.Easy],
+                [new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1), "Q4", ReviewResponse.Easy], // This is the first card as we are using order_DueFirst_Sequential
+                [new DeckStats(4, 0, 3, 3, 0, 3, 3, 0, 1), "Q1", ReviewResponse.Easy], // Iterated through all the due cards, now the new ones
+                [new DeckStats(4, 0, 2, 2, 0, 2, 2, 0, 1), "Q2", ReviewResponse.Easy],
             ]);
         });
     });
