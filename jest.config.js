@@ -18,10 +18,22 @@ module.exports = {
     coveragePathIgnorePatterns: [
         "/node_modules/",
         "src/lang/locale/",
+        
+        // GUI & Obsidian coupled code
+        "src/algorithms/fsrs-.*.ts",
+        "src/Events/",
         "src/gui/",
+        "src/reviewNote/",
+        "src/settings/",
+        "src/settings.ts",
+        "src/ReviewDeck.ts",
+        "src/commands.ts",
         "src/main.ts",
         "src/constants",
         "src/icons",
+        "src/suggesters/",
+        "src/utils/",
+        "src/utils/renderers.ts",
         "src/declarations.d.ts",
         "build",
     ],
