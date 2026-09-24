@@ -21,28 +21,52 @@ import { SrTFile } from "src/file";
 import { ItemInfoModal } from "./info";
 import { DataLocation } from "src/dataStore/dataLocation";
 import { debug } from "src/util/utils_recall";
+import { now } from "moment";
 
 export class CardUI {
     public app: App;
     public plugin: SRPlugin;
-    public contentEl: HTMLElement;
-    public parentEl: HTMLElement;
     public mode: FlashcardMode;
 
     public view: HTMLDivElement;
 
-    public header: HTMLDivElement;
-    public title: HTMLDivElement;
-    public backButton: HTMLDivElement;
+    public infoSection: HTMLDivElement;
+    public deckProgressInfo: HTMLDivElement;
+
+    public chosenDeckInfo: HTMLDivElement;
+    public chosenDeckName: HTMLDivElement;
+
+    public chosenDeckCounterWrapper: HTMLDivElement;
+    public chosenDeckCounterDivider: HTMLDivElement;
+
+    public chosenDeckCardCounterWrapper: HTMLDivElement;
+    public chosenDeckCardCounter: HTMLDivElement;
+    public chosenDeckCardCounterIcon: HTMLDivElement;
+
+    public chosenDeckSubDeckCounterWrapper: HTMLDivElement;
+    public chosenDeckSubDeckCounter: HTMLDivElement;
+    public chosenDeckSubDeckCounterIcon: HTMLDivElement;
+
+    public currentDeckInfo: HTMLDivElement;
+    public currentDeckName: HTMLDivElement;
+
+    public currentDeckCounterWrapper: HTMLDivElement;
+
+    public currentDeckCounterDivider: HTMLDivElement;
+
+    public currentDeckCardCounterWrapper: HTMLDivElement;
+    public currentDeckCardCounter: HTMLDivElement;
+    public currentDeckCardCounterIcon: HTMLDivElement;
+
+    public cardContext: HTMLElement;
+
+    public content: HTMLDivElement;
 
     public controls: HTMLDivElement;
     public editButton: HTMLButtonElement;
     public resetButton: HTMLButtonElement;
     public infoButton: HTMLButtonElement;
     public skipButton: HTMLButtonElement;
-
-    public content: HTMLDivElement;
-    public context: HTMLElement;
 
     public response: HTMLDivElement;
     public responseBtns: HTMLButtonElement[];
@@ -51,11 +75,20 @@ export class CardUI {
     public easyButton: HTMLButtonElement;
     public answerButton: HTMLButtonElement;
     public openNoteFileButton: HTMLElement;
+    public lastPressed: number;
+
+    private chosenDeck: Deck | null;
+    private totalCardsInSession: number = 0;
+    private totalDecksInSession: number = 0;
+
+    private currentDeck: Deck | null;
+    private previousDeck: Deck | null;
+    private currentDeckTotalCardsInQueue: number = 0;
 
     private reviewSequencer: IFlashcardReviewSequencer;
     private settings: SRSettings;
     private reviewMode: FlashcardReviewMode;
-    private backClickHandler: () => void;
+    private backToDeck: () => void;
     private editClickHandler: () => void;
 
     public cardItem: RepetitionItem;
@@ -68,9 +101,8 @@ export class CardUI {
         settings: SRSettings,
         reviewSequencer: IFlashcardReviewSequencer,
         reviewMode: FlashcardReviewMode,
-        contentEl: HTMLElement,
-        parentEl: HTMLElement,
-        backClickHandler: () => void,
+        view: HTMLDivElement,
+        backToDeck: () => void,
         editClickHandler: () => void,
     ) {
         // Init properties
@@ -80,39 +112,29 @@ export class CardUI {
         this.settings = settings;
         this.reviewSequencer = reviewSequencer;
         this.reviewMode = reviewMode;
-        this.backClickHandler = backClickHandler;
+        this.backToDeck = backToDeck;
         this.editClickHandler = editClickHandler;
-        this.contentEl = contentEl;
-        this.parentEl = parentEl;
+        this.view = view;
+        this.chosenDeck = null;
 
         // Build ui
         this.init();
     }
 
+    // #region -> public methods
+
     /**
      * Initializes all static elements in the FlashcardView
      */
     init() {
-        this.view = this.contentEl.createDiv();
         this.view.addClasses(["sr-flashcard", "sr-is-hidden"]);
 
-        this.header = this.view.createDiv();
-        this.header.addClass("sr-header");
-
-        this._createBackButton();
-
-        this.title = this.header.createDiv();
-        this.title.addClass("sr-title");
-
-        this.controls = this.header.createDiv();
+        this.controls = this.view.createDiv();
         this.controls.addClass("sr-controls");
 
         this._createCardControls();
 
-        if (this.settings.showContextInCards) {
-            this.context = this.view.createDiv();
-            this.context.addClass("sr-context");
-        }
+        this._createInfoSection();
 
         this.content = this.view.createDiv();
         this.content.addClass("sr-content");
@@ -124,158 +146,89 @@ export class CardUI {
     }
 
     /**
-     * Shows the FlashcardView & rerenders all dynamic elements
+     * Shows the FlashcardView if it is hidden
      */
-    async show() {
-        this.mode = FlashcardMode.Front;
-        const deck: Deck = this.reviewSequencer.currentDeck;
-
-        // Setup title
-        this._setTitle(deck);
-        this.resetButton.disabled = true;
-
-        // Setup context
-        if (this.settings.showContextInCards) {
-            this.context.setText(
-                this._formatQuestionContextText(this._currentQuestion.questionContext),
-            );
-        }
-
-        // Setup card content
-        this.content.empty();
-        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
-            this.app,
-            this.plugin,
-            this._currentNote.filePath,
-        );
-        await wrapper.renderMarkdownWrapper(
-            this._currentCard.front,
-            this.content,
-            this._currentQuestion.questionText.textDirection,
-        );
-        // Set scroll position back to top
-        this.content.scrollTop = 0;
-
-        // Setup response buttons
-        this._resetResponseButtons();
-
-        // Prevents the following code, from running if this show is just a redraw and not an unhide
+    async show(chosenDeck: Deck) {
+        // Prevents rest of code, from running if this was executed multiple times after one another
         if (!this.view.hasClass("sr-is-hidden")) {
             return;
         }
+
+        this.chosenDeck = chosenDeck;
+        const deckStats = this.reviewSequencer.getDeckStats(chosenDeck.getTopicPath());
+        this.totalCardsInSession = deckStats.cardsInQueueCount;
+        this.totalDecksInSession = deckStats.decksInQueueOfThisDeckCount;
+
+        await this._drawContent();
+
         this.view.removeClass("sr-is-hidden");
-        this.backButton.removeClass("sr-is-hidden");
         document.addEventListener("keydown", this._keydownHandler);
     }
 
     /**
-     * Hides the FlashcardView
+     * Refreshes all dynamic elements
+     */
+    async refresh() {
+        await this._drawContent();
+    }
+
+    /**
+     * Hides the FlashcardView if it is visible
      */
     hide() {
-        // Prevents the following code, from running if this was executed multiple times after one another
+        // Prevents the rest of code, from running if this was executed multiple times after one another
         if (this.view.hasClass("sr-is-hidden")) {
             return;
         }
-        this.view.addClass("sr-is-hidden");
-        this.backButton.addClass("sr-is-hidden");
+
         document.removeEventListener("keydown", this._keydownHandler);
+        this.view.addClass("sr-is-hidden");
     }
 
     /**
      * Closes the FlashcardView
      */
     close() {
-        document.removeEventListener("keydown", this._keydownHandler);
         this.hide();
+        document.removeEventListener("keydown", this._keydownHandler);
     }
 
-    // -> Functions & helpers
+    // #region -> Functions & helpers
 
-    private _keydownHandler = (e: KeyboardEvent) => {
-        // Prevents any input, if the edit modal is open or if the view is not in focus
-        if (
-            document.activeElement.nodeName === "TEXTAREA" ||
-            this.mode === FlashcardMode.Closed ||
-            !this.plugin.getSRInFocusState()
-        ) {
-            return;
+    private async _drawContent() {
+        this.resetButton.disabled = true;
+
+        // Update current deck info
+        this.mode = FlashcardMode.Front;
+        this.previousDeck = this.currentDeck;
+        this.currentDeck = this.reviewSequencer.currentDeck;
+        if (this.previousDeck !== this.currentDeck) {
+            const currentDeckStats = this.reviewSequencer.getDeckStats(
+                this.currentDeck.getTopicPath(),
+            );
+            this.currentDeckTotalCardsInQueue = currentDeckStats.cardsInQueueOfThisDeckCount;
         }
 
-        const consumeKeyEvent = () => {
-            e.preventDefault();
-            e.stopPropagation();
-        };
+        this._updateInfoBar(this.chosenDeck, this.currentDeck);
 
-        switch (e.code) {
-            case "KeyS":
-                this._skipCurrentCard();
-                consumeKeyEvent();
-                break;
-            case "Space":
-                if (this.mode === FlashcardMode.Front) {
-                    this._showAnswer();
-                    consumeKeyEvent();
-                } else if (this.mode === FlashcardMode.Back) {
-                    this._processReview(ReviewResponse.Good);
-                    consumeKeyEvent();
-                }
-                break;
-            case "Enter":
-            case "NumpadEnter":
-                if (this.mode !== FlashcardMode.Front) {
-                    break;
-                }
-                this._showAnswer();
-                consumeKeyEvent();
-                break;
-            case "Numpad1":
-            case "Digit1":
-                if (this.mode !== FlashcardMode.Back) {
-                    break;
-                }
-                this._processReview(ReviewResponse.Hard);
-                consumeKeyEvent();
-                break;
-            case "Numpad2":
-            case "Digit2":
-                if (this.mode !== FlashcardMode.Back) {
-                    break;
-                }
-                this._processReview(ReviewResponse.Good);
-                consumeKeyEvent();
-                break;
-            case "Numpad3":
-            case "Digit3":
-                if (this.mode !== FlashcardMode.Back) {
-                    break;
-                }
-                this._processReview(ReviewResponse.Easy);
-                consumeKeyEvent();
-                break;
-            case "Numpad0":
-            case "Digit0":
-                if (this.mode !== FlashcardMode.Back) {
-                    break;
-                }
-                this._processReview(ReviewResponse.Reset);
-                consumeKeyEvent();
-                break;
-            default:
-                break;
-        }
-    };
+        // Update card content
+        this.content.empty();
+        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
+            this.app,
+            this.plugin,
+            this._currentNote.filePath,
+        );
 
-    private _displayCurrentCardInfoNotice() {
-        const schedule = this._currentCard.scheduleInfo;
+        await wrapper.renderMarkdownWrapper(
+            this._currentCard.front.trimStart(),
+            this.content,
+            this._currentQuestion.questionText.textDirection,
+        );
+        // Set scroll position back to top
+        this.content.scrollTop = 0;
 
-        const currentEaseStr = t("CURRENT_EASE_HELP_TEXT") + (schedule?.ease ?? t("NEW"));
-        const currentIntervalStr =
-            t("CURRENT_INTERVAL_HELP_TEXT") + textInterval(schedule?.interval, false);
-        const generatedFromStr = t("CARD_GENERATED_FROM", {
-            notePath: this._currentQuestion.note.filePath,
-        });
-
-        new Notice(currentEaseStr + "\n" + currentIntervalStr + "\n" + generatedFromStr);
+        // Update response buttons
+        this._resetResponseButtons();
     }
 
     private get _currentCard(): Card {
@@ -290,105 +243,23 @@ export class CardUI {
         return this.reviewSequencer.currentNote;
     }
 
-    private _showAnswer(): void {
-        this.mode = FlashcardMode.Back;
-        this._previousCard =
-            this._currentCard?.multiClozeIndex >= 0 ? this._currentCard : undefined;
-
-        this.resetButton.disabled = false;
-
-        // Show answer text
-        if (this._currentQuestion.questionType !== CardType.Cloze) {
-            const hr: HTMLElement = document.createElement("hr");
-            hr.addClass("sr-card-divide");
-            this.content.appendChild(hr);
-        } else {
-            this.content.empty();
-        }
-
-        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
-            this.app,
-            this.plugin,
-            this._currentNote.filePath,
-        );
-        wrapper.renderMarkdownWrapper(
-            this._currentCard.back,
-            this.content,
-            this._currentQuestion.questionText.textDirection,
-        );
-
-        // Show response buttons
-        this.answerButton.addClass("sr-is-hidden");
-        this.hardButton.removeClass("sr-is-hidden");
-        this.easyButton.removeClass("sr-is-hidden");
-
-        const settings = this.settings;
-        const algo = settings.algorithm;
-        const btnTexts = settings.responseOptionBtnsText[algo];
-
-        if (this.reviewMode == FlashcardReviewMode.Cram) {
-            // Same for mobile/desktop
-            this.response.addClass("is-cram");
-            for (let i = 2; i < this.responseBtns.length - 1; i++) {
-                this.responseBtns[i].addClass("sr-is-hidden");
-            }
-            // this.hardButton.setText(`${this.settings.flashcardHardText}`);
-            // this.easyButton.setText(`${this.settings.flashcardEasyText}`);
-            this.hardButton.setText(`${btnTexts[1]}`);
-            this.easyButton.setText(`${btnTexts.last()}`);
-            return;
-        } else {
-            for (let i = 2; i < this.responseBtns.length - 1; i++) {
-                this.responseBtns[i].removeClass("sr-is-hidden");
-            }
-        }
-        if (!settings.intervalShowHide) {
-            for (let i = 1; i < this.responseBtns.length; i++) {
-                this.responseBtns[i].setText(`${btnTexts[i]}`);
-            }
-        } else if (settings.dataLocation !== DataLocation.SaveOnNoteFile) {
-            this._setupResponseBtns(btnTexts);
-            const item = this.plugin.store.getItembyID(this._currentCard.Id);
-            if (
-                item.nextReview > Date.now() &&
-                this._currentCard.hasSchedule &&
-                !this._currentCard.scheduleInfo.isDue()
-            ) {
-                debug("复习了还没到期的卡片" + item);
-            }
-        } else {
-            this.goodButton.removeClass("sr-is-hidden");
-            this._setupEaseButton(
-                this.hardButton,
-                this.settings.flashcardHardText,
-                ReviewResponse.Hard,
-            );
-            this._setupEaseButton(
-                this.goodButton,
-                this.settings.flashcardGoodText,
-                ReviewResponse.Good,
-            );
-            this._setupEaseButton(
-                this.easyButton,
-                this.settings.flashcardEasyText,
-                ReviewResponse.Easy,
-            );
-        }
-    }
-
     private async _processReview(response: ReviewResponse): Promise<void> {
+        const timeNow = now();
+        if (
+            this.lastPressed &&
+            timeNow - this.lastPressed < this.plugin.data.settings.reviewButtonDelay
+        ) {
+            return;
+        }
+        this.lastPressed = timeNow;
+
         await this.reviewSequencer.processReview(response);
-        await this._handleSkipCard();
+        await this._showNextCard();
     }
 
-    private async _skipCurrentCard(): Promise<void> {
-        this.reviewSequencer.skipCurrentCard();
-        await this._handleSkipCard();
-    }
-
-    private async _handleSkipCard(): Promise<void> {
+    private async _showNextCard(): Promise<void> {
         if (this._currentCard != null) {
-            await this.show();
+            await this.refresh();
             if (
                 this?._previousCard &&
                 this._previousCard.isMultiCloze &&
@@ -397,7 +268,7 @@ export class CardUI {
             ) {
                 this._showAnswer();
             }
-        } else this.backClickHandler();
+        } else this.backToDeck();
     }
 
     private _formatQuestionContextText(questionContext: string[]): string {
@@ -526,8 +397,157 @@ export class CardUI {
         });
     }
 
-    // -> Response
+    private async _skipCurrentCard(): Promise<void> {
+        this.reviewSequencer.skipCurrentCard();
+        await this._showNextCard();
+    }
 
+    private _displayCurrentCardInfoNotice() {
+        const schedule = this._currentCard.scheduleInfo;
+
+        const currentEaseStr = t("CURRENT_EASE_HELP_TEXT") + (schedule?.ease ?? t("NEW"));
+        const currentIntervalStr =
+            t("CURRENT_INTERVAL_HELP_TEXT") + textInterval(schedule?.interval, false);
+        const generatedFromStr = t("CARD_GENERATED_FROM", {
+            notePath: this._currentQuestion.note.filePath,
+        });
+
+        new Notice(currentEaseStr + "\n" + currentIntervalStr + "\n" + generatedFromStr);
+    }
+
+    // #region -> Deck Info
+
+    private _createInfoSection() {
+        this.infoSection = this.view.createDiv();
+        this.infoSection.addClass("sr-info-section");
+
+        this.deckProgressInfo = this.infoSection.createDiv();
+        this.deckProgressInfo.addClass("sr-deck-progress-info");
+
+        this.chosenDeckInfo = this.deckProgressInfo.createDiv();
+        this.chosenDeckInfo.addClass("sr-chosen-deck-info");
+        this.chosenDeckName = this.chosenDeckInfo.createDiv();
+        this.chosenDeckName.addClass("sr-chosen-deck-name");
+
+        this.chosenDeckCounterWrapper = this.chosenDeckInfo.createDiv();
+        this.chosenDeckCounterWrapper.addClass("sr-chosen-deck-counter-wrapper");
+
+        this.chosenDeckCounterDivider = this.chosenDeckCounterWrapper.createDiv();
+        this.chosenDeckCounterDivider.addClass("sr-chosen-deck-counter-divider");
+
+        this.chosenDeckCardCounterWrapper = this.chosenDeckCounterWrapper.createDiv();
+        this.chosenDeckCardCounterWrapper.addClass("sr-chosen-deck-card-counter-wrapper");
+
+        this.chosenDeckCardCounter = this.chosenDeckCardCounterWrapper.createDiv();
+        this.chosenDeckCardCounter.addClass("sr-chosen-deck-card-counter");
+
+        this.chosenDeckCardCounterIcon = this.chosenDeckCardCounterWrapper.createDiv();
+        this.chosenDeckCardCounterIcon.addClass("sr-chosen-deck-card-counter-icon");
+        setIcon(this.chosenDeckCardCounterIcon, "credit-card");
+
+        this.chosenDeckSubDeckCounterWrapper = this.chosenDeckCounterWrapper.createDiv();
+        this.chosenDeckSubDeckCounterWrapper.addClass("sr-is-hidden");
+        this.chosenDeckSubDeckCounterWrapper.addClass("sr-chosen-deck-subdeck-counter-wrapper");
+
+        this.chosenDeckSubDeckCounter = this.chosenDeckSubDeckCounterWrapper.createDiv();
+        this.chosenDeckSubDeckCounter.addClass("sr-chosen-deck-subdeck-counter");
+
+        this.chosenDeckSubDeckCounterIcon = this.chosenDeckSubDeckCounterWrapper.createDiv();
+        this.chosenDeckSubDeckCounterIcon.addClass("sr-chosen-deck-subdeck-counter-icon");
+        setIcon(this.chosenDeckSubDeckCounterIcon, "layers");
+
+        this.currentDeckInfo = this.deckProgressInfo.createDiv();
+        this.currentDeckInfo.addClass("sr-is-hidden");
+        this.currentDeckInfo.addClass("sr-current-deck-info");
+
+        this.currentDeckName = this.currentDeckInfo.createDiv();
+        this.currentDeckName.addClass("sr-current-deck-name");
+
+        this.currentDeckCounterWrapper = this.currentDeckInfo.createDiv();
+        this.currentDeckCounterWrapper.addClass("sr-current-deck-counter-wrapper");
+
+        this.currentDeckCounterDivider = this.currentDeckCounterWrapper.createDiv();
+        this.currentDeckCounterDivider.addClass("sr-current-deck-counter-divider");
+
+        this.currentDeckCardCounterWrapper = this.currentDeckCounterWrapper.createDiv();
+        this.currentDeckCardCounterWrapper.addClass("sr-current-deck-card-counter-wrapper");
+
+        this.currentDeckCardCounter = this.currentDeckCardCounterWrapper.createDiv();
+        this.currentDeckCardCounter.addClass("sr-current-deck-card-counter");
+        this.currentDeckCardCounterIcon = this.currentDeckCardCounterWrapper.createDiv();
+        this.currentDeckCardCounterIcon.addClass("sr-current-deck-card-counter-icon");
+        setIcon(this.currentDeckCardCounterIcon, "credit-card");
+
+        if (this.settings.showContextInCards) {
+            this.cardContext = this.infoSection.createDiv();
+            this.cardContext.addClass("sr-context");
+        }
+    }
+
+    private _updateInfoBar(chosenDeck: Deck, currentDeck: Deck) {
+        this._updateChosenDeckInfo(chosenDeck);
+        this._updateCurrentDeckInfo(chosenDeck, currentDeck);
+        this._updateCardContext();
+    }
+
+    private _updateChosenDeckInfo(chosenDeck: Deck) {
+        const chosenDeckStats = this.reviewSequencer.getDeckStats(chosenDeck.getTopicPath());
+
+        this.chosenDeckName.setText(`${chosenDeck.deckName}`);
+        this.chosenDeckCardCounter.setText(
+            `${this.totalCardsInSession - chosenDeckStats.cardsInQueueCount}/${this.totalCardsInSession}`,
+        );
+
+        if (chosenDeck.subdecks.length === 0) {
+            if (!this.chosenDeckSubDeckCounterWrapper.hasClass("sr-is-hidden")) {
+                this.chosenDeckSubDeckCounterWrapper.addClass("sr-is-hidden");
+            }
+            return;
+        }
+
+        if (this.chosenDeckSubDeckCounterWrapper.hasClass("sr-is-hidden")) {
+            this.chosenDeckSubDeckCounterWrapper.removeClass("sr-is-hidden");
+        }
+
+        this.chosenDeckSubDeckCounter.setText(
+            `${this.totalDecksInSession - chosenDeckStats.decksInQueueOfThisDeckCount}/${this.totalDecksInSession}`,
+        );
+    }
+
+    private _updateCurrentDeckInfo(chosenDeck: Deck, currentDeck: Deck) {
+        if (chosenDeck.subdecks.length === 0) {
+            if (!this.currentDeckInfo.hasClass("sr-is-hidden")) {
+                this.currentDeckInfo.addClass("sr-is-hidden");
+            }
+            return;
+        }
+
+        if (this.currentDeckInfo.hasClass("sr-is-hidden")) {
+            this.currentDeckInfo.removeClass("sr-is-hidden");
+        }
+
+        this.currentDeckName.setText(`${currentDeck.deckName}`);
+
+        const isRandomMode = this.settings.flashcardCardOrder === "EveryCardRandomDeckAndCard";
+        if (!isRandomMode) {
+            const currentDeckStats = this.reviewSequencer.getDeckStats(currentDeck.getTopicPath());
+            this.currentDeckCardCounter.setText(
+                `${this.currentDeckTotalCardsInQueue - currentDeckStats.cardsInQueueOfThisDeckCount}/${this.currentDeckTotalCardsInQueue}`,
+            );
+        }
+    }
+
+    private _updateCardContext() {
+        if (!this.settings.showContextInCards) {
+            this.cardContext.setText("");
+            return;
+        }
+        this.cardContext.setText(
+            ` ${this._formatQuestionContextText(this._currentQuestion.questionContext)}`,
+        );
+    }
+
+    // #region -> Response
     private _createResponseBtns() {
         const optBtnCounts = this.plugin.algorithm.srsOptions().length;
         let btnCols = 4;
@@ -649,10 +669,183 @@ export class CardUI {
         );
         const interval: number = schedule.interval;
 
-        if (Platform.isMobile) {
-            button.setText(textInterval(interval, true));
+        if (this.settings.showIntervalInReviewButtons) {
+            if (Platform.isMobile) {
+                button.setText(textInterval(interval, true));
+            } else {
+                button.setText(`${buttonName} - ${textInterval(interval, false)}`);
+            }
         } else {
-            button.setText(`${buttonName} - ${textInterval(interval, false)}`);
+            button.setText(buttonName);
         }
     }
+
+    private _showAnswer(): void {
+        const timeNow = now();
+        if (
+            this.lastPressed &&
+            timeNow - this.lastPressed < this.plugin.data.settings.reviewButtonDelay
+        ) {
+            return;
+        }
+        this.lastPressed = timeNow;
+
+        this.mode = FlashcardMode.Back;
+        this._previousCard =
+            this._currentCard?.multiClozeIndex >= 0 ? this._currentCard : undefined;
+
+        this.resetButton.disabled = false;
+
+        // Show answer text
+        if (this._currentQuestion.questionType !== CardType.Cloze) {
+            const hr: HTMLElement = document.createElement("hr");
+            hr.addClass("sr-card-divide");
+            this.content.appendChild(hr);
+        } else {
+            this.content.empty();
+        }
+
+        const wrapper: RenderMarkdownWrapper = new RenderMarkdownWrapper(
+            this.app,
+            this.plugin,
+            this._currentNote.filePath,
+        );
+        wrapper.renderMarkdownWrapper(
+            this._currentCard.back,
+            this.content,
+            this._currentQuestion.questionText.textDirection,
+        );
+
+        // Show response buttons
+        this.answerButton.addClass("sr-is-hidden");
+        this.hardButton.removeClass("sr-is-hidden");
+        this.easyButton.removeClass("sr-is-hidden");
+
+        const settings = this.settings;
+        const algo = settings.algorithm;
+        const btnTexts = settings.responseOptionBtnsText[algo];
+
+        if (this.reviewMode == FlashcardReviewMode.Cram) {
+            // Same for mobile/desktop
+            this.response.addClass("is-cram");
+            for (let i = 2; i < this.responseBtns.length - 1; i++) {
+                this.responseBtns[i].addClass("sr-is-hidden");
+            }
+            // this.hardButton.setText(`${this.settings.flashcardHardText}`);
+            // this.easyButton.setText(`${this.settings.flashcardEasyText}`);
+            this.hardButton.setText(`${btnTexts[1]}`);
+            this.easyButton.setText(`${btnTexts.last()}`);
+            return;
+        } else {
+            for (let i = 2; i < this.responseBtns.length - 1; i++) {
+                this.responseBtns[i].removeClass("sr-is-hidden");
+            }
+        }
+        if (!settings.intervalShowHide) {
+            for (let i = 1; i < this.responseBtns.length; i++) {
+                this.responseBtns[i].setText(`${btnTexts[i]}`);
+            }
+        } else if (settings.dataLocation !== DataLocation.SaveOnNoteFile) {
+            this._setupResponseBtns(btnTexts);
+            const item = this.plugin.store.getItembyID(this._currentCard.Id);
+            if (
+                item.nextReview > Date.now() &&
+                this._currentCard.hasSchedule &&
+                !this._currentCard.scheduleInfo.isDue()
+            ) {
+                debug("复习了还没到期的卡片" + item);
+            }
+        } else {
+            this.goodButton.removeClass("sr-is-hidden");
+            this._setupEaseButton(
+                this.hardButton,
+                this.settings.flashcardHardText,
+                ReviewResponse.Hard,
+            );
+            this._setupEaseButton(
+                this.goodButton,
+                this.settings.flashcardGoodText,
+                ReviewResponse.Good,
+            );
+            this._setupEaseButton(
+                this.easyButton,
+                this.settings.flashcardEasyText,
+                ReviewResponse.Easy,
+            );
+        }
+    }
+
+    private _keydownHandler = (e: KeyboardEvent) => {
+        // Prevents any input, if the edit modal is open or if the view is not in focus
+        if (
+            document.activeElement.nodeName === "TEXTAREA" ||
+            this.mode === FlashcardMode.Closed ||
+            !this.plugin.getSRInFocusState()
+        ) {
+            return;
+        }
+
+        const consumeKeyEvent = () => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+
+        switch (e.code) {
+            case "KeyS":
+                this._skipCurrentCard();
+                consumeKeyEvent();
+                break;
+            case "Space":
+                if (this.mode === FlashcardMode.Front) {
+                    this._showAnswer();
+                    consumeKeyEvent();
+                } else if (this.mode === FlashcardMode.Back) {
+                    this._processReview(ReviewResponse.Good);
+                    consumeKeyEvent();
+                }
+                break;
+            case "Enter":
+            case "NumpadEnter":
+                if (this.mode !== FlashcardMode.Front) {
+                    break;
+                }
+                this._showAnswer();
+                consumeKeyEvent();
+                break;
+            case "Numpad1":
+            case "Digit1":
+                if (this.mode !== FlashcardMode.Back) {
+                    break;
+                }
+                this._processReview(ReviewResponse.Hard);
+                consumeKeyEvent();
+                break;
+            case "Numpad2":
+            case "Digit2":
+                if (this.mode !== FlashcardMode.Back) {
+                    break;
+                }
+                this._processReview(ReviewResponse.Good);
+                consumeKeyEvent();
+                break;
+            case "Numpad3":
+            case "Digit3":
+                if (this.mode !== FlashcardMode.Back) {
+                    break;
+                }
+                this._processReview(ReviewResponse.Easy);
+                consumeKeyEvent();
+                break;
+            case "Numpad0":
+            case "Digit0":
+                if (this.mode !== FlashcardMode.Back) {
+                    break;
+                }
+                this._processReview(ReviewResponse.Reset);
+                consumeKeyEvent();
+                break;
+            default:
+                break;
+        }
+    };
 }

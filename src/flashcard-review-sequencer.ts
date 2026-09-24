@@ -246,6 +246,8 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
 
         if (this.settings.dataLocation === DataLocation.SaveOnNoteFile) {
             if (response != ReviewResponse.Reset || this.currentCard.hasSchedule) {
+                const oldSchedule = this.currentCard.scheduleInfo;
+
                 // We need to update the schedule if:
                 //  (1) the user reviewed with easy/good/hard (either a new or due card),
                 //  (2) or reset a due card

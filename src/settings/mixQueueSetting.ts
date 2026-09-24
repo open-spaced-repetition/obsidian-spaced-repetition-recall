@@ -48,6 +48,76 @@ export function addmixQueueSetting(containerEl: HTMLElement, plugin: SRPlugin) {
                 });
         });
 
+    if (!settings.mdView) {
+        settings.mixCardNote = false;
+        plugin.savePluginData();
+        return;
+    }
+    const desc = createFragment((frag) => {
+        frag.createDiv().innerHTML =
+            "review flashcards and note in mix Que in default MarkdownPreview";
+    });
+    const set = new Setting(containerEl)
+        .setName("mix flashcards and note")
+        .setDesc(desc)
+        .addToggle((toggle) => {
+            toggle.setValue(plugin.data.settings.mixCardNote).onChange(async (newValue) => {
+                plugin.data.settings.mixCardNote = newValue;
+                if (newValue) addmixCardNoteCountSetting();
+                await update();
+            });
+        });
+
+    addmixCardNoteCountSetting();
+
+    function addmixCardNoteCountSetting() {
+        if (!settings.mixCardNote) return;
+        new Setting(containerEl)
+            .setDesc(
+                `mix cards and notes when review. \
+                **first** slider for total count(${settings.mixCard + settings.mixNote}), \
+                second slider for cards count(${settings.mixCard}). And notes count is (total - ondue)= ${settings.mixNote}.`,
+            )
+            .addSlider((slider) =>
+                slider
+                    .setLimits(1, 7, 1)
+                    .setValue(settings.mixCard + settings.mixNote)
+                    .setDynamicTooltip()
+                    .onChange(async (value) => {
+                        applySettingsUpdate(async () => {
+                            settings.mixCard = Math.min(value, settings.mixCard);
+                            settings.mixNote = value - settings.mixCard;
+                            await update();
+                        });
+                    }),
+            )
+            .addSlider((slider) =>
+                slider
+                    .setLimits(0, Math.min(7, settings.mixCard + settings.mixNote), 1)
+                    .setValue(settings.mixCard)
+                    .setDynamicTooltip()
+                    .onChange((value) => {
+                        applySettingsUpdate(async () => {
+                            settings.mixCard = value;
+                            await update();
+                        });
+                    }),
+            )
+            .addExtraButton((button) => {
+                button
+                    .setIcon("reset")
+                    .setTooltip(t("RESET_DEFAULT"))
+                    .onClick(() => {
+                        applySettingsUpdate(async () => {
+                            settings.mixCardNote = DEFAULT_SETTINGS.mixCardNote;
+                            settings.mixCard = DEFAULT_SETTINGS.mixCard;
+                            settings.mixNote = DEFAULT_SETTINGS.mixNote;
+                            await update();
+                        });
+                    });
+            });
+    }
+
     async function update() {
         await plugin.savePluginData();
         plugin.settingTab.display();

@@ -35,6 +35,6 @@ export abstract class SrsAlgorithm {
     abstract importer(fromAlgo: algorithmNames, items: RepetitionItem[]): void;
     abstract displaySettings(
         containerEl: HTMLElement,
-        update: (settings: unknown, refresh?: boolean) => void,
+        update: (settings: unknown, refresh: boolean) => void,
     ): void;
 }

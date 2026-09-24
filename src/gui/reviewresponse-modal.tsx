@@ -41,6 +41,7 @@ export class reviewResponseModal {
     private _reviewMode: FlashcardReviewMode;
 
     respCallback: (resp: number) => void | Promise<void>;
+
     showAnsCB: () => void;
     public cardtotalCB: () => number;
     public notetotalCB: () => number;
@@ -70,7 +71,6 @@ export class reviewResponseModal {
         front?: boolean,
     ): void {
         const settings = this.settings;
-        // this.mode = mode;
 
         if (!settings.reviewResponseFloatBar || !settings.autoNextNote) return;
         if (item) {
@@ -114,7 +114,7 @@ export class reviewResponseModal {
         //     .querySelector(".workspace-leaf.mod-active")
         //     .insertAdjacentElement("afterbegin", this.containerEl);
 
-        const view = this.plugin.app.workspace.getActiveViewOfType(MarkdownView);
+        const view = Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView);
         // const view = this.plugin.app.workspace.containerEl
         //     .querySelector(".workspace-leaf.mod-active")
         //     .insertAdjacentElement("afterbegin", this.containerEl);

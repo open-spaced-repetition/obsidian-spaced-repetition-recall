@@ -105,8 +105,9 @@ export class FlashcardModal extends Modal {
     }
 
     private _showFlashcard(deck: Deck): void {
+        this.plugin.setSRViewInFocus(true);
         this._hideDecksList();
-        this.flashcardView.show();
+        this.flashcardView.show(deck);
     }
 
     private _hideFlashcard(): void {

@@ -174,7 +174,7 @@ export class SRTabView extends ItemView {
 
     private _showFlashcard(deck: Deck): void {
         this._hideDecksList();
-        this.flashcardView.show();
+        this.flashcardView.show(deck);
     }
 
     private _hideFlashcard(): void {

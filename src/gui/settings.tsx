@@ -861,7 +861,6 @@ export class SRSettingTab extends PluginSettingTab {
 
     private async tabScheduling(containerEl: HTMLElement): Promise<void> {
         containerEl.createEl("h3", { text: t("ALGORITHM") });
-        const algoSettingEl = new Setting(containerEl).setName(t("ALGORITHM"));
 
         const plugin = this.plugin;
         const settings = this.plugin.data.settings;
@@ -880,7 +879,7 @@ export class SRSettingTab extends PluginSettingTab {
         addAlgorithmSpecificDisplaySetting(newSettingEl(containerEl), this.plugin);
 
         return;
-
+        const algoSettingEl = new Setting(containerEl).setName(t("ALGORITHM"));
         algoSettingEl.descEl.insertAdjacentHTML(
             "beforeend",
             t("CHECK_ALGORITHM_WIKI", {
