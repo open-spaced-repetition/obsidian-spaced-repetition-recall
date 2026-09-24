@@ -115,7 +115,7 @@ export class ItemInfoModal extends Modal {
         contentEl.createEl("p").setText(t("ITEM_INFO_TITLE") + " " + path);
         const contentdiv = contentEl.createEl("div");
 
-        console.debug("item: ", item);
+        console.log("item: ", item);
         // Object.keys(item).forEach(key => {
         //     contentEl.createDiv("li").setText(key+ ": "+ item[key])
         // });

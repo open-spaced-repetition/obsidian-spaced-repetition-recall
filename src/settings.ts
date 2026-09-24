@@ -36,6 +36,7 @@ export interface SRSettings {
     burySiblingCardsByNoteReview: boolean;
     multiClozeCard: boolean;
     cardBlockID: boolean;
+    mdView: boolean;
     randomizeCardOrder: boolean;
     flashcardCardOrder: string;
     flashcardDeckOrder: string;
@@ -122,6 +123,7 @@ export const DEFAULT_SETTINGS: SRSettings = {
     burySiblingCardsByNoteReview: false,
     multiClozeCard: false,
     cardBlockID: false,
+    mdView: false,
     randomizeCardOrder: null,
     flashcardCardOrder: "DueFirstRandom",
     flashcardDeckOrder: "PrevDeckComplete_Sequential",

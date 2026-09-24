@@ -26,6 +26,7 @@ import { addcardBlockIDSetting } from "src/settings/cardBlockIDSetting";
 import { addmixQueueSetting } from "src/settings/mixQueueSetting";
 import { addIntervalShowHideSetting } from "src/settings/intervalShowHideSetting";
 import { addReviewNoteDirectlySetting } from "src/settings/reviewNoteDirectlySetting";
+import { addmdViewSetting } from "src/settings/mdViewSetting";
 
 // https://github.com/mgmeyers/obsidian-kanban/blob/main/src/Settings.ts
 let applyDebounceTimer = 0;
@@ -665,6 +666,7 @@ export class SRSettingTab extends PluginSettingTab {
             );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
+        addmdViewSetting(newSettingEl(containerEl), this.plugin);
         new Setting(containerEl)
             .setName(t("INITIALLY_EXPAND_SUBDECKS_IN_TREE"))
             .setDesc(t("INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC"))

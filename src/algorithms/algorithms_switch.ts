@@ -33,8 +33,8 @@ export async function algorithmSwitchData(
     const bak_path = old_path + "." + fromAlgo + ".bak";
 
     await store.save(bak_path);
-    await store.pruneData();
     await store.verifyItems();
+    await store.pruneData();
     const fromTo = " from " + fromAlgo + " to: " + toAlgo;
     try {
         const algo = algorithms[toAlgo];

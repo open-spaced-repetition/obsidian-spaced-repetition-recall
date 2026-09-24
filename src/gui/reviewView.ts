@@ -53,7 +53,7 @@ export class ReviewView {
                 state.item = que.getNextId();
                 // state.mode = "question";
 
-                reviewFloatBar.display(item, (opt) => {
+                reviewFloatBar.display(item, async (opt) => {
                     IReviewNote.recallReviewResponse(this.itemId, opt);
                     plugin.postponeResponse(note, itemToShedNote(item, note));
                     if (settings.autoNextNote) {
@@ -78,7 +78,7 @@ export class ReviewView {
 
         ReviewView.nextReviewNotice(IReviewNote.minNextView, store.data.queues.laterSize);
 
-        reviewFloatBar.selfDestruct();
+        reviewFloatBar.close();
         new Notice(t("ALL_CAUGHT_UP"));
         this.plugin.sync();
     }
