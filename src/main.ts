@@ -1026,6 +1026,11 @@ export default class SRPlugin extends Plugin {
         if (leaves.length == 0) {
             return null;
         }
+        if (leaves.length > 1) {
+            leaves.slice(1).forEach((leaf) => {
+                leaf.detach();
+            });
+        }
 
         return leaves[0];
     }
