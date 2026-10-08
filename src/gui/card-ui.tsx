@@ -25,12 +25,11 @@ import { now } from "moment";
 import { reviewResponseModal } from "src/gui/reviewresponse-modal";
 import { FlashcardContentUI } from "src/gui/FlashcardContextUI";
 import { MixQueSet } from "src/dataStore/mixQueSet";
+import { SR_TAB_VIEW } from "src/constants";
 
 export class CardUI {
     public app: App;
     public plugin: SRPlugin;
-    public modalContentEl: HTMLElement;
-    public modalEl: HTMLElement;
     public mode: FlashcardMode;
 
     public view: HTMLDivElement;
@@ -143,32 +142,27 @@ export class CardUI {
      */
     init() {
         if (this.settings.mdView) {
+            // await this.cardUI.render("","",this._currentNote.filePath);
             const fbar = reviewResponseModal.getInstance();
             fbar.showAnsCB = this._showAnswer.bind(this);
             fbar.build();
             fbar.reviewMode = this.reviewMode;
-            this.view = fbar.controls;
-            this.view.empty();
+            this.header = fbar.controls;
+            // this.view.empty();
             this.response = fbar.response;
         } else {
-            this.view = this.modalContentEl.createDiv();
+            this.header = this.view.createDiv();
         }
 
         this.view.addClasses(["sr-flashcard", "sr-is-hidden"]);
 
-        this.header = this.view.createDiv();
         this.header.addClass("sr-header");
 
         this.title = this.header.createDiv();
         this.title.addClass("sr-title");
 
-        // this.controls = fbar.controls;
         this.controls = this.header.createDiv();
         this.controls.addClass("sr-controls");
-        this._createBackButton();
-        this._createCardControls();
-
-        this._createInfoSection();
 
         if (!this.settings.mdView) {
             if (this.settings.showContextInCards) {
@@ -176,14 +170,22 @@ export class CardUI {
                 this.cardContext.addClass("sr-context");
             }
 
+            this.controls = this.view.createDiv();
             this.content = this.view.createDiv();
-            this.content.addClass("sr-content");
-
             this.response = this.view.createDiv();
+
+            this.content.addClass("sr-content");
         }
 
-        this.response.addClass("sr-response");
         this.cardUI = FlashcardContentUI.create(this.plugin, this.cardContext, this.content);
+
+        this.controls.addClass("sr-controls");
+        this.response.addClass("sr-response");
+        // this._createBackButton();
+        this._createCardControls();
+
+        this._createInfoSection();
+
         this._createResponseButtons();
     }
 
@@ -203,6 +205,7 @@ export class CardUI {
             if (!fbar.hasBar()) {
                 this.init();
             }
+            this.cardUI.show();
         }
 
         // Setup title
@@ -210,33 +213,35 @@ export class CardUI {
         this.resetButton.disabled = true;
 
         // Setup context
-        let context: string = "";
-        if (this.settings.showContextInCards) {
-            context = this._formatQuestionContextText(this._currentQuestion.questionContext);
-        }
+        // let context: string = "";
+        // if (this.settings.showContextInCards) {
+        //     context = this._formatQuestionContextText(this._currentQuestion.questionContext);
+        // }
 
         // Setup card content
-        await this.cardUI.render(context, this._currentCard.front, this._currentNote.filePath);
+        // await this.cardUI.render(context, this._currentCard.front, this._currentNote.filePath);
 
-        // Setup response buttons
-        this._resetResponseButtons();
-        if (this.settings.mdView) {
-            const item = this.plugin.store.getItembyID(this._currentCard.Id);
-            const fbar = reviewResponseModal.getInstance();
-            fbar.display(item, this._processReview.bind(this));
-            this._autoremove();
-        }
+        // if (this.settings.mdView) {
+        //     const item = this.plugin.store.getItembyID(this._currentCard.Id);
+        //     const fbar = reviewResponseModal.getInstance();
+        //     fbar.display(item, this._processReview.bind(this));
+        //     this._autoremove();
+        // }
+        // // Setup response buttons
+        // this._resetResponseButtons();
 
         this.chosenDeck = chosenDeck;
         const deckStats = this.reviewSequencer.getDeckStats(chosenDeck.getTopicPath());
         this.totalCardsInSession = deckStats.cardsInQueueCount;
         this.totalDecksInSession = deckStats.decksInQueueOfThisDeckCount;
 
-        // await this._drawContent();
+        await this._drawContent();
 
-        if (!this.settings.mdView) this.view.removeClass("sr-is-hidden");
+        if (!this.settings.mdView) {
+            this.view.removeClass("sr-is-hidden");
+        }
         this.backButton.removeClass("sr-is-hidden");
-        this.view.removeClass("sr-is-hidden");
+        // this.view.removeClass("sr-is-hidden");
         document.addEventListener("keydown", this._keydownHandler);
     }
 
@@ -303,8 +308,6 @@ export class CardUI {
         // Update card content
         await this.cardUI.render(context, this._currentCard.front, this._currentNote.filePath);
 
-        // Setup response buttons
-        // this._resetResponseButtons();
         if (this.settings.mdView) {
             const item = this.plugin.store.getItembyID(this._currentCard.Id);
             const fbar = reviewResponseModal.getInstance();
@@ -364,11 +367,11 @@ export class CardUI {
         }
 
         if (this._currentCard != null) {
-            if (this?._previousCard && isMulti() && this.mode === FlashcardModalMode.Back) {
+            if (this?._previousCard && isMulti() && this.mode === FlashcardMode.Back) {
                 this._showAnswer();
                 return;
             }
-            await this.show();
+            await this.refresh();
         } else if (this.settings.mdView) {
             FlashcardModal.instance.open();
         } else this.backToDeck();
@@ -404,7 +407,7 @@ export class CardUI {
         this.backButton.setAttribute("aria-label", t("BACK"));
         this.backButton.addEventListener("click", () => {
             /* this.plugin.data.historyDeck = ""; */
-            FlashcardModal.instance.open();
+            // FlashcardModal.instance.open();
             this.backToDeck();
         });
         this._createCloseButton(div);
@@ -420,8 +423,10 @@ export class CardUI {
         closeButton.setAttribute("aria-label", t("CLOSE"));
         closeButton.addEventListener("click", () => {
             this.close();
+            const tabview = this.app.workspace.getLeavesOfType(SR_TAB_VIEW);
+            tabview?.forEach((lf) => lf.detach());
             // reviewResponseModal.getInstance().close();
-            FlashcardModal.instance.close();
+            // FlashcardModal.instance.close();
         });
     }
 
@@ -432,6 +437,7 @@ export class CardUI {
     // -> Controls
 
     private _createCardControls() {
+        this._createBackButton();
         this._createOpenFileButton();
         this._createEditButton();
         this._createResetButton();
@@ -555,7 +561,7 @@ export class CardUI {
     // #region -> Deck Info
 
     private _createInfoSection() {
-        this.infoSection = this.view.createDiv();
+        this.infoSection = this.header.createDiv();
         this.infoSection.addClass("sr-info-section");
 
         this.deckProgressInfo = this.infoSection.createDiv();
@@ -699,11 +705,8 @@ export class CardUI {
             this.responseBtns[i].addEventListener("click", () => {
                 this._processReview(i);
             });
-            this.response.appendChild(this.responseBtns[i]);
+            // this.response.appendChild(this.responseBtns[i]);
         }
-        this.hardButton = this.responseBtns[1];
-        this.goodButton = this.responseBtns.at(-2);
-        this.easyButton = this.responseBtns.last();
     }
 
     private _setupResponseBtns(btnTexts: string[]) {
@@ -734,6 +737,12 @@ export class CardUI {
             this._createShowAnswerButton();
             this._createResponseBtns();
         }
+
+        // this.resetButton = this.responseBtns[0];
+        this.hardButton = this.responseBtns[1];
+        this.goodButton = this.responseBtns.at(-2);
+        this.easyButton = this.responseBtns.last();
+
         // this._createHardButton();
         // this._createGoodButton();
         // this._createEasyButton();
@@ -845,8 +854,8 @@ export class CardUI {
 
         // Show response buttons
         this.answerButton.addClass("sr-is-hidden");
-        // this.hardButton.removeClass("sr-is-hidden");
-        // this.easyButton.removeClass("sr-is-hidden");
+        this.hardButton.removeClass("sr-is-hidden");
+        this.easyButton.removeClass("sr-is-hidden");
 
         const settings = this.settings;
         const algo = settings.algorithm;
@@ -880,7 +889,7 @@ export class CardUI {
             if (
                 item.nextReview > Date.now() &&
                 this._currentCard.hasSchedule &&
-                !this._currentCard.scheduleInfo.isDue()
+                !this._currentCard.scheduleInfo?.isDue()
             ) {
                 debug("复习了还没到期的卡片" + item);
             }
@@ -907,7 +916,7 @@ export class CardUI {
     private _keydownHandler = (e: KeyboardEvent) => {
         // Prevents any input, if the edit modal is open or if the view is not in focus
         if (
-            document.activeElement.nodeName === "TEXTAREA" ||
+            document.activeElement?.nodeName === "TEXTAREA" ||
             this.mode === FlashcardMode.Closed ||
             !this.plugin.getSRInFocusState()
         ) {
@@ -986,14 +995,15 @@ export class CardUI {
             }
             return;
         }
+        return;
         const tout = Platform.isMobile ? 5000 : 10000;
         this._timmer = setInterval(() => {
             const file = this.app.workspace.getActiveFile();
             const Markdown = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (!Markdown) {
-                this.close();
+                // this.close();
                 clearInterval(this._timmer);
-            } else if (this.mode === FlashcardModalMode.Closed) {
+            } else if (this.mode === FlashcardMode.Closed) {
                 this.close();
                 clearInterval(this._timmer);
             }

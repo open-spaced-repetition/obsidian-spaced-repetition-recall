@@ -71,8 +71,31 @@ export class reviewResponseModal {
         front?: boolean,
     ): void {
         const settings = this.settings;
-
         if (!settings.reviewResponseFloatBar || !settings.autoNextNote) return;
+        this.containerEl?.show();
+        if (!this.hasBar() || !this.buttons) {
+            console.debug("display didn't find rrbar, rebuild ...");
+            this.build();
+            this.vwcontainerEl = undefined;
+        }
+
+        if (!this.vwcontainerEl) {
+            const view = Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView);
+            // const view = this.plugin.app.workspace.containerEl
+            //     .querySelector(".workspace-leaf.mod-active")
+            //     .insertAdjacentElement("afterbegin", this.containerEl);
+            view?.containerEl?.appendChild(this.containerEl);
+            if (view) {
+                this.vwcontainerEl = view.containerEl;
+                this.ownerdoc = view.containerEl.ownerDocument;
+                this.addKeysEvent();
+                view.onunload = () => {
+                    // view.containerEl.removeChild(this.containerEl);
+                    // view.containerEl.remove();
+                    this.close();
+                };
+            }
+        }
         if (item) {
             this.item = item;
             this.responseInterval = this.algorithm.calcAllOptsIntervals(item);
@@ -80,10 +103,7 @@ export class reviewResponseModal {
             this.item = undefined;
             this.responseInterval = null;
         }
-        if (!this.hasBar() || !this.buttons) {
-            // console.debug("display didn't find rrbar");
-            this.build();
-        }
+
         this.containerEl.show();
         if (callback) {
             this.respCallback = callback;
@@ -98,8 +118,8 @@ export class reviewResponseModal {
     }
 
     build() {
-        if (this.isDisplay()) return;
-        // console.debug("build start...");
+        if (this.isDisplay() || this.hasBar()) return;
+        console.debug("build start...");
         // const options = this.plugin.algorithm.srsOptions();
         const optBtnCounts = this.options.length;
         let btnCols = 4;
@@ -114,26 +134,12 @@ export class reviewResponseModal {
         //     .querySelector(".workspace-leaf.mod-active")
         //     .insertAdjacentElement("afterbegin", this.containerEl);
 
-        const view = Iadapter.instance.app.workspace.getActiveViewOfType(MarkdownView);
-        // const view = this.plugin.app.workspace.containerEl
-        //     .querySelector(".workspace-leaf.mod-active")
-        //     .insertAdjacentElement("afterbegin", this.containerEl);
-        view?.containerEl?.appendChild(this.containerEl);
-        if (view) {
-            this.vwcontainerEl = view.containerEl;
-            this.ownerdoc = view.containerEl.ownerDocument;
-            this.addKeysEvent();
-            view.onunload = () => {
-                this.close();
-                view.containerEl.removeChild(this.containerEl);
-            };
-        }
-
         this.contentEl = this.containerEl.createDiv("sr-show-response");
         this.contentEl.addClass("sr-modal-content");
         this.contentEl.addClass("sr-flashcard");
         this.notecontrols = this.contentEl.createDiv();
         this.controls = this.contentEl.createDiv();
+        this.controls.hide();
 
         this.response = this.contentEl.createDiv("sr-show-response");
         this.response.setAttribute("style", `grid-template-columns: ${"1fr ".repeat(btnCols)}`);
@@ -209,6 +215,7 @@ export class reviewResponseModal {
             const btn = this.response.createEl("button");
             btn.setAttribute("id", "sr-" + opt.toLowerCase() + "-btn");
             btn.addClasses(["sr-response-button", "sr-is-hidden"]); //
+            // btn.addClasses(["sr-response-button"]); //, "sr-is-hidden"
             // btn.setAttribute("aria-label", "Hotkey: " + (index + 1));
             // btn.setAttribute("style", `width: calc(95%/${buttonCounts});`);
             // setIcon(btn, item.icon);
@@ -218,11 +225,12 @@ export class reviewResponseModal {
             this.buttons.push(btn);
             // this.response.appendChild(btn);
         });
+        // this.response.addClasses(["sr-response-button", "sr-is-hidden"]);
     }
 
     private createButton_showAnswer() {
-        // this.answerBtn = this.contentEl.createEl("button");
-        this.answerBtn = this.response.createEl("button");
+        this.answerBtn = this.contentEl.createEl("button");
+        // this.answerBtn = this.response.createEl("button");
         this.answerBtn.setAttribute("id", "sr-show-answer");
         this.answerBtn.addClasses(["sr-response-button", "sr-show-answer-button", "sr-bg-blue"]); //
         this.answerBtn.setText(t("SHOW_ANSWER"));
@@ -438,7 +446,8 @@ export class reviewResponseModal {
             this.controls.removeClass("sr-is-hidden");
             return true;
         } else if (this.controls.hasChildNodes()) {
-            this.controls.addClass("sr-is-hidden");
+            // this.controls.addClass("sr-is-hidden");
+            this.controls.hide();
             return true;
         }
         return false;
@@ -463,9 +472,9 @@ export class reviewResponseModal {
             // let text = btnText[algo][index];
             const text = this.getTextWithInterval(_stIndx + index);
             btn.setText(text);
-            if (!this.item.isCard) {
-                btn.removeClass("sr-is-hidden");
-            }
+            // if (!this.item.isCard) {
+            btn.removeClass("sr-is-hidden");
+            // }
         });
     }
 
@@ -473,6 +482,7 @@ export class reviewResponseModal {
         // this.mode = FlashcardModalMode.Front;
 
         this.answerBtn.removeClass("sr-is-hidden");
+        // this.response.addClass("sr-is-hidden");
         this.buttons.forEach((btn, _index) => {
             btn.addClass("sr-is-hidden");
         });
@@ -493,7 +503,10 @@ export class reviewResponseModal {
     }
 
     public hasBar() {
-        return this.vwcontainerEl?.querySelector("#" + this.barId) != null;
+        return (
+            this.containerEl != undefined ||
+            this.vwcontainerEl?.querySelector("#" + this.barId) != null
+        );
     }
 
     public isDisplay() {
@@ -511,9 +524,11 @@ export class reviewResponseModal {
         if (rrBar) {
             this.removeKeysEvent();
             rrBar.style.visibility = "hidden";
-            if (rrBar.firstChild) {
-                rrBar.removeChild(rrBar.firstChild);
-            }
+            // while (rrBar.firstChild) {
+            //     rrBar.removeChild(rrBar.firstChild);
+            // }
+            this.containerEl = undefined;
+            this.vwcontainerEl = undefined;
             rrBar.remove();
         }
     }

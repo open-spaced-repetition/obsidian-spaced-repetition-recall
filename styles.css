@@ -732,7 +732,7 @@ ResponseFloatBar TOOLBAR
     /* flex-direction: row; */
     left: 0;
     right: 0;
-    bottom: 5%;
+    bottom: 8%;
     margin: auto;
     align-items: center;
     transition: 200ms ease;

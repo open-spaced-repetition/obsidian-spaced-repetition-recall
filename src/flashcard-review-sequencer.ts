@@ -156,6 +156,9 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
     setCurrentDeck(topicPath: TopicPath): void {
         this.cardSequencer.setIteratorTopicPath(topicPath);
         this.cardSequencer.nextCard();
+        if (this.hasCurrentCard) {
+            console.debug(this, "setCrrentDeck, and hasCurrentCard...");
+        }
     }
 
     get originalDeckTree(): Deck {

@@ -289,6 +289,7 @@ export class DeckTreeIterator implements IDeckTreeIterator {
         const iteratorDeck: Deck = this.baseDeckTree.getDeck(topicPath);
         this.deckArray = DeckTreeIterator.filterForDecksWithCards(iteratorDeck.toDeckArray());
         this.setDeckIdx(null);
+        this.singleDeckIterator.previousCard = undefined;
     }
 
     private static filterForDecksWithCards(sourceArray: Deck[]): Deck[] {

@@ -131,7 +131,7 @@ export class SRTabView extends ItemView {
                     this.reviewSequencer,
                     this.reviewMode,
                     this.viewContentEl.createDiv(),
-                    this.viewContentEl,
+                    // this.viewContentEl,
                     this._showDecksList.bind(this),
                     this._doEditQuestionText.bind(this),
                 );
@@ -166,6 +166,7 @@ export class SRTabView extends ItemView {
     private _showDecksList(): void {
         this._hideFlashcard();
         this.deckView.show();
+        this.plugin.app.workspace.setActiveLeaf(this.leaf, { focus: true });
     }
 
     private _hideDecksList(): void {

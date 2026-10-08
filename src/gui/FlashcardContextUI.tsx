@@ -37,15 +37,16 @@ export abstract class FlashcardContentUI {
     }
     abstract render(context: string, cardtext: string, path: string): Promise<void>;
     abstract render_Ans(cardtext: string, isNotCloze: boolean): Promise<void>;
+    show(): void;
     close() {}
 }
 
 class FlashcardC_MD extends FlashcardContentUI {
     private adapter: DataAdapter;
-    private activeLeaf: WorkspaceLeaf;
+    private activeLeaf!: WorkspaceLeaf;
     private mdview: MarkdownView;
-    private mdCardContext: string;
-    private mdCardText: string;
+    private mdCardContext!: string;
+    private mdCardText!: string;
     private path: string;
     private file: TFile;
 
@@ -63,8 +64,11 @@ class FlashcardC_MD extends FlashcardContentUI {
         if (!hasLeaf) {
             this.activeLeaf = this.app.workspace.getLeaf("tab");
         }
-        this.mdview = new MarkdownView(this.activeLeaf);
-        this.file = this.app.vault.getFileByPath(path);
+        // this.adapter.write(path, "");
+        // console.debug("UI  constrator:", this.activeLeaf);
+        // this.mdview = new MarkdownView(this.activeLeaf);
+        // this.mdview.registerEvent(this.close);
+        // this.file = this.app.vault.getFileByPath(path) as TFile;
     }
     get basename() {
         return fbasename;
@@ -98,33 +102,55 @@ class FlashcardC_MD extends FlashcardContentUI {
 
     private async _render() {
         await this.adapter.write(path, this.mdCardText);
-        if (this.file instanceof TFile) {
-            // const activeLeaf = this.app.workspace.getLeaf("tab");
-            await this.activeLeaf.openFile(this.file);
-            const vstate = this.activeLeaf.getViewState();
-            vstate.active = true;
-            vstate.state.mode = "preview";
-            await this.activeLeaf.setViewState(vstate);
+        if (!this.mdview) {
+            this.mdview = new MarkdownView(this.activeLeaf);
+            this.mdview.registerEvent(this.close);
+            this.file = this.app.vault.getFileByPath(path) as TFile;
+            // console.debug("dont have mdview, adnf this.file:", this.file);
+            // } else if (!this.isActiveleaf) {
+            //     this.app.workspace.setActiveLeaf(this.activeLeaf);
         } else {
-            debug("UI _render", 5, "openLinkText");
-            await this.app.workspace.openLinkText(this.basename, this.path, false);
-            const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-            const state = activeLeaf.getState();
-            state.mode = "preview";
-            state.file = path;
-            activeLeaf.setState(state, { history: false });
-            this.file = this.app.vault.getFileByPath(path);
+            return;
         }
+
+        // if (this.file instanceof TFile) {
+        // const activeLeaf = this.app.workspace.getLeaf("tab");
+        await this.activeLeaf.openFile(this.file);
+        const vstate = this.activeLeaf.getViewState();
+        vstate.active = true;
+        vstate.state.mode = "preview";
+        await this.activeLeaf.setViewState(vstate);
+        // console.debug("UI _render", 5, "active setveiwstate \nthis.file:", this.file);
+        // } else {
+        //     debug("UI _render", 5, "openLinkText\nthis.file:", this.file);
+        //     await this.app.workspace.openLinkText(this.basename, this.path, false);
+        //     console.debug(`this.basename:${this.basename}, this.path:${this.path}`);
+        //     const activeLeaf = this.app.workspace.getActiveViewOfType(MarkdownView) as MarkdownView;
+        //     const state = activeLeaf.getState();
+        //     state.mode = "preview";
+        //     state.file = path;
+        //     activeLeaf.setState(state, { history: false });
+        //     this.file = this.app.vault.getFileByPath(path) as TFile;
+        // }
     }
 
+    show() {
+        this.app.workspace.setActiveLeaf(this.activeLeaf);
+    }
     close() {
-        this.adapter.remove(path);
+        this.adapter.write(path, "");
+        // this.adapter.remove(path);
         this.activeLeaf.detach();
+    }
+
+    get isActiveleaf() {
+        const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        return view?.leaf == this.activeLeaf;
     }
 }
 
 class FlashcardC_Modal extends FlashcardContentUI {
-    private wrapper: RenderMarkdownWrapper;
+    private wrapper!: RenderMarkdownWrapper;
 
     async render(context: string, cardtext: string, path: string): Promise<void> {
         // Setup context
