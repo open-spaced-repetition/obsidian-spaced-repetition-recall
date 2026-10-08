@@ -23,6 +23,7 @@ export default {
     CURRENT_INTERVAL_HELP_TEXT: "Текущий интервал: ",
     CARD_GENERATED_FROM: "Создано из: ${notePath}",
     OPEN_NOTE: "Открыть заметку",
+    CLOSE_NOTE: "Закрыть заметку",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Открыть заметку для повторения",
