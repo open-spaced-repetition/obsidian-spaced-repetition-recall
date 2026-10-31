@@ -16,9 +16,9 @@ export class ItemInfoModal extends Modal {
     file: TFile;
     item: RepetitionItem;
     mnextReview: Map<number, number> = new Map();
-    lastInterval: number;
+    lastInterval: number | undefined;
 
-    constructor(plugin: SRPlugin, file: TFile, item: RepetitionItem = null) {
+    constructor(plugin: SRPlugin, file: TFile, item: RepetitionItem | null = null) {
         super(plugin.app);
         this.plugin = plugin;
         this.store = DataStore.getInstance();
@@ -77,7 +77,7 @@ export class ItemInfoModal extends Modal {
     displayAllitems(contentEl: HTMLElement, tkfile: TrackedFile) {
         contentEl.empty();
         const stext = t("LINE_NO");
-        tkfile.cardItems.forEach((cinfo) => {
+        tkfile.cardItems?.forEach((cinfo) => {
             const ln = cinfo.lineNo + 1;
             this.displayitemWithSummary(contentEl, this.store.getItems(cinfo.itemIds), stext + ln);
         });
@@ -145,8 +145,7 @@ export class ItemInfoModal extends Modal {
         contentdiv.createEl("p").setText(t("ITEM_DATA_INFO"));
 
         tablestr = "";
-        Object.keys(item.data).forEach((key) => {
-            const dkey = key as keyof typeof item.data;
+        Object.entries(item.data ?? {}).forEach(([key, value]) => {
             if (key === "lastInterval") {
                 const akey = key as keyof AnkiData;
                 new Setting(contentdiv).setDesc(key).addText((text) => {
@@ -157,7 +156,7 @@ export class ItemInfoModal extends Modal {
                     });
                 });
             } else {
-                tablestr += ` ${key} | ${item.data[dkey]} \n`;
+                tablestr += ` ${key} | ${value} \n`;
             }
         });
         MarkdownRenderer.render(this.plugin.app, title + tablestr, contentdiv, "", this.plugin);
@@ -179,7 +178,7 @@ export class ItemInfoModal extends Modal {
 
                 if (algo === algorithmNames.Fsrs) {
                     const data = item.data as FsrsData;
-                    data.due = new Date(item.nextReview);
+                    data.dueAt = new Date(item.nextReview);
                 }
             });
         }

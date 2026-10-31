@@ -1,7 +1,7 @@
 import { Notice } from "obsidian";
 import { AnkiData } from "src/algorithms/anki";
 import { balance } from "src/algorithms/balance/balance";
-import { FsrsData } from "src/algorithms/fsrs";
+import { FsrsData, fsrsDefinition } from "src/algorithms/fsrs-scheduler";
 import { globalDateProvider } from "src/util/DateProvider";
 import { DateUtils, debug } from "src/util/utils_recall";
 
@@ -71,8 +71,11 @@ export class RepetitionItem {
         Object.assign(newItem, item);
         if (newItem.isFsrs) {
             const data = item.data as FsrsData;
-            data.due = new Date(data.due);
-            data.last_review = new Date(data.last_review);
+            newItem.data = fsrsDefinition.schema.card.parse({
+                ...data,
+                dueAt: new Date(data.dueAt),
+                lastReviewAt: data.lastReviewAt == null ? null : new Date(data.lastReviewAt),
+            });
         }
         return newItem;
     }
@@ -146,7 +149,7 @@ export class RepetitionItem {
 
         if (this.isFsrs) {
             const data = this.data as FsrsData;
-            interval = data.scheduled_days;
+            interval = data.scheduledDays;
             // ease just used for StatsChart, not review scheduling.
             ease = data.state;
         } else {
@@ -214,10 +217,10 @@ export class RepetitionItem {
 
             newdue = newdue
                 ? newdue
-                : // : odue - (data.scheduled_days - newitvl) * DateUtils.DAYS_TO_MILLIS;
-                  data.last_review.getTime() + newitvl * DateUtils.DAYS_TO_MILLIS;
-            // data.scheduled_days = newitvl;
-            data.due = new Date(newdue);
+                : // : odue - (data.scheduledDays - newitvl) * DateUtils.DAYS_TO_MILLIS;
+                  (data.lastReviewAt?.getTime() ?? now) + newitvl * DateUtils.DAYS_TO_MILLIS;
+            // data.scheduledDays = newitvl;
+            data.dueAt = new Date(newdue);
         } else {
             newdue = newdue ? newdue : odue - (this.interval - newitvl) * DateUtils.DAYS_TO_MILLIS;
             // (this.data as AnkiData).lastInterval = newitvl;
@@ -237,7 +240,7 @@ export class RepetitionItem {
             odue: new Date(this.nextReview).toISOString(),
             ndue: new Date(newdue).toISOString(),
         });
-        this.isFsrs ? ((this.data as FsrsData).due = new Date(newdue)) : null;
+        this.isFsrs ? ((this.data as FsrsData).dueAt = new Date(newdue)) : null;
         this.nextReview = newdue;
     }
 
@@ -277,7 +280,7 @@ export class RepetitionItem {
             if (this.nextReview < globalDateProvider.endofToday.valueOf()) {
                 if (this.isFsrs) {
                     const data: FsrsData = this.data as FsrsData;
-                    const lastr = data.last_review.valueOf();
+                    const lastr = data.lastReviewAt?.valueOf() ?? 0;
                     if (lastr > 0 && lastr < globalDateProvider.startofToday.valueOf()) {
                         return true;
                     }

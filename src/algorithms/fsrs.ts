@@ -3,11 +3,11 @@ import { DateUtils, MiscUtils } from "src/util/utils_recall";
 import { SrsAlgorithm, algorithmNames } from "./algorithms";
 import { DataStore } from "../dataStore/data";
 
-import * as tsfsrs from "ts-fsrs";
+import { Grade, Rating } from "ts-fsrs";
+import { migrateFSRS6Parameters } from "ts-fsrs/models/fsrs-6";
+import { fsrsDefinition, FsrsData, FsrsReviewLog, FsrsScheduler } from "./fsrs-scheduler";
 import { t } from "src/lang/helpers";
-import deepcopy from "deepcopy";
 import { AnkiData } from "./anki";
-import { Rating, ReviewLog } from "ts-fsrs";
 import { RepetitionItem, ReviewResult } from "src/dataStore/repetitionItem";
 import { Iadapter } from "src/dataStore/adapter";
 import { fsrsOptimizer, type OptimizerProgress } from "./fsrs-optimizer";
@@ -19,7 +19,7 @@ function applySettingsUpdate(callback: () => void): void {
     applyDebounceTimer = window.setTimeout(callback, 512);
 }
 
-export type FsrsData = tsfsrs.Card;
+export type { FsrsData } from "./fsrs-scheduler";
 
 export class RevLog {
     // https://github.com/open-spaced-repetition/fsrs-optimizer
@@ -30,13 +30,17 @@ export class RevLog {
     review_duration = 0;
     tag = "";
 
-    constructor(item: RepetitionItem = null, reviewLog: ReviewLog = null, duration: number = 0) {
+    constructor(
+        item: RepetitionItem | null = null,
+        reviewLog: FsrsReviewLog | null = null,
+        duration: number = 0,
+    ) {
         if (item) {
             this.card_id = item.ID;
             this.tag = item.deckName;
         }
         if (reviewLog) {
-            this.review_time = reviewLog.review.getTime();
+            this.review_time = reviewLog.reviewTime.getTime();
             this.review_rating = reviewLog.rating;
             this.review_state = reviewLog.state;
         }
@@ -57,6 +61,8 @@ interface FsrsSettings {
     w: readonly number[];
     enable_fuzz: boolean;
     enable_short_term: boolean;
+    learning_steps: FsrsScheduler["config"]["learningSteps"];
+    relearning_steps: FsrsScheduler["config"]["relearningSteps"];
 }
 
 const FsrsOptions: string[] = ["Again", "Hard", "Good", "Easy"]; // Manual =0
@@ -67,34 +73,26 @@ const FsrsOptions: string[] = ["Again", "Hard", "Good", "Easy"]; // Manual =0
  * https://github.com/open-spaced-repetition/fsrs.js
  */
 export class FsrsAlgorithm extends SrsAlgorithm {
-    settings: FsrsSettings;
+    settings: FsrsSettings = this.defaultSettings();
 
-    fsrs = new tsfsrs.FSRS(tsfsrs.generatorParameters(this.settings));
-    card = tsfsrs.createEmptyCard();
+    fsrs: FsrsScheduler = this.createScheduler();
 
     filename = "ob_revlog.csv";
-    logfilepath: string = null;
+    logfilepath: string | null = null;
     REVLOG_sep = ",";
     REVLOG_TITLE = RevLog.getKeyNames().join(this.REVLOG_sep) + "\n";
     review_duration = 0;
 
-    constructor() {
-        super();
-        //Set algorithm parameters
-        this.updateFsrsParams();
-    }
-
     defaultSettings(): FsrsSettings {
         return {
             revlog_tags: [],
-            ...tsfsrs.generatorParameters(),
-            // request_retention: 0.9,
-            // maximum_interval: 36500,
-            // w: [
-            //     0.4, 0.6, 2.4, 5.8, 4.93, 0.94, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05, 0.34,
-            //     1.26, 0.29, 2.61,
-            // ],
-            // enable_fuzz: false,
+            request_retention: 0.9,
+            maximum_interval: 36500,
+            w: migrateFSRS6Parameters(),
+            enable_fuzz: false,
+            enable_short_term: true,
+            learning_steps: ["1m", "10m"],
+            relearning_steps: ["10m"],
         };
     }
     updateSettings(settings: unknown) {
@@ -113,7 +111,25 @@ export class FsrsAlgorithm extends SrsAlgorithm {
     }
 
     updateFsrsParams() {
-        this.fsrs = new tsfsrs.FSRS(tsfsrs.generatorParameters(this.settings));
+        this.fsrs = this.createScheduler();
+    }
+
+    private createScheduler(): FsrsScheduler {
+        const settings = this.settings;
+        return fsrsDefinition.create({
+            config: {
+                weights: migrateFSRS6Parameters(settings.w),
+                desiredRetention: settings.request_retention,
+                maximumInterval: settings.maximum_interval,
+                enableFuzz: settings.enable_fuzz,
+                enableShortTerm: settings.enable_short_term,
+                fractionalDays: false,
+                learningSteps: settings.learning_steps,
+                relearningSteps: settings.relearning_steps,
+                numRelearningSteps: settings.relearning_steps.length,
+                clearStatsOnForget: false,
+            },
+        });
     }
 
     getLogfilepath() {
@@ -123,7 +139,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
     }
 
     defaultData(): FsrsData {
-        return tsfsrs.createEmptyCard();
+        return this.fsrs.newCard();
     }
 
     srsOptions(): string[] {
@@ -131,18 +147,15 @@ export class FsrsAlgorithm extends SrsAlgorithm {
     }
 
     calcAllOptsIntervals(item: RepetitionItem) {
-        const data = item.data as FsrsData;
-        const card = deepcopy(data);
-        const now = new Date();
-        const scheduling_cards = this.fsrs.repeat(card, now);
+        const inputCard = { ...(item.data as FsrsData), cardId: String(item.ID) };
         const intvls: number[] = [];
-        tsfsrs.Grades.forEach((grade, _ind) => {
-            const due = scheduling_cards[grade].card.due.valueOf();
-            const lastrv = scheduling_cards[grade].card.last_review.valueOf();
-            const nextInterval = due - lastrv;
-            intvls.push(nextInterval / DateUtils.DAYS_TO_MILLIS);
-            // console.debug("due:" + due + ", last: " + lastrv + ", intvl: " + nextInterval);
-        });
+        for (const { grade, revlog, card } of this.fsrs.preview({
+            card: inputCard,
+            now: new Date(),
+        })) {
+            intvls[grade - 1] =
+                (card.dueAt.valueOf() - revlog.reviewTime.valueOf()) / DateUtils.DAYS_TO_MILLIS;
+        }
         this.review_duration = new Date().getTime();
         return intvls;
     }
@@ -152,8 +165,8 @@ export class FsrsAlgorithm extends SrsAlgorithm {
         repeat: boolean,
         log: boolean = true,
     ): ReviewResult {
-        let data = item.data as FsrsData;
-        const response = (FsrsOptions.indexOf(optionStr) + 1) as tsfsrs.Grade;
+        const card = { ...(item.data as FsrsData), cardId: String(item.ID) };
+        const response = (FsrsOptions.indexOf(optionStr) + 1) as Grade;
 
         let correct = true;
         if (response == 1) {
@@ -168,22 +181,14 @@ export class FsrsAlgorithm extends SrsAlgorithm {
         }
 
         const now = new Date();
-        const scheduling_cards = this.fsrs.repeat(data, now);
-        // console.log(scheduling_cards);
+        const result = this.fsrs.review({ card, now, grade: response });
+        const data = (item.data = result.card);
 
-        //Update the card after rating:
-        data = item.data = deepcopy(scheduling_cards[response].card) as FsrsData;
-        data.stability = MiscUtils.fixed(data.stability, 5);
-        data.difficulty = MiscUtils.fixed(data.difficulty, 5);
-        data.elapsed_days = MiscUtils.fixed(data.elapsed_days, 3);
-
-        // Get the review log after rating :
         if (log) {
-            const review_log = scheduling_cards[response].log;
-            this.appendRevlog(item, review_log);
+            this.appendRevlog(item, result.revlog);
         }
 
-        const nextInterval = data.due.valueOf() - data.last_review.valueOf();
+        const nextInterval = data.dueAt.valueOf() - result.revlog.reviewTime.valueOf();
 
         return {
             correct,
@@ -197,7 +202,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
      * @param cid 对应数据项ID
      * @param rating
      */
-    async appendRevlog(item: RepetitionItem, reviewLog: ReviewLog) {
+    async appendRevlog(item: RepetitionItem, reviewLog: FsrsReviewLog) {
         if (this.settings.revlog_tags.length > 0) {
             if (item.deckName.includes("/")) {
                 if (
@@ -213,7 +218,10 @@ export class FsrsAlgorithm extends SrsAlgorithm {
             }
         }
 
-        const adapter = Iadapter.instance.adapter;
+        const adapter = Iadapter.instance?.adapter;
+        if (!adapter || this.logfilepath === null) {
+            throw new Error("FSRS review log storage is not initialized");
+        }
         const duration = this.review_duration > 0 ? new Date().getTime() - this.review_duration : 0;
         this.review_duration = 0;
         const rlog = new RevLog(item, reviewLog, duration);
@@ -235,7 +243,10 @@ export class FsrsAlgorithm extends SrsAlgorithm {
      * @param rating
      */
     reWriteRevlog(data: string, withTitle = false) {
-        const adapter = Iadapter.instance.adapter;
+        const adapter = Iadapter.instance?.adapter;
+        if (!adapter || this.logfilepath === null) {
+            throw new Error("FSRS review log storage is not initialized");
+        }
 
         if (withTitle) {
             data = this.REVLOG_TITLE + data;
@@ -244,7 +255,10 @@ export class FsrsAlgorithm extends SrsAlgorithm {
     }
 
     async readRevlog() {
-        const adapter = Iadapter.instance.adapter;
+        const adapter = Iadapter.instance?.adapter;
+        if (!adapter || this.logfilepath === null) {
+            throw new Error("FSRS review log storage is not initialized");
+        }
         let data = "";
         if (await adapter.exists(this.logfilepath)) {
             data = await adapter.read(this.logfilepath);
@@ -283,10 +297,10 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                     this.onSelection(item, opt, false, false);
 
                     card = item.data as FsrsData;
-                    card.due = due;
-                    card.scheduled_days = interval;
+                    card.dueAt = due;
+                    card.scheduledDays = interval;
                     card.reps = reps;
-                    card.last_review = lastview;
+                    card.lastReviewAt = lastview;
                 } else {
                     item.data = card;
                 }
@@ -438,9 +452,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                             this.updateFsrsParams();
                         });
                     });
-            })
-            .settingEl.querySelector(".setting-item-description").innerHTML =
-            t("FSRS_W_PARAM_DESC");
+            }).descEl.innerHTML = t("FSRS_W_PARAM_DESC");
 
         new Setting(containerEl)
             .setName(t("FUZZING"))
@@ -623,7 +635,7 @@ export class FsrsAlgorithm extends SrsAlgorithm {
             .addButton((button) => {
                 button.setButtonText(t("FSRS_SELECT_CSV")).onClick(async () => {
                     // Create file input
-                    const input = document.createElement("input");
+                    const input = containerEl.ownerDocument.createElement("input");
                     input.type = "file";
                     input.accept = ".csv";
 
@@ -635,17 +647,6 @@ export class FsrsAlgorithm extends SrsAlgorithm {
                         resultContainer.style.display = "none";
 
                         try {
-                            // Set plugin base path for WASM loading
-                            const dataStore = DataStore.getInstance();
-                            if (dataStore?.dataPath) {
-                                // Get the plugin directory path relative to vault
-                                const pluginBasePath = dataStore.dataPath.substring(
-                                    0,
-                                    dataStore.dataPath.lastIndexOf("/"),
-                                );
-                                fsrsOptimizer.setPluginBasePath(pluginBasePath);
-                            }
-
                             const newParams = await fsrsOptimizer.trainFromFile(file, {
                                 nextDayStartsAt: 4, // Default 4 AM
                                 enableShortTerm: this.settings.enable_short_term,

@@ -1,3 +1,4 @@
+import { migrateFsrsCard } from "src/algorithms/fsrs-scheduler";
 import type { DataStore } from "./data";
 import { DEFAULT_SRS_DATA } from "./data";
 import { Iadapter } from "./adapter";
@@ -12,6 +13,7 @@ export async function loadData(store: DataStore, path = store.dataPath) {
         return;
     }
 
+    let originalData: string | null = null;
     try {
         if (await adapter.exists(path)) {
             const data = await adapter.read(path);
@@ -19,6 +21,7 @@ export async function loadData(store: DataStore, path = store.dataPath) {
                 console.log("Unable to read SRS data!");
                 store.data = Object.assign({}, DEFAULT_SRS_DATA);
             } else {
+                originalData = data;
                 console.log("Reading tracked files...");
                 store.data = Object.assign(Object.assign({}, DEFAULT_SRS_DATA), JSON.parse(data));
                 store.data.mtime = await getmtime(store, path);
@@ -32,6 +35,29 @@ export async function loadData(store: DataStore, path = store.dataPath) {
         console.log(error + "Tracked files not found! Creating new file...");
         store.data = Object.assign({}, DEFAULT_SRS_DATA);
         await saveData(store, path);
+    }
+    if (originalData !== null) {
+        let migrated = false;
+        const items = store.data.items.map((item) => {
+            if (
+                item?.data &&
+                typeof item.data === "object" &&
+                "state" in item.data &&
+                "due" in item.data
+            ) {
+                migrated = true;
+                return { ...item, data: migrateFsrsCard(item.data, item.ID) };
+            }
+            return item;
+        });
+        if (migrated) {
+            // Migration errors must propagate, never enter the legacy empty-store recovery above.
+            await adapter.write(`${path}.pre-fsrs-v6-${Date.now()}.bak`, originalData);
+            const data = { ...store.data, items };
+            await adapter.write(path, JSON.stringify(data));
+            store.data = data as typeof store.data;
+            store.data.mtime = await getmtime(store, path);
+        }
     }
     store.toInstances();
 }

@@ -72,7 +72,7 @@ export function schedule(
 }
 
 export class DefaultAlgorithm extends SrsAlgorithm {
-    settings: DefaultAlgoSettings;
+    settings: DefaultAlgoSettings = this.defaultSettings();
     defaultSettings(): DefaultAlgoSettings {
         return {
             // algorithm
@@ -198,7 +198,7 @@ export class DefaultAlgorithm extends SrsAlgorithm {
         items.forEach((item) => {
             if (item != null && item.data != null) {
                 const data = item.data as FsrsData;
-                const lastitval = data.scheduled_days;
+                const lastitval = data.scheduledDays;
                 const iter = data.reps;
                 const newdata = this.defaultData() as AnkiData;
                 newdata.lastInterval =
