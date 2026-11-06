@@ -1,5 +1,5 @@
 import { RepetitionItem } from "src/dataStore/repetitionItem";
-import { DateUtils, debug } from "src/util/utils_recall";
+import { debug } from "src/util/utils_recall";
 import { SrsAlgorithm } from "../algorithms";
 import { FsrsAlgorithm, FsrsData } from "../fsrs";
 
@@ -35,13 +35,18 @@ function reschedule_default(items: RepetitionItem[]) {
 
 function reschedule_fsrs(items: RepetitionItem[]) {
     let reCnt = 0;
-    const fsrs = (SrsAlgorithm.getInstance() as FsrsAlgorithm).fsrs;
+    const algorithm = SrsAlgorithm.getInstance() as FsrsAlgorithm;
+    const fsrs = algorithm.fsrs;
 
     items.map((item) => {
         if (!item.isTracked) return;
         const data = item.data as FsrsData;
-        const newitvl = fsrs.next_interval(data.stability, data.elapsed_days ?? 0);
-        if (newitvl !== data.scheduled_days) {
+        if (data.lastReviewAt === null) return;
+        const newitvl = Math.min(
+            fsrs.model.nextInterval(data, algorithm.settings.request_retention),
+            algorithm.settings.maximum_interval,
+        );
+        if (newitvl !== data.scheduledDays) {
             reCnt++;
             item.updateDueByInterval(newitvl);
         }

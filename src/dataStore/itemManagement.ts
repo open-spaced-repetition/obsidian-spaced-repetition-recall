@@ -9,12 +9,12 @@ import { MiscUtils } from "src/util/utils_recall";
 
 export function updateItem(
     store: DataStore,
-    id: number = null,
+    id: number | null = null,
     fileIndex: number,
     itemType: RPITEMTYPE,
     deckName: string,
 ): number {
-    if (id != null && id < 0) return;
+    if (id != null && id < 0) return -1;
     // `item` will be retrieved later when needed; declare at point of use to satisfy eslint
     const algorithm = SrsAlgorithm.getInstance();
 
@@ -36,7 +36,7 @@ export function updateItem(
     if (item != null) {
         item.setTracked(fileIndex);
         item.itemType = itemType;
-        item.data = Object.assign(algorithm.defaultData(), item.data);
+        item.data = Object.assign({}, algorithm.defaultData(), item.data);
         return item.ID;
     }
 
@@ -56,7 +56,7 @@ export function updateItems(
     const ind = store.getFileIndex(path);
     if (ind == -1) {
         console.log("Attempt to update untracked file: " + path);
-        return;
+        return null;
     }
     const trackedFile = store.getFileByIndex(ind);
 
@@ -110,7 +110,7 @@ export function updateCardItems(
         }
     });
     if (idsLen === count) {
-        return;
+        return null;
     }
 
     let added = 0;
@@ -186,7 +186,7 @@ export function updateReviewedCounts(
     if (item.isDue) {
         if (store.settings.algorithm === algorithmNames.Fsrs) {
             const data: FsrsData = item.data as FsrsData;
-            if (new Date(data.last_review) < new Date(date)) {
+            if (data.lastReviewAt !== null && data.lastReviewAt < new Date(date)) {
                 rc[date].due++;
             }
         } else {

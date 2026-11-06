@@ -28,7 +28,7 @@ const AnkiOptions: string[] = ["Again", "Hard", "Good", "Easy"];
  * https://faqs.ankiweb.net/what-spaced-repetition-algorithm.html
  */
 export class AnkiAlgorithm extends SrsAlgorithm {
-    settings: AnkiSettings;
+    settings: AnkiSettings = this.defaultSettings();
     defaultSettings(): AnkiSettings {
         return {
             easyBonus: 1.3,
@@ -154,7 +154,7 @@ export class AnkiAlgorithm extends SrsAlgorithm {
         items.forEach((item) => {
             if (item != null && item.data != null) {
                 const data = item.data as FsrsData;
-                const lastitval = data.scheduled_days;
+                const lastitval = data.scheduledDays;
                 const iter = data.reps;
                 const newdata = this.defaultData() as AnkiData;
                 newdata.lastInterval =

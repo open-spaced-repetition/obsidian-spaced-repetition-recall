@@ -238,7 +238,7 @@ export class StatsModal extends Modal {
         const esaeStr: string[] = [];
         getKeysPreserveType(cardStats.eases.dict).forEach((value: number) => {
             if (this.plugin.data.settings.algorithm === algorithmNames.Fsrs) {
-                esaeStr.push(`${State[value]} `);
+                esaeStr.push(`${Object.entries(State).find(([, state]) => state === value)?.[0]} `);
             } else {
                 esaeStr.push(`${value} `);
             }
@@ -382,7 +382,8 @@ function createStatsChart(
         chartPeriodCallBack(chartPeriodEl);
     }
 
-    document.getElementById(`${canvasId}Summary`).innerText = summary;
+    const summaryEl = document.getElementById(`${canvasId}Summary`);
+    if (summaryEl) summaryEl.innerText = summary;
 
     function chartPeriodCallBack(chartPeriodEl: HTMLSelectElement) {
         let filteredLabels, filteredData;
@@ -409,6 +410,4 @@ function createStatsChart(
         };
         statsChart.update();
     }
-
-    document.getElementById(`${canvasId}Summary`).innerText = summary;
 }
