@@ -1,5 +1,5 @@
 import { YAML_FRONT_MATTER_REGEX } from "src/constants";
-import { extractFrontmatter, isEqualOrSubPath } from "src/util/utils";
+import { extractFrontmatter, isEqualOrSubPath } from "../../../src/utils/utils";
 import {
     convertToStringOrEmpty,
     findLineIndexOfSearchStringIgnoringWs,

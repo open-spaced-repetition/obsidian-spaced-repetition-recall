@@ -51,7 +51,7 @@ import Commands from "./commands";
 import { algorithmNames, SrsAlgorithm } from "src/algorithms/algorithms";
 
 import { reviewResponseModal } from "src/gui/reviewresponse-modal";
-import { debug, isVersionNewerThanOther } from "./util/utils_recall";
+import { debug, isVersionNewerThanOther } from "./utils/utils_recall";
 import { ReleaseNotes } from "src/gui/ReleaseNotes";
 
 import { algorithms } from "src/algorithms/algorithms_switch";
@@ -597,11 +597,13 @@ export default class SRPlugin extends Plugin {
             }
 
             // file has no scheduling information
-            if (!(
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
-            )) {
+            if (
+                !(
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
+                )
+            ) {
                 for (const matchedNoteTag of matchedNoteTags) {
                     this.reviewDecks[matchedNoteTag].newNotes.push({ note: noteFile });
                 }

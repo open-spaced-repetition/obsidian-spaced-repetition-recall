@@ -3,7 +3,7 @@ import { ISRFile } from "src/file";
 import { Question } from "src/question";
 import { SRSettings } from "src/settings";
 
-import { Multi_cloze } from "src/util/multi-cloze-util";
+import { Multi_cloze } from "./utils/multi-cloze-util";
 
 export class Note {
     file: ISRFile;

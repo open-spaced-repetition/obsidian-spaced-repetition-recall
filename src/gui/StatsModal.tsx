@@ -17,7 +17,7 @@ import {
 } from "chart.js";
 
 import type SRPlugin from "src/main";
-import { getKeysPreserveType, getTypedObjectEntries } from "src/util/utils";
+import { getKeysPreserveType, getTypedObjectEntries } from "../utils/utils";
 import { textInterval } from "src/scheduling";
 import { t } from "src/lang/helpers";
 import { ReviewedCounts } from "src/dataStore/data";

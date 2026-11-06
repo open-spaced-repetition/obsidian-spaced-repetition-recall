@@ -1,4 +1,4 @@
-import { MiscUtils, debug } from "src/util/utils_recall";
+import { MiscUtils, debug } from "../utils/utils_recall";
 import { SRSettings } from "../settings";
 
 import { TFile, TFolder, getAllTags } from "obsidian";

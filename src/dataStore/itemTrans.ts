@@ -5,7 +5,7 @@ import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { SrTFile } from "src/file";
 import { TopicPath } from "src/topic-path";
 import { DataStore } from "src/dataStore/data";
-import { BlockUtils, debug, logExecutionTime } from "src/util/utils_recall";
+import { BlockUtils, debug, logExecutionTime } from "../utils/utils_recall";
 import { CardInfo } from "./trackedFile";
 import { Card } from "src/card";
 import { DataLocation } from "./dataLocation";

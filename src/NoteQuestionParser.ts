@@ -8,7 +8,7 @@ import { SRSettings, SettingsUtil } from "./settings";
 import { ISRFile, frontmatterTagPseudoLineNum } from "./file";
 import { TopicPath, TopicPathList } from "src/topic-path";
 import { TextDirection } from "./utils/strings";
-import { extractFrontmatter, splitTextIntoLineArray } from "./util/utils";
+import { extractFrontmatter, splitTextIntoLineArray } from "./utils/utils";
 
 export class NoteQuestionParser {
     settings: SRSettings;

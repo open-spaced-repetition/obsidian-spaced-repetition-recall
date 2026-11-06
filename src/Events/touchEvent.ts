@@ -1,4 +1,4 @@
-import { debug } from "src/util/utils_recall";
+import { debug } from "../utils/utils_recall";
 
 interface IminTouch {
     identifier: number;

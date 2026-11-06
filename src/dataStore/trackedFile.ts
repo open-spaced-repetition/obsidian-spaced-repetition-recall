@@ -1,5 +1,5 @@
 import { SRSettings } from "src/settings";
-import { BlockUtils } from "src/util/utils_recall";
+import { BlockUtils } from "../utils/utils_recall";
 import { CardType } from "src/question";
 import { parse, ParsedQuestionInfo } from "src/parser";
 import { RPITEMTYPE } from "./repetitionItem";

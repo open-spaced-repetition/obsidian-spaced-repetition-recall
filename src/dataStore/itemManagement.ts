@@ -5,7 +5,7 @@ import { SrsAlgorithm, algorithmNames } from "src/algorithms/algorithms";
 import { AnkiData } from "src/algorithms/anki";
 import { FsrsData } from "src/algorithms/fsrs";
 import { t } from "src/lang/helpers";
-import { MiscUtils } from "src/util/utils_recall";
+import { MiscUtils } from "../utils/utils_recall";
 
 export function updateItem(
     store: DataStore,

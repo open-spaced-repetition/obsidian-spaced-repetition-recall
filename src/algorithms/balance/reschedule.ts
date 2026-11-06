@@ -1,5 +1,5 @@
 import { RepetitionItem } from "src/dataStore/repetitionItem";
-import { debug } from "src/util/utils_recall";
+import { debug } from "../../utils/utils_recall";
 import { SrsAlgorithm } from "../algorithms";
 import { FsrsAlgorithm, FsrsData } from "../fsrs";
 

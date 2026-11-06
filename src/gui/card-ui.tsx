@@ -20,7 +20,7 @@ import { RepetitionItem } from "src/dataStore/repetitionItem";
 import { SrTFile } from "src/file";
 import { ItemInfoModal } from "./info";
 import { DataLocation } from "src/dataStore/dataLocation";
-import { debug } from "src/util/utils_recall";
+import { debug } from "../utils/utils_recall";
 import { now } from "moment";
 import { reviewResponseModal } from "src/gui/reviewresponse-modal";
 import { FlashcardContentUI } from "src/gui/FlashcardContextUI";

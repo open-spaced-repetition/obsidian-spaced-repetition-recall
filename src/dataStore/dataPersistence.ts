@@ -2,7 +2,7 @@ import { migrateFsrsCard } from "src/algorithms/fsrs-scheduler";
 import type { DataStore } from "./data";
 import { DEFAULT_SRS_DATA } from "./data";
 import { Iadapter } from "./adapter";
-import { MiscUtils } from "src/util/utils_recall";
+import { MiscUtils } from "../utils/utils_recall";
 import { t } from "src/lang/helpers";
 
 export async function loadData(store: DataStore, path = store.dataPath) {

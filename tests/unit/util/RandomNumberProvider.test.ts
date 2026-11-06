@@ -3,7 +3,7 @@ import {
     WeightedRandomNumber,
     setupNextRandomNumber,
     setupStaticRandomNumberProvider,
-} from "src/util/RandomNumberProvider";
+} from "../../../src/utils/RandomNumberProvider";
 
 let provider: WeightedRandomNumber;
 

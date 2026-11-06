@@ -1,6 +1,6 @@
 import { RepetitionItem } from "src/dataStore/repetitionItem";
 import { globalDateProvider } from "src/utils/dates";
-import { DateUtils, debug } from "src/util/utils_recall";
+import { DateUtils, debug } from "../../utils/utils_recall";
 
 export function postponeItems(items: RepetitionItem[], days?: number): RepetitionItem[] {
     const now = Date.now();

@@ -12,7 +12,7 @@ import {
 import {
     setupNextRandomNumber,
     setupStaticRandomNumberProvider,
-} from "src/util/RandomNumberProvider";
+} from "../../src/utils/RandomNumberProvider";
 
 const order_DueFirst_Sequential: IIteratorOrder = {
     cardOrder: CardOrder.DueFirstSequential,
