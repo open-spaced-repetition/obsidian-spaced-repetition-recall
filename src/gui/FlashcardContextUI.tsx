@@ -3,7 +3,6 @@ import SRPlugin from "src/main";
 import { SRSettings } from "src/settings";
 import { RenderMarkdownWrapper } from "src/utils/renderers";
 import { TextDirection } from "src/utils/strings";
-import { debug } from "src/util/utils_recall";
 
 const fbasename = "DoNotUse_tempCardtext_for_spacedrepetition";
 const path = fbasename + ".md";
@@ -37,7 +36,7 @@ export abstract class FlashcardContentUI {
     }
     abstract render(context: string, cardtext: string, path: string): Promise<void>;
     abstract render_Ans(cardtext: string, isNotCloze: boolean): Promise<void>;
-    show(): void;
+    abstract show(): void;
     close() {}
 }
 
@@ -151,6 +150,8 @@ class FlashcardC_MD extends FlashcardContentUI {
 
 class FlashcardC_Modal extends FlashcardContentUI {
     private wrapper!: RenderMarkdownWrapper;
+
+    show() {}
 
     async render(context: string, cardtext: string, path: string): Promise<void> {
         // Setup context
