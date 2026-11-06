@@ -39,7 +39,8 @@ jobs:
         needs: validate
         runs-on: ubuntu-latest
         # if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'Newdea/obsidian-spaced-repetition-recall'
-        permissions: write-all
+        permissions:
+            contents: write
 
         steps:
             - name: Checkout
@@ -48,14 +49,23 @@ jobs:
                   # Make sure the actual branch is checked out when running on pull requests
                   ref: ${{ github.head_ref }}
 
+            - name: Setup Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "22"
+
+            - name: Install dependencies
+              run: npm install -g pnpm && pnpm install --frozen-lockfile
+
+            - name: Get locked Prettier version
+              id: prettier
+              run: echo "version=$(pnpm exec prettier --version)" >> "$GITHUB_OUTPUT"
+
             - name: Prettify code
               uses: creyD/prettier_action@v4.6
               with:
-                  # prettier_version: ^3.1.1
-                  # This part is also where you can pass other options, for example:
-                  # prettier_options: --write *.ts *.json src test --ignore-path package-lock.json
-                  # --config .prettierrc.json --ignore-path package-lock.json pnpm-lock.yaml
-                  prettier_options: --write .
+                  prettier_version: ${{ steps.prettier.outputs.version }}
+                  prettier_options: --write . --config .prettierrc.json
 
     lint_and_codecov:
         needs: pretty
