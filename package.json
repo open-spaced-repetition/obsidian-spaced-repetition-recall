@@ -55,6 +55,9 @@
         "pagerank.js": "^1.0.2",
         "short-uuid": "^5.2.0"
     },
+    "overrides": {
+        "handlebars": "^4.7.10"
+    },
     "pre-commit": [
         "precommit-msg",
         "validate"
