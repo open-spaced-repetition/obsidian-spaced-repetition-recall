@@ -1,4 +1,4 @@
-import { Deck } from "./Deck";
+import { Deck } from "src/deck";
 import {
     CardOrder,
     DeckOrder,
@@ -6,7 +6,7 @@ import {
     IDeckTreeIterator,
     IIteratorOrder,
 } from "./DeckTreeIterator";
-import { Card } from "./Card";
+import { Card } from "src/card";
 import { Stats } from "./stats";
 import { CardScheduleInfo } from "./CardSchedule";
 import { TopicPath } from "src/topic-path";

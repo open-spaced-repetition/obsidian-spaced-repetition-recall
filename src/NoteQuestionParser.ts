@@ -1,14 +1,14 @@
 import { TagCache } from "obsidian";
-import { Card } from "./Card";
+import { Card } from "./card";
 import { CardScheduleInfo, NoteCardScheduleParser } from "./CardSchedule";
 import { parse, ParsedQuestionInfo, ParserOptions } from "./parser";
-import { Question, QuestionText } from "./Question";
+import { Question, QuestionText } from "./question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { SRSettings, SettingsUtil } from "./settings";
-import { ISRFile, frontmatterTagPseudoLineNum } from "./SRFile";
+import { ISRFile, frontmatterTagPseudoLineNum } from "./file";
 import { TopicPath, TopicPathList } from "src/topic-path";
-import { TextDirection } from "./util/TextDirection";
-import { extractFrontmatter, splitTextIntoLineArray } from "./util/utils";
+import { TextDirection } from "./utils/strings";
+import { extractFrontmatter, splitTextIntoLineArray } from "./utils/utils";
 
 export class NoteQuestionParser {
     settings: SRSettings;

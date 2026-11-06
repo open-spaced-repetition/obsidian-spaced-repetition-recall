@@ -1,6 +1,7 @@
 import { DEFAULT_DECKNAME, OBSIDIAN_TAG_AT_STARTOFLINE_REGEX } from "src/constants";
-import { ISRFile } from "src/SRFile";
+import { ISRFile } from "src/file";
 import { SRSettings } from "src/settings";
+
 import { DataStore } from "src/dataStore/data";
 import { DataLocation } from "src/dataStore/dataLocation";
 

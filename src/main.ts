@@ -10,7 +10,7 @@ import {
 import * as graph from "pagerank.js";
 
 import { DEFAULT_SETTINGS, SettingsUtil, SRSettings, upgradeSettings } from "src/settings";
-import { FlashcardModal } from "src/gui/FlashcardModal";
+import { FlashcardModal } from "src/gui/sr-modal";
 import { StatsModal } from "src/gui/StatsModal";
 import { REVIEW_QUEUE_VIEW_TYPE, ReviewQueueListView } from "src/gui/Sidebar";
 import { ReviewResponse, schedule } from "src/scheduling";
@@ -19,13 +19,13 @@ import { ReviewDeck, SchedNote } from "src/ReviewDeck";
 import { t } from "src/lang/helpers";
 import { appIcon } from "src/icons/appicon";
 import { TopicPath } from "src/topic-path";
-import { CardListType, Deck, DeckTreeFilter } from "./Deck";
+import { CardListType, Deck, DeckTreeFilter } from "src/deck";
 import { Stats } from "./stats";
 import {
     FlashcardReviewMode,
     FlashcardReviewSequencer as FlashcardReviewSequencer,
     IFlashcardReviewSequencer as IFlashcardReviewSequencer,
-} from "./FlashcardReviewSequencer";
+} from "./flashcard-review-sequencer";
 import {
     CardOrder,
     DeckOrder,
@@ -34,15 +34,15 @@ import {
     IIteratorOrder,
 } from "./DeckTreeIterator";
 import { CardScheduleCalculator } from "./CardSchedule";
-import { Note } from "./Note";
+import { Note } from "src/note";
 import { NoteFileLoader } from "./NoteFileLoader";
-import { ISRFile, SrTFile as SrTFile } from "./SRFile";
+import { ISRFile, SrTFile as SrTFile } from "src/file";
 import { NoteEaseCalculator } from "./NoteEaseCalculator";
 import { DeckTreeStatsCalculator } from "./DeckTreeStatsCalculator";
 import { NoteEaseList } from "./NoteEaseList";
-import { QuestionPostponementList } from "./QuestionPostponementList";
-import { TextDirection } from "./util/TextDirection";
-import { convertToStringOrEmpty, isEqualOrSubPath } from "./util/utils";
+import { QuestionPostponementList } from "src/question-postponement-list";
+import { TextDirection } from "./utils/strings";
+import { convertToStringOrEmpty } from "src/utils/strings";
 import { setDebugParser } from "src/parser";
 
 // https://github.com/martin-jw/obsidian-recall
@@ -51,7 +51,7 @@ import Commands from "./commands";
 import { algorithmNames, SrsAlgorithm } from "src/algorithms/algorithms";
 
 import { reviewResponseModal } from "src/gui/reviewresponse-modal";
-import { debug, isVersionNewerThanOther } from "./util/utils_recall";
+import { debug, isVersionNewerThanOther } from "./utils/utils_recall";
 import { ReleaseNotes } from "src/gui/ReleaseNotes";
 
 import { algorithms } from "src/algorithms/algorithms_switch";
@@ -67,8 +67,8 @@ import { IReviewNote } from "./reviewNote/review-note";
 import { ReviewView } from "./gui/reviewView";
 import { MixQueSet } from "./dataStore/mixQueSet";
 import { Iadapter } from "./dataStore/adapter";
-import TabViewManager from "src/gui/TabViewManager";
-import { TabView } from "src/gui/TabView";
+import TabViewManager from "src/gui/tab-view-manager";
+import { SRTabView } from "src/gui/sr-tab-view";
 import { SRSettingTab } from "src/gui/settings";
 
 interface PluginData {
@@ -597,11 +597,13 @@ export default class SRPlugin extends Plugin {
             }
 
             // file has no scheduling information
-            if (!(
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
-                Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
-            )) {
+            if (
+                !(
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-due") &&
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-interval") &&
+                    Object.prototype.hasOwnProperty.call(frontmatter, "sr-ease")
+                )
+            ) {
                 for (const matchedNoteTag of matchedNoteTags) {
                     this.reviewDecks[matchedNoteTag].newNotes.push({ note: noteFile });
                 }
@@ -1024,6 +1026,11 @@ export default class SRPlugin extends Plugin {
         if (leaves.length == 0) {
             return null;
         }
+        if (leaves.length > 1) {
+            leaves.slice(1).forEach((leaf) => {
+                leaf.detach();
+            });
+        }
 
         return leaves[0];
     }
@@ -1141,7 +1148,7 @@ export default class SRPlugin extends Plugin {
     }
 
     public handleFocusChange(leaf: WorkspaceLeaf | null) {
-        this.setSRViewInFocus(leaf !== null && leaf.view instanceof TabView);
+        this.setSRViewInFocus(leaf !== null && leaf.view instanceof SRTabView);
     }
 
     public setSRViewInFocus(value: boolean) {

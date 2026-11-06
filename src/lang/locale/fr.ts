@@ -23,6 +23,7 @@ export default {
     CURRENT_INTERVAL_HELP_TEXT: "Intervalle actuel : ",
     CARD_GENERATED_FROM: "Généré depuis : ${notePath}",
     OPEN_NOTE: "Open Note",
+    CLOSE_NOTE: "Close Note",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Ouvrir une note à apprendre",

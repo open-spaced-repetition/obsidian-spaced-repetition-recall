@@ -1,8 +1,8 @@
-import { Card } from "./Card";
-import { CardListType, Deck } from "./Deck";
-import { Question } from "./Question";
+import { Card } from "src/card";
+import { CardListType, Deck } from "src/deck";
+import { Question } from "src/question";
 import { TopicPath } from "src/topic-path";
-import { WeightedRandomNumber, globalRandomNumberProvider } from "./util/RandomNumberProvider";
+import { WeightedRandomNumber, globalRandomNumberProvider } from "./utils/RandomNumberProvider";
 
 export enum CardOrder {
     NewFirstSequential,
@@ -289,6 +289,7 @@ export class DeckTreeIterator implements IDeckTreeIterator {
         const iteratorDeck: Deck = this.baseDeckTree.getDeck(topicPath);
         this.deckArray = DeckTreeIterator.filterForDecksWithCards(iteratorDeck.toDeckArray());
         this.setDeckIdx(null);
+        this.singleDeckIterator.previousCard = undefined;
     }
 
     private static filterForDecksWithCards(sourceArray: Deck[]): Deck[] {

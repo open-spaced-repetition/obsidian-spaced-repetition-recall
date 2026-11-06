@@ -2,8 +2,8 @@ import { Notice } from "obsidian";
 import { AnkiData } from "src/algorithms/anki";
 import { balance } from "src/algorithms/balance/balance";
 import { FsrsData, fsrsDefinition } from "src/algorithms/fsrs-scheduler";
-import { globalDateProvider } from "src/util/DateProvider";
-import { DateUtils, debug } from "src/util/utils_recall";
+import { globalDateProvider } from "src/utils/dates";
+import { DateUtils, debug } from "../utils/utils_recall";
 
 export enum RPITEMTYPE {
     NOTE = "note",
@@ -281,7 +281,7 @@ export class RepetitionItem {
                 if (this.isFsrs) {
                     const data: FsrsData = this.data as FsrsData;
                     const lastr = data.lastReviewAt?.valueOf() ?? 0;
-                    if (lastr > 0 && lastr < globalDateProvider.startofToday.valueOf()) {
+                    if (lastr > 0 && lastr < globalDateProvider.today.valueOf()) {
                         return true;
                     }
                 } else {
@@ -334,6 +334,10 @@ export class RepetitionItem {
         }
         if (!Object.prototype.hasOwnProperty.call(this, "itemType")) {
             this.itemType = isCard ? RPITEMTYPE.CARD : RPITEMTYPE.NOTE;
+        } else if (isCard && this.itemType !== RPITEMTYPE.CARD) {
+            this.itemType = RPITEMTYPE.CARD;
+        } else if (!isCard && this.itemType !== RPITEMTYPE.NOTE) {
+            this.itemType = RPITEMTYPE.NOTE;
         }
     }
 

@@ -1,30 +1,13 @@
-import { Notice, PluginSettingTab, Setting, App, Platform } from "obsidian";
+import { Platform } from "obsidian";
 import type SRPlugin from "src/main";
 import { t } from "src/lang/helpers";
-// import { pathMatchesPattern } from "src/utils/fs";
-import { TabStructure, createTabs } from "./gui/tabs";
-import { setDebugParser } from "./parser";
-import { addignoreSetting } from "./settings/ignoreSetting";
-import { addMultiClozeSetting } from "./settings/multiClozeSetting";
+import { pathMatchesPattern } from "src/utils/fs";
 
 // https://github.com/martin-jw/obsidian-recall/blob/main/src/settings.ts
 
 import { algorithms } from "./algorithms/algorithms_switch";
-import { addResponseFloatBarSetting } from "src/settings/responseBarSetting";
 import { DataLocation } from "./dataStore/dataLocation";
-import { addDataLocationSettings } from "./settings/locationSetting";
-import {
-    DEFAULT_responseOptionBtnsText,
-    addAlgorithmSetting,
-    addAlgorithmSpecificDisplaySetting,
-    addResponseButtonTextSetting,
-} from "./settings/algorithmSetting";
-import { addUntrackSetting, addTrackedNoteToDecksSetting } from "./settings/trackSetting";
-import { buildDonation } from "./settings/donation";
-import { addburySiblingSetting } from "./settings/burySiblingSetting";
-import { addcardBlockIDSetting } from "./settings/cardBlockIDSetting";
-import { addmixQueueSetting } from "./settings/mixQueueSetting";
-import { pathMatchesPattern } from "src/utils/fs";
+import { DEFAULT_responseOptionBtnsText } from "./settings/algorithmSetting";
 
 export interface SRSettings {
     // flashcards
@@ -36,6 +19,7 @@ export interface SRSettings {
     burySiblingCardsByNoteReview: boolean;
     multiClozeCard: boolean;
     cardBlockID: boolean;
+    mdView: boolean;
     randomizeCardOrder: boolean;
     flashcardCardOrder: string;
     flashcardDeckOrder: string;
@@ -122,6 +106,7 @@ export const DEFAULT_SETTINGS: SRSettings = {
     burySiblingCardsByNoteReview: false,
     multiClozeCard: false,
     cardBlockID: false,
+    mdView: false,
     randomizeCardOrder: null,
     flashcardCardOrder: "DueFirstRandom",
     flashcardDeckOrder: "PrevDeckComplete_Sequential",

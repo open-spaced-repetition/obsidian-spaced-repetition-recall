@@ -13,17 +13,17 @@ import {
 import { t } from "src/lang/helpers";
 import SRPlugin from "src/main";
 import { SettingsUtil, SRSettings } from "src/settings";
-import { escapeRegexString } from "src/util/utils";
+import { escapeRegexString } from "src/utils/strings";
 import { DataStore } from "./data";
 import { Tags } from "src/tags";
 
 import { Stats } from "src/stats";
-import { DateUtils } from "src/util/utils_recall";
+import { DateUtils } from "../utils/utils_recall";
 import { RPITEMTYPE } from "./repetitionItem";
 import deepcopy from "deepcopy";
 import { NoteCardScheduleParser } from "src/CardSchedule";
 import { DataLocation, getStorePath } from "./dataLocation";
-import { globalDateProvider } from "src/util/DateProvider";
+import { globalDateProvider } from "src/utils/dates";
 import { Iadapter } from "./adapter";
 
 export class LocationSwitch {
@@ -380,8 +380,6 @@ export class LocationSwitch {
                         this.settings.dataLocation = DataLocation.SaveOnNoteFile;
                         for (let i = 0; i < nnote.questionList.length; i++) {
                             const qst = nnote.questionList[i];
-                            fileText = qst.updateQuestionText(fileText, this.settings);
-
                             qst.cards
                                 .map((card) => store.getItembyID(card.Id as number))
                                 .filter((citem) => citem.isTracked)

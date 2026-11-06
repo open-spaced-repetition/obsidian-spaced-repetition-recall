@@ -26,6 +26,7 @@ import { addcardBlockIDSetting } from "src/settings/cardBlockIDSetting";
 import { addmixQueueSetting } from "src/settings/mixQueueSetting";
 import { addIntervalShowHideSetting } from "src/settings/intervalShowHideSetting";
 import { addReviewNoteDirectlySetting } from "src/settings/reviewNoteDirectlySetting";
+import { addmdViewSetting } from "src/settings/mdViewSetting";
 
 // https://github.com/mgmeyers/obsidian-kanban/blob/main/src/Settings.ts
 let applyDebounceTimer = 0;
@@ -665,6 +666,7 @@ export class SRSettingTab extends PluginSettingTab {
             );
 
         containerEl.createEl("h3", { text: t("FLASHCARDS") });
+        addmdViewSetting(newSettingEl(containerEl), this.plugin);
         new Setting(containerEl)
             .setName(t("INITIALLY_EXPAND_SUBDECKS_IN_TREE"))
             .setDesc(t("INITIALLY_EXPAND_SUBDECKS_IN_TREE_DESC"))
@@ -859,7 +861,6 @@ export class SRSettingTab extends PluginSettingTab {
 
     private async tabScheduling(containerEl: HTMLElement): Promise<void> {
         containerEl.createEl("h3", { text: t("ALGORITHM") });
-        const algoSettingEl = new Setting(containerEl).setName(t("ALGORITHM"));
 
         const plugin = this.plugin;
         const settings = this.plugin.data.settings;
@@ -878,7 +879,7 @@ export class SRSettingTab extends PluginSettingTab {
         addAlgorithmSpecificDisplaySetting(newSettingEl(containerEl), this.plugin);
 
         return;
-
+        const algoSettingEl = new Setting(containerEl).setName(t("ALGORITHM"));
         algoSettingEl.descEl.insertAdjacentHTML(
             "beforeend",
             t("CHECK_ALGORITHM_WIKI", {

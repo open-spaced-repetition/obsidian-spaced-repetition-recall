@@ -1,13 +1,13 @@
-import { Card } from "./Card";
-import { CardListType, Deck } from "./Deck";
-import { Question, QuestionText } from "./Question";
-import { ReviewResponse } from "./scheduling";
-import { SRSettings } from "./settings";
-import { TopicPath } from "src/topic-path";
-import { CardScheduleInfo, ICardScheduleCalculator } from "./CardSchedule";
-import { Note } from "./Note";
+import { CardScheduleInfo as RepItemScheduleInfo, ICardScheduleCalculator } from "./CardSchedule";
+import { Card } from "src/card";
+import { CardListType, Deck } from "src/deck";
 import { IDeckTreeIterator } from "./DeckTreeIterator";
-import { IQuestionPostponementList } from "./QuestionPostponementList";
+import { Note } from "src/note";
+import { Question, QuestionText } from "src/question";
+import { ReviewResponse } from "./scheduling";
+import { IQuestionPostponementList } from "src/question-postponement-list";
+import { SRSettings } from "src/settings";
+import { TopicPath } from "src/topic-path";
 import { DataLocation } from "src/dataStore/dataLocation";
 import { DataStore } from "./dataStore/data";
 import { RPITEMTYPE } from "./dataStore/repetitionItem";
@@ -23,21 +23,68 @@ export interface IFlashcardReviewSequencer {
     setDeckTree(originalDeckTree: Deck, remainingDeckTree: Deck): void;
     setCurrentDeck(topicPath: TopicPath): void;
     getDeckStats(topicPath: TopicPath): DeckStats;
+    getSubDecksWithCardsInQueue(deck: Deck): Deck[];
     skipCurrentCard(): void;
-    determineCardSchedule(response: ReviewResponse, card: Card): CardScheduleInfo;
+    determineCardSchedule(response: ReviewResponse, card: Card): RepItemScheduleInfo;
     processReview(response: ReviewResponse): Promise<void>;
     updateCurrentQuestionText(text: string): Promise<void>;
 }
 
+/**
+ * Represents statistics for a deck and its subdecks.
+ *
+ * @property {number} totalCount - Total number of cards in this deck and all subdecks.
+ * @property {number} dueCount - Number of due cards in this deck and all subdecks.
+ * @property {number} newCount - Number of new cards in this deck and all subdecks.
+ * @property {number} cardsInQueueCount - Number of cards in the queue of this deck and all subdecks.
+ * @property {number} dueCardsInQueueOfThisDeckCount - Number of due cards just in this deck.
+ * @property {number} newCardsInQueueOfThisDeckCount - Number of new cards just in this deck.
+ * @property {number} cardsInQueueOfThisDeckCount - Total number of cards in queue just in this deck.
+ * @property {number} subDecksInQueueOfThisDeckCount - Number of subdecks in the queue just in this deck.
+ * @property {number} decksInQueueOfThisDeckCount - Total number of decks in the queue including this deck and its subdecks.
+ *
+ * @constructor
+ * @param {number} totalCount - Initializes the total count of cards.
+ * @param {number} dueCount - Initializes the due count of cards.
+ * @param {number} newCount - Initializes the new count of cards.
+ * @param {number} cardsInQueueCount - Initializes the count of cards in the queue.
+ * @param {number} dueCardsInQueueOfThisDeckCount - Initializes the count of due cards just in this deck.
+ * @param {number} newCardsInQueueOfThisDeckCount - Initializes the count of new cards just in this deck.
+ * @param {number} cardsInQueueOfThisDeckCount - Initializes the count of all cards in the queue just in this deck.
+ * @param {number} subDecksInQueueOfThisDeckCount - Initializes the count of subdecks in the queue just in this deck.
+ * @param {number} decksInQueueOfThisDeckCount - Initializes the count of all decks in the queue including this deck and its subdecks.
+ */
 export class DeckStats {
+    totalCount: number;
     dueCount: number;
     newCount: number;
-    totalCount: number;
+    cardsInQueueCount: number;
+    dueCardsInQueueOfThisDeckCount: number;
+    newCardsInQueueOfThisDeckCount: number;
+    cardsInQueueOfThisDeckCount: number;
+    subDecksInQueueOfThisDeckCount: number;
+    decksInQueueOfThisDeckCount: number;
 
-    constructor(dueCount: number, newCount: number, totalCount: number) {
+    constructor(
+        totalCount: number,
+        dueCount: number,
+        newCount: number,
+        cardsInQueueCount: number = 0,
+        dueCardsInQueueOfThisDeckCount: number = 0,
+        newCardsInQueueOfThisDeckCount: number = 0,
+        cardsInQueueOfThisDeckCount: number = 0,
+        subDecksInQueueOfThisDeckCount: number = 0,
+        decksInQueueOfThisDeckCount: number = 0,
+    ) {
         this.dueCount = dueCount;
         this.newCount = newCount;
         this.totalCount = totalCount;
+        this.cardsInQueueCount = cardsInQueueCount;
+        this.dueCardsInQueueOfThisDeckCount = dueCardsInQueueOfThisDeckCount;
+        this.newCardsInQueueOfThisDeckCount = newCardsInQueueOfThisDeckCount;
+        this.cardsInQueueOfThisDeckCount = cardsInQueueOfThisDeckCount;
+        this.subDecksInQueueOfThisDeckCount = subDecksInQueueOfThisDeckCount;
+        this.decksInQueueOfThisDeckCount = decksInQueueOfThisDeckCount;
     }
 }
 
@@ -56,6 +103,7 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
     private reviewMode: FlashcardReviewMode;
     private cardSequencer: IDeckTreeIterator;
     private settings: SRSettings;
+    // private srsAlgorithm: ISrsAlgorithm;
     private cardScheduleCalculator: ICardScheduleCalculator;
     private questionPostponementList: IQuestionPostponementList;
 
@@ -63,12 +111,15 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
         reviewMode: FlashcardReviewMode,
         cardSequencer: IDeckTreeIterator,
         settings: SRSettings,
+        // srsAlgorithm: ISrsAlgorithm,
         cardScheduleCalculator: ICardScheduleCalculator,
         questionPostponementList: IQuestionPostponementList,
+        _legacyDueDateFlashcardHistogram?: unknown,
     ) {
         this.reviewMode = reviewMode;
         this.cardSequencer = cardSequencer;
         this.settings = settings;
+        // this.srsAlgorithm = srsAlgorithm;
         this.cardScheduleCalculator = cardScheduleCalculator;
         this.questionPostponementList = questionPostponementList;
     }
@@ -105,6 +156,9 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
     setCurrentDeck(topicPath: TopicPath): void {
         this.cardSequencer.setIteratorTopicPath(topicPath);
         this.cardSequencer.nextCard();
+        if (this.hasCurrentCard) {
+            console.debug(this, "setCrrentDeck, and hasCurrentCard...");
+        }
     }
 
     get originalDeckTree(): Deck {
@@ -118,7 +172,53 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
         const remainingDeck: Deck = this.remainingDeckTree.getDeck(topicPath);
         const newCount: number = remainingDeck.getDistinctCardCount(CardListType.NewCard, true);
         const dueCount: number = remainingDeck.getDistinctCardCount(CardListType.DueCard, true);
-        return new DeckStats(dueCount, newCount, totalCount);
+
+        // Sry for the long variable names, but I needed all these distinct counts in the UI
+        const newCardsInQueueOfThisDeckCount = remainingDeck.getDistinctCardCount(
+            CardListType.NewCard,
+            false,
+        );
+        const dueCardsInQueueOfThisDeckCount = remainingDeck.getDistinctCardCount(
+            CardListType.DueCard,
+            false,
+        );
+        const cardsInQueueOfThisDeckCount =
+            newCardsInQueueOfThisDeckCount + dueCardsInQueueOfThisDeckCount;
+
+        const subDecksInQueueOfThisDeckCount =
+            this.getSubDecksWithCardsInQueue(remainingDeck).length;
+        const decksInQueueOfThisDeckCount =
+            cardsInQueueOfThisDeckCount > 0
+                ? subDecksInQueueOfThisDeckCount + 1
+                : subDecksInQueueOfThisDeckCount;
+
+        return new DeckStats(
+            totalCount,
+            dueCount,
+            newCount,
+            dueCount + newCount,
+            dueCardsInQueueOfThisDeckCount,
+            newCardsInQueueOfThisDeckCount,
+            cardsInQueueOfThisDeckCount,
+            subDecksInQueueOfThisDeckCount,
+            decksInQueueOfThisDeckCount,
+        );
+    }
+
+    getSubDecksWithCardsInQueue(deck: Deck): Deck[] {
+        let subDecksWithCardsInQueue: Deck[] = [];
+
+        deck.subdecks.forEach((subDeck) => {
+            subDecksWithCardsInQueue = subDecksWithCardsInQueue.concat(
+                this.getSubDecksWithCardsInQueue(subDeck),
+            );
+
+            const newCount: number = subDeck.getDistinctCardCount(CardListType.NewCard, false);
+            const dueCount: number = subDeck.getDistinctCardCount(CardListType.DueCard, false);
+            if (newCount + dueCount > 0) subDecksWithCardsInQueue.push(subDeck);
+        });
+
+        return subDecksWithCardsInQueue;
     }
 
     skipCurrentCard(): void {
@@ -132,16 +232,16 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
     async processReview(response: ReviewResponse): Promise<void> {
         switch (this.reviewMode) {
             case FlashcardReviewMode.Review:
-                await this.processReview_ReviewMode(response);
+                await this.processReviewReviewMode(response);
                 break;
 
             case FlashcardReviewMode.Cram:
-                await this.processReview_CramMode(response);
+                await this.processReviewCramMode(response);
                 break;
         }
     }
 
-    async processReview_ReviewMode(response: ReviewResponse): Promise<void> {
+    async processReviewReviewMode(response: ReviewResponse): Promise<void> {
         if (this.settings.dataLocation !== DataLocation.SaveOnNoteFile) {
             // just update storedata
             this._processReviewbyAlgo(response);
@@ -149,6 +249,8 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
 
         if (this.settings.dataLocation === DataLocation.SaveOnNoteFile) {
             if (response != ReviewResponse.Reset || this.currentCard.hasSchedule) {
+                const oldSchedule = this.currentCard.scheduleInfo;
+
                 // We need to update the schedule if:
                 //  (1) the user reviewed with easy/good/hard (either a new or due card),
                 //  (2) or reset a due card
@@ -159,9 +261,11 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
                 );
 
                 // Update the source file with the updated schedule
+                // await DataStore.getInstance().questionWriteSchedule(this.currentQuestion);
                 await this.currentQuestion.writeQuestion(this.settings);
             }
         }
+
         if (this.settings.cardBlockID && !this.currentQuestion.questionText.obsidianBlockId) {
             // Update the source file with the updated block id
             await this.currentQuestion.writeQuestion(this.settings);
@@ -204,7 +308,7 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
         }
     }
 
-    async processReview_CramMode(response: ReviewResponse): Promise<void> {
+    async processReviewCramMode(response: ReviewResponse): Promise<void> {
         if (response == ReviewResponse.Easy) this.deleteCurrentCard();
         else {
             this.cardSequencer.moveCurrentCardToEndOfList();
@@ -212,24 +316,29 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
         }
     }
 
-    determineCardSchedule(response: ReviewResponse, card: Card): CardScheduleInfo {
-        let result: CardScheduleInfo;
+    determineCardSchedule(response: ReviewResponse, card: Card): RepItemScheduleInfo {
+        let result: RepItemScheduleInfo;
 
         if (response == ReviewResponse.Reset) {
             // Resetting the card schedule
+            // result = this.srsAlgorithm.cardGetResetSchedule();
             result = this.cardScheduleCalculator.getResetCardSchedule();
         } else {
             // scheduled card
             if (card.hasSchedule) {
+                // result = this.srsAlgorithm.cardCalcUpdatedSchedule(
                 result = this.cardScheduleCalculator.calcUpdatedSchedule(
                     response,
                     card.scheduleInfo,
+                    // this.dueDateFlashcardHistogram,
                 );
             } else {
                 const currentNote: Note = card.question.note;
+                // result = this.srsAlgorithm.cardGetNewSchedule(
                 result = this.cardScheduleCalculator.getNewCardSchedule(
                     response,
                     currentNote.filePath,
+                    // this.dueDateFlashcardHistogram,
                 );
             }
         }
@@ -241,6 +350,7 @@ export class FlashcardReviewSequencer implements IFlashcardReviewSequencer {
 
         q.actualQuestion = text;
 
+        // await DataStore.getInstance().questionWrite(this.currentQuestion);
         await this.currentQuestion.writeQuestion(this.settings);
     }
 }

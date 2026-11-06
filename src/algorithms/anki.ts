@@ -1,5 +1,5 @@
 import { Setting, Notice } from "obsidian";
-import { DateUtils, MiscUtils } from "src/util/utils_recall";
+import { DateUtils, MiscUtils } from "../utils/utils_recall";
 import { SrsAlgorithm, algorithmNames } from "./algorithms";
 import deepcopy from "deepcopy";
 import { FsrsData } from "./fsrs";

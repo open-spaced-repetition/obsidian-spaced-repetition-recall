@@ -2,7 +2,7 @@ import { Notice, Setting } from "obsidian";
 
 import { t } from "src/lang/helpers";
 
-import { DateUtils } from "src/util/utils_recall";
+import { DateUtils } from "../utils/utils_recall";
 import { SrsAlgorithm, algorithmNames } from "./algorithms";
 import deepcopy from "deepcopy";
 import { AnkiData } from "./anki";

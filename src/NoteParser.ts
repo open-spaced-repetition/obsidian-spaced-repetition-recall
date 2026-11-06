@@ -1,9 +1,9 @@
-import { NoteQuestionParser } from "./NoteQuestionParser";
-import { ISRFile } from "./SRFile";
-import { Note } from "./Note";
+import { NoteQuestionParser } from "src/note-question-parser";
+import { ISRFile } from "src/file";
+import { Note } from "src/note";
 import { SRSettings } from "./settings";
 import { TopicPath } from "src/topic-path";
-import { TextDirection } from "./util/TextDirection";
+import { TextDirection } from "src/utils/strings";
 
 export class NoteParser {
     settings: SRSettings;

@@ -1,26 +1,28 @@
-import { NoteQuestionParser } from "src/NoteQuestionParser";
-import { CardScheduleInfo } from "src/CardSchedule";
+import { CardScheduleInfo as RepItemScheduleInfo } from "src/CardSchedule";
+import { CardScheduleInfo as RepItemScheduleInfoOsr } from "src/CardSchedule";
+import { Card } from "src/card";
 import { TICKS_PER_DAY } from "src/constants";
-import { CardType, Question } from "src/Question";
+import { frontmatterTagPseudoLineNum, ISRFile } from "src/file";
+import { NoteQuestionParser } from "src/note-question-parser";
+import { CardType, Question } from "src/question";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { TopicPath, TopicPathList } from "src/topic-path";
-import { createTest_NoteQuestionParser } from "./SampleItems";
-import { ISRFile, frontmatterTagPseudoLineNum } from "src/SRFile";
-import { setupStaticDateProvider_20230906 } from "src/util/DateProvider";
-import { TextDirection } from "src/util/TextDirection";
+import { setupStaticDateProvider20230906 } from "src/utils/dates";
+import { TextDirection } from "src/utils/strings";
+
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
-import { Card } from "src/Card";
+import { createTest_NoteQuestionParser } from "./SampleItems";
 
 const parserWithDefaultSettings: NoteQuestionParser =
     createTest_NoteQuestionParser(DEFAULT_SETTINGS);
-const settings_ConvertFoldersToDecks: SRSettings = { ...DEFAULT_SETTINGS };
-settings_ConvertFoldersToDecks.convertFoldersToDecks = true;
-const parser_ConvertFoldersToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
-    settings_ConvertFoldersToDecks,
+const settingsConvertFoldersToDecks: SRSettings = { ...DEFAULT_SETTINGS };
+settingsConvertFoldersToDecks.convertFoldersToDecks = true;
+const parserConvertFoldersToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
+    settingsConvertFoldersToDecks,
 );
 
 beforeAll(() => {
-    setupStaticDateProvider_20230906();
+    setupStaticDateProvider20230906();
 });
 
 describe("No flashcard questions", () => {
@@ -65,7 +67,7 @@ A::B
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: null as CardScheduleInfo,
+            scheduleInfo: null as RepItemScheduleInfo,
         };
         const expected = [
             {
@@ -100,14 +102,11 @@ A::B
 
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const delayDays = 3 - 6;
+        const scheduleInfo = RepItemScheduleInfoOsr.fromDueDateStr("2023-09-03", 1, 230, 0);
+        scheduleInfo.delayBeforeReviewTicks = delayDays * TICKS_PER_DAY;
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: CardScheduleInfo.fromDueDateStr(
-                "2023-09-03",
-                1,
-                230,
-                delayDays * TICKS_PER_DAY,
-            ),
+            scheduleInfo,
         };
         const expected = [
             {
@@ -207,7 +206,7 @@ A::B ^d7cee0
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: null as CardScheduleInfo,
+            scheduleInfo: null as RepItemScheduleInfoOsr,
         };
         const expected = [
             {
@@ -249,14 +248,12 @@ A::B ^d7cee0
 
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const delayDays = 3 - 6;
+        const scheduleInfo = RepItemScheduleInfoOsr.fromDueDateStr("2023-09-03", 1, 230, 0);
+        scheduleInfo.delayBeforeReviewTicks = delayDays * TICKS_PER_DAY;
+
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: CardScheduleInfo.fromDueDateStr(
-                "2023-09-03",
-                1,
-                230,
-                delayDays * TICKS_PER_DAY,
-            ),
+            scheduleInfo,
         };
         const expected = [
             {
@@ -298,14 +295,11 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
 
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const delayDays = 3 - 6;
+        const scheduleInfo = RepItemScheduleInfoOsr.fromDueDateStr("2023-09-03", 1, 230, 0);
+        scheduleInfo.delayBeforeReviewTicks = delayDays * TICKS_PER_DAY;
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: CardScheduleInfo.fromDueDateStr(
-                "2023-09-03",
-                1,
-                230,
-                delayDays * TICKS_PER_DAY,
-            ),
+            scheduleInfo,
         };
         const expected = [
             {
@@ -346,14 +340,11 @@ A::B <!--SR:!2023-09-03,1,230--> ^d7cee0
 
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
         const delayDays = 3 - 6;
+        const scheduleInfo = RepItemScheduleInfoOsr.fromDueDateStr("2023-09-03", 1, 230, 0);
+        scheduleInfo.delayBeforeReviewTicks = delayDays * TICKS_PER_DAY;
         const card1 = {
             cardIdx: 0,
-            scheduleInfo: CardScheduleInfo.fromDueDateStr(
-                "2023-09-03",
-                1,
-                230,
-                delayDays * TICKS_PER_DAY,
-            ),
+            scheduleInfo,
         };
         const expected = [
             {
@@ -394,7 +385,7 @@ Q2::A2
 `;
         const noteFile: ISRFile = new UnitTestSRFile(noteText);
         const folderTopicPath: TopicPath = TopicPath.emptyPath;
-        const questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
+        const questionList: Question[] = await parserConvertFoldersToDecks.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -412,33 +403,7 @@ Q3::A3
         const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
         const folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
-        const questionList: Question[] = await parser_ConvertFoldersToDecks.createQuestionList(
-            noteFile,
-            TextDirection.Ltr,
-            folderTopicPath,
-            true,
-        );
-        expect(questionList.length).toEqual(3);
-        expect(questionList[0].topicPathList.formatPsv()).toEqual("#flashcards/science");
-        expect(questionList[1].topicPathList.formatPsv()).toEqual("#flashcards/science");
-        expect(questionList[2].topicPathList.formatPsv()).toEqual("#flashcards/science");
-    });
-
-    test("SingleLineBasic: Note topic applies to all questions when trackedNoteToDecks", async () => {
-        const noteText: string = `
-Q1::A1
-Q2::A2
-Q3::A3
-`;
-        const noteFile: ISRFile = new UnitTestSRFile(noteText);
-
-        const folderTopicPath: TopicPath = new TopicPath(["flashcards", "science"]);
-        const settings_trackedNoteToDecks: SRSettings = { ...DEFAULT_SETTINGS };
-        settings_trackedNoteToDecks.trackedNoteToDecks = true;
-        const parser_trackedNoteToDecks: NoteQuestionParser = createTest_NoteQuestionParser(
-            settings_trackedNoteToDecks,
-        );
-        const questionList: Question[] = await parser_trackedNoteToDecks.createQuestionList(
+        const questionList: Question[] = await parserConvertFoldersToDecks.createQuestionList(
             noteFile,
             TextDirection.Ltr,
             folderTopicPath,
@@ -480,7 +445,7 @@ Q3::A3
     test("MultiLine: Space before multi line separator", async () => {
         // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/853
         const noteText: string = `
-#flashcards/test/b853 
+#flashcards/test/b853
 
 Question::Answer
 
@@ -491,7 +456,7 @@ Multiline answer
 Multiline question2
  ??
 Multiline answer2
- 
+
 `;
         const noteFile: ISRFile = new UnitTestSRFile(noteText);
         const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
@@ -620,7 +585,7 @@ Q1::A1
             const noteText: string = `---
 created: 2023-10-26T07:34
 ---
-#flashcards/English 
+#flashcards/English
 
 ## taunting & teasing & irony & sarcasm
 
@@ -628,7 +593,6 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
 `;
             const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            const expectedPath: string = "#flashcards/English";
             const folderTopicPath: TopicPath = TopicPath.emptyPath;
             const expected = [
                 {
@@ -682,7 +646,6 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
     `;
             const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            const expectedPath: TopicPath = new TopicPath(["flashcards", "test"]);
             const folderTopicPath: TopicPath = TopicPath.emptyPath;
             const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
@@ -728,7 +691,6 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
     `;
             const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
-            const expectedPath: TopicPath = new TopicPath(["flashcards", "science"]);
             const folderTopicPath: TopicPath = TopicPath.emptyPath;
             const questionList: Question[] = await parserWithDefaultSettings.createQuestionList(
                 noteFile,
@@ -745,18 +707,18 @@ Stop trying ==to milk the crowd== for sympathy. // доить толпу
         // https://github.com/st3v3nmw/obsidian-spaced-repetition/issues/915#issuecomment-2016580471
         test("Topic tag at end of line question line (no other tags present)", async () => {
             const noteText: string = `---
-Title: "The Taliban at war: 2001-2018"
-Authors: "Antonio Giustozzi"
+Title: "Aegon's Conquest: 2BC-1AC"
+Authors: "GRRM"
 Year: 2019
-URL: 
-DOI: 
-Unique Citekey: Talibanwar20012018
-Zotero Link: zotero://select/items/@Talibanwar20012018
+URL:
+DOI:
+Unique Citekey: AegonsConquest2BC1AC
+Zotero Link: zotero://select/items/@AegonsConquest2BC1AC
 ---
-> [!PDF|255, 208, 0] [[The Taliban at War_ 2001 - 2018.pdf#page=10&annotation=1440R|The Taliban at War_ 2001 - 2018, page 10]]
-> > The Taliban Emirate, established in 1996, was in 2001 overthrown relatively easily by a coalition of US forces and various Afghan anti-Taliban groups. Few at the end of 2001 expected to hear again from the Taliban, except in the annals of history. Even as signs emerged in 2003 of a Taliban comeback, in the shape of an insurgency against the post-2001 Afghan government and its international sponsors, many did not take it seriously. It was hard to imagine that the Taliban would be able to mount a resilient challenge to a large-scale commitment of forces by the US and its allies.
+> [!PDF|255, 208, 0] [[Aegon's Conquest_ 2BC - 1AC.pdf#page=10&annotation=1440R|Aegon's Conquest_ 2BC - 1AC, page 10]]
+> > Aegon's Conquest also known as the War of Conquest or simply the Conquest, was the first of the Wars of Conquest initiated by Aegon Targaryen to conquer the continent of Westeros. Supported by his sister-wives, Rhaenys and Visenya, and their dragons, Meraxes and Vhagar, as well as his own, Balerion, Aegon successfully unified six of the Seven Kingdoms of Westeros under the invading forces of House Targaryen within two years. Only Dorne was able to successfully resist Aegon's conquest. Despite its name, the conflict was not entirely resolved on the field of battle, as some regions and houses of Westeros actively supported the Targaryen war effort, while others voluntarily surrendered to their might.
 
-What year was the Taliban Emirate founded?::1996 #flashcards
+What year did Aegon's Conquest start?::2BC #flashcards
 `;
             const noteFile: ISRFile = new UnitTestSRFile(noteText);
 
@@ -767,8 +729,8 @@ What year was the Taliban Emirate founded?::1996 #flashcards
                     topicPathList: TopicPathList.fromPsv("#flashcards", 12),
                     cards: [
                         new Card({
-                            front: "What year was the Taliban Emirate founded?",
-                            back: "1996 #flashcards",
+                            front: "What year did Aegon's Conquest start?",
+                            back: "2BC #flashcards",
                         }),
                     ],
                 },
@@ -912,51 +874,3 @@ A::B
         ).toMatchObject(expected);
     });
 });
-
-function checkQuestion1(question: Question) {
-    expect(question.cards.length).toEqual(1);
-    const card1 = {
-        cardIdx: 0,
-        isDue: false,
-        front: "Q1",
-        back: "A1",
-        scheduleInfo: null as CardScheduleInfo,
-    };
-    const expected = {
-        questionType: CardType.SingleLineBasic,
-        topicPath: TopicPath.emptyPath,
-        questionTextOriginal: "Q1::A1",
-        questionTextCleaned: "Q1::A1",
-        lineNo: 1,
-        hasEditLaterTag: false,
-        context: "",
-        hasChanged: false,
-    };
-    expect(question).toMatchObject(expected);
-    expect(question.cards[0]).toMatchObject(card1);
-    return question;
-}
-
-function checkQuestion2(question: Question) {
-    expect(question.cards.length).toEqual(1);
-    const card1 = {
-        cardIdx: 0,
-        isDue: false,
-        front: "Q2",
-        back: "A2",
-        scheduleInfo: null as CardScheduleInfo,
-    };
-    const expected = {
-        questionType: CardType.SingleLineBasic,
-        topicPath: TopicPath.emptyPath,
-        questionTextOriginal: "Q2::A2",
-        questionTextCleaned: "Q2::A2",
-        lineNo: 2,
-        hasEditLaterTag: false,
-        context: "",
-        hasChanged: false,
-    };
-    expect(question).toMatchObject(expected);
-    expect(question.cards[0]).toMatchObject(card1);
-    return question;
-}

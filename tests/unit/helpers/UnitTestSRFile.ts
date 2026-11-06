@@ -1,7 +1,7 @@
-import { TagCache } from "obsidian";
-import { ISRFile } from "src/SRFile";
+import { TagCache, TFile } from "obsidian";
+import { ISRFile } from "src/file";
 import { unitTest_GetAllTagsFromTextEx } from "./UnitTestHelper";
-import { TextDirection } from "src/util/TextDirection";
+import { TextDirection } from "src/utils/strings";
 
 export class UnitTestSRFile implements ISRFile {
     content: string;
@@ -18,6 +18,14 @@ export class UnitTestSRFile implements ISRFile {
 
     get basename(): string {
         return "";
+    }
+
+    get tfile(): TFile {
+        return undefined;
+    }
+
+    async getFrontmatter(): Promise<Map<string, string>> {
+        return new Map<string, string>();
     }
 
     getAllTagsFromCache(): string[] {

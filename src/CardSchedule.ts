@@ -7,8 +7,8 @@ import {
 import { INoteEaseList } from "./NoteEaseList";
 import { ReviewResponse, schedule } from "./scheduling";
 import { SRSettings } from "./settings";
-import { formatDate_YYYY_MM_DD } from "./util/utils";
-import { DateUtil, globalDateProvider } from "./util/DateProvider";
+import { formatDateYYYYMMDD } from "src/utils/dates";
+import { DateUtil, globalDateProvider } from "src/utils/dates";
 
 export class CardScheduleInfo {
     dueDate: Moment;
@@ -81,7 +81,7 @@ export class CardScheduleInfo {
     }
 
     formatDueDate(): string {
-        return formatDate_YYYY_MM_DD(this.dueDate);
+        return formatDateYYYYMMDD(this.dueDate);
     }
 
     formatSchedule() {

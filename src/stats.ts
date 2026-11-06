@@ -1,7 +1,7 @@
-import { CardListType } from "./Deck";
+import { CardListType } from "./deck";
 import { RepetitionItem } from "./dataStore/repetitionItem";
-import { ValueCountDict } from "./util/NumberCountDict";
-import { DateUtils } from "./util/utils_recall";
+import { ValueCountDict } from "./utils/NumberCountDict";
+import { DateUtils } from "./utils/utils_recall";
 
 export class Stats {
     eases: ValueCountDict = new ValueCountDict();

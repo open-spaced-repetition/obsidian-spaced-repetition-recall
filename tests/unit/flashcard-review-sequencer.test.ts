@@ -11,20 +11,23 @@ import {
     FlashcardReviewMode,
     FlashcardReviewSequencer,
     IFlashcardReviewSequencer,
-} from "src/FlashcardReviewSequencer";
+} from "src/flashcard-review-sequencer";
 import { TopicPath } from "src/topic-path";
-import { CardListType, Deck, DeckTreeFilter } from "src/Deck";
+import { CardListType, Deck, DeckTreeFilter } from "src/deck";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { SampleItemDecks } from "./SampleItems";
 import { ReviewResponse } from "src/scheduling";
 import {
     setupStaticDateProvider,
-    setupStaticDateProvider_20230906,
-    setupStaticDateProvider_OriginDatePlusDays,
-} from "src/util/DateProvider";
+    setupStaticDateProvider20230906,
+    setupStaticDateProviderOriginDatePlusDays,
+} from "src/utils/dates";
 import moment from "moment";
 import { INoteEaseList, NoteEaseList } from "src/NoteEaseList";
-import { QuestionPostponementList, IQuestionPostponementList } from "src/QuestionPostponementList";
+import {
+    QuestionPostponementList,
+    IQuestionPostponementList,
+} from "src/question-postponement-list";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 
 const order_DueFirst_Sequential: IIteratorOrder = {
@@ -64,8 +67,9 @@ class TestContext {
             this.settings,
             this.cardScheduleCalculator,
             this.questionPostponementList,
+            null,
         );
-        setupStaticDateProvider_OriginDatePlusDays(daysAfterOrigin);
+        setupStaticDateProviderOriginDatePlusDays(daysAfterOrigin);
 
         await this.setSequencerDeckTreeFromOriginalText();
     }
@@ -118,6 +122,7 @@ class TestContext {
             settings,
             cardScheduleCalculator,
             cardPostponementList,
+            null,
         );
         const file: UnitTestSRFile = new UnitTestSRFile(text, fakeFilePath);
 
@@ -308,7 +313,7 @@ function skipThenCheckCardFront(sequencer: IFlashcardReviewSequencer, expectedFr
 
 // Do this before each test, as some tests change the "current" date
 beforeEach(() => {
-    setupStaticDateProvider_20230906();
+    setupStaticDateProvider20230906();
 });
 
 describe("setDeckTree", () => {
@@ -593,7 +598,7 @@ Q1::A1
 
                 // Simulate performing the review on 2023-09-06
                 // Check that the reviewed card, scheduled for following day; 2 buried cards have schedule dates with magic number indicating unreviewed card ("2000-01-01")
-                setupStaticDateProvider_OriginDatePlusDays(0);
+                setupStaticDateProviderOriginDatePlusDays(0);
                 const c: TestContext = TestContext.Create(
                     order_DueFirst_Sequential,
                     FlashcardReviewMode.Review,
@@ -655,7 +660,7 @@ Q1::A1
                 const text: string = "#flashcards Q1::A1";
 
                 // Create the test context
-                setupStaticDateProvider_OriginDatePlusDays(0);
+                setupStaticDateProviderOriginDatePlusDays(0);
                 const c: TestContext = TestContext.Create(
                     order_DueFirst_Sequential,
                     FlashcardReviewMode.Review,
@@ -1004,6 +1009,25 @@ ${updatedQuestionText}`;
 });
 
 describe("getDeckStats", () => {
+    describe("Multi level deck with some new and due cards", () => {
+        test("Initial multi level stats", async () => {
+            const text: string = `#flashcards/sub-deck
+Q1::A1
+Q2::A2
+Q3::A3
+Q4::A4 <!--SR:!2023-01-21,15,290-->
+`;
+            const c: TestContext = TestContext.Create(
+                order_DueFirst_Sequential,
+                FlashcardReviewMode.Review,
+                DEFAULT_SETTINGS,
+                text,
+            );
+            await c.setSequencerDeckTreeFromOriginalText();
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 0, 0, 0, 1, 1));
+        });
+    });
+
     describe("Single level deck with some new and due cards", () => {
         test("Initial stats", async () => {
             const text: string = `#flashcards
@@ -1019,7 +1043,7 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
                 text,
             );
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(1, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1));
         });
 
         test("Reduction in due count after skipping card", async () => {
@@ -1038,10 +1062,10 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
 
             expect(c.reviewSequencer.currentCard.front).toEqual("Q4"); // This is the first card as we are using order_DueFirst_Sequential
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(1, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1));
             c.reviewSequencer.skipCurrentCard();
             // One less due card
-            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(0, 3, 4));
+            expect(c.getDeckStats("#flashcards")).toEqual(new DeckStats(4, 0, 3, 3, 0, 3, 3, 0, 1));
         });
 
         test("Change in stats after reviewing each card", async () => {
@@ -1060,9 +1084,9 @@ Q4::A4 <!--SR:!2023-01-21,15,290-->
             const deck: Deck = await c.setSequencerDeckTreeFromOriginalText();
 
             await checkStats(c, "#flashcards", [
-                [new DeckStats(1, 3, 4), "Q4", ReviewResponse.Easy], // This is the first card as we are using order_DueFirst_Sequential
-                [new DeckStats(0, 3, 4), "Q1", ReviewResponse.Easy], // Iterated through all the due cards, now the new ones
-                [new DeckStats(0, 2, 4), "Q2", ReviewResponse.Easy],
+                [new DeckStats(4, 1, 3, 4, 1, 3, 4, 0, 1), "Q4", ReviewResponse.Easy], // This is the first card as we are using order_DueFirst_Sequential
+                [new DeckStats(4, 0, 3, 3, 0, 3, 3, 0, 1), "Q1", ReviewResponse.Easy], // Iterated through all the due cards, now the new ones
+                [new DeckStats(4, 0, 2, 2, 0, 2, 2, 0, 1), "Q2", ReviewResponse.Easy],
             ]);
         });
     });

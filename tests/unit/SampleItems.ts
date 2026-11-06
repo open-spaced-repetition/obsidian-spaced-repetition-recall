@@ -1,13 +1,13 @@
-import { Card } from "src/Card";
-import { Deck } from "src/Deck";
-import { Note } from "src/Note";
+import { Card } from "src/card";
+import { Deck } from "src/deck";
+import { Note } from "src/note";
 import { NoteParser } from "src/NoteParser";
-import { NoteQuestionParser } from "src/NoteQuestionParser";
-import { CardType, Question } from "src/Question";
+import { NoteQuestionParser } from "src/note-question-parser";
+import { CardType, Question } from "src/question";
 import { CardFrontBack, CardFrontBackUtil } from "src/question-type";
 import { DEFAULT_SETTINGS, SRSettings } from "src/settings";
 import { TopicPath } from "src/topic-path";
-import { TextDirection } from "src/util/TextDirection";
+import { TextDirection } from "src/utils/strings";
 import { UnitTestSRFile } from "./helpers/UnitTestSRFile";
 import { CardOrder, DeckOrder, DeckTreeIterator } from "src/DeckTreeIterator";
 
@@ -71,7 +71,11 @@ Q3::A3`;
     ): Promise<Deck> {
         const deck: Deck = new Deck("Root", null);
         const noteParser: NoteParser = createTest_NoteParser();
-        const note: Note = await noteParser.parse(file, TextDirection.Ltr, folderTopicPath);
+        const note: Note = await noteParser.parse(
+            file as unknown as import("src/file").ISRFile,
+            TextDirection.Ltr,
+            folderTopicPath,
+        );
         note.appendCardsToDeck(deck);
         return deck;
     }

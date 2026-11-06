@@ -23,6 +23,7 @@ export default {
     CURRENT_INTERVAL_HELP_TEXT: "Mevcut Aralık: ",
     CARD_GENERATED_FROM: "${notePath} kaynağından oluşturuldu.",
     OPEN_NOTE: "Open Note",
+    CLOSE_NOTE: "Close Note",
 
     // main.ts
     OPEN_NOTE_FOR_REVIEW: "Gözden geçirmek için bir not aç",

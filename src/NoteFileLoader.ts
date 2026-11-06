@@ -1,10 +1,10 @@
-import { ISRFile } from "./SRFile";
-import { Note } from "./Note";
-import { Question } from "./Question";
+import { ISRFile } from "src/file";
+import { Note } from "src/note";
+import { Question } from "src/question";
 import { TopicPath } from "src/topic-path";
-import { NoteQuestionParser } from "./NoteQuestionParser";
+import { NoteQuestionParser } from "src/note-question-parser";
 import { SRSettings } from "./settings";
-import { TextDirection } from "./util/TextDirection";
+import { TextDirection } from "./utils/strings";
 
 export class NoteFileLoader {
     fileText: string;

@@ -1,13 +1,13 @@
 import { TFile } from "obsidian";
 import { CardScheduleInfo, NoteCardScheduleParser } from "src/CardSchedule";
-import { Note } from "src/Note";
+import { Note } from "src/note";
 import { ReviewDeck, SchedNote } from "src/ReviewDeck";
-import { SrTFile } from "src/SRFile";
+import { SrTFile } from "src/file";
 import { TopicPath } from "src/topic-path";
 import { DataStore } from "src/dataStore/data";
-import { BlockUtils, debug, logExecutionTime } from "src/util/utils_recall";
+import { BlockUtils, debug, logExecutionTime } from "../utils/utils_recall";
 import { CardInfo } from "./trackedFile";
-import { Card } from "src/Card";
+import { Card } from "src/card";
 import { DataLocation } from "./dataLocation";
 import { RPITEMTYPE, RepetitionItem } from "./repetitionItem";
 import { Tags } from "src/tags";
@@ -109,7 +109,11 @@ export class ItemTrans {
         }
         // update store.trackFile and item
         trackedFile.updateTags(rdeck.deckName);
-        item.updateDeckName(rdeck.deckName, store.isCardItem(item.ID));
+        const isCard = store.isCardItem(item.ID);
+        if (isCard) {
+            console.warn("note item type error: ", item, trackedFile);
+        }
+        item.updateDeckName(rdeck.deckName, false);
 
         return;
     }

@@ -1,8 +1,9 @@
 import { TagCache } from "obsidian";
 
-import { RepItemScheduleInfo } from "src/algorithms/base/rep-item-schedule-info";
+// import { RepItemScheduleInfo } from "src/algorithms/base/rep-item-schedule-info";
+import { CardScheduleInfo as RepItemScheduleInfo, NoteCardScheduleParser } from "./CardSchedule";
 import { Card } from "src/card";
-import { DataStore } from "src/data-stores/base/data-store";
+// import { DataStore } from "src/data-stores/base/data-store";
 import { frontmatterTagPseudoLineNum, ISRFile } from "src/file";
 import { parse, ParsedQuestionInfo, ParserOptions } from "src/parser";
 import { Question, QuestionText } from "src/question";
@@ -122,9 +123,10 @@ export class NoteQuestionParser {
 
             // And if the card has been reviewed, then scheduling info as well
             let cardScheduleInfoList: RepItemScheduleInfo[] =
-                DataStore.getInstance().questionCreateSchedule(
+                // DataStore.getInstance().questionCreateSchedule(
+                NoteCardScheduleParser.createCardScheduleInfoList(
                     question.questionText.original,
-                    null,
+                    // null,
                 );
 
             // we have some extra scheduling dates to delete
@@ -362,6 +364,9 @@ export class NoteQuestionParser {
                     result = this.createTopicPathListFromSingleTag(this.flashcardTagList[0]);
                 }
             }
+        }
+        if (!result && this.settings.trackedNoteToDecks && this.folderTopicPath) {
+            result = new TopicPathList([this.folderTopicPath]);
         }
         return result;
     }

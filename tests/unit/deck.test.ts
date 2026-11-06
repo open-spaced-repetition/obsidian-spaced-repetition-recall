@@ -1,7 +1,7 @@
-import { CardListType, Deck } from "src/Deck";
+import { CardListType, Deck } from "src/deck";
 import { TopicPath } from "src/topic-path";
 import { SampleItemDecks } from "./SampleItems";
-import { Card } from "src/Card";
+import { Card } from "src/card";
 
 describe("constructor", () => {
     test("Deck name", () => {

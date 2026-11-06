@@ -2,7 +2,7 @@ import { MarkdownView, Notice } from "obsidian";
 import ObsidianSrsPlugin from "./main";
 import { ItemInfoModal } from "src/gui/info";
 import { Queue } from "./dataStore/queue";
-import { debug } from "./util/utils_recall";
+import { debug } from "./utils/utils_recall";
 import { postponeItems } from "./algorithms/balance/postpone";
 import { reschedule } from "./algorithms/balance/reschedule";
 import { GetInputModal } from "./gui/getInputModal";
