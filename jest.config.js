@@ -26,6 +26,7 @@ module.exports = {
         "src/reviewNote/",
         "src/settings/",
         "src/settings.ts",
+        "src/plugin-data.ts",
         "src/ReviewDeck.ts",
         "src/commands.ts",
         "src/main.ts",
